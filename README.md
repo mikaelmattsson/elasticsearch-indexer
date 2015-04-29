@@ -14,7 +14,3 @@ The plugin requires that you have Elasticsearch installed on your server
  - Password protected posts
  - Some date queries
  - Random sorting
-
-###Todo
- - Add optional cross multisite searching
- - Add option for selecting which terms that should be searchable
