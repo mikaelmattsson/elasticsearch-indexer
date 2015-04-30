@@ -14,3 +14,9 @@ The plugin requires that you have Elasticsearch installed on your server
  - Password protected posts
  - Some date queries
  - Random sorting
+
+###Demo
+ - [WooCommerce 10 000 products](http://enabled-1.es-demo.wallmanderco.se/)
+ - [WooCommerce 10 000 products without elasticsearch](http://disabled-1.es-demo.wallmanderco.se/)
+ - [WooCommerce 135 000 products](http://enabled-2.es-demo.wallmanderco.se/)
+ - [WooCommerce 135 000 products without elasticsearch](http://disabled-2.es-demo.wallmanderco.se/)
