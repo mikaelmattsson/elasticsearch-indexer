@@ -355,7 +355,7 @@ trait WpConverterTrait
 
     public function argMenuOrder($value, &$q)
     {
-        //
+        $this->where('menu_order', $value);
     }
 
     public function argCategoryIn($value, &$q)
@@ -599,7 +599,7 @@ trait WpConverterTrait
                     continue;
                 }
                 if (empty($mq['compare']) || $mq['compare'] == '=') {
-                    $mq['compare'] = 'in'; // ”=” is handeled as ”in” in meta query
+                    $mq['compare'] = 'in'; // ”=” is handled as ”in” in meta query
                 }
                 $filter->where('post_meta.' . $mq['key'] . '.raw', $mq['compare'], $mq['value']);
             }
