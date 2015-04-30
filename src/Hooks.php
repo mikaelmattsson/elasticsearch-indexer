@@ -27,8 +27,7 @@ class Hooks
     {
         static::setupAdmin();
 
-        $client = new Client;
-        if (!$client->isAvailible()) {
+        if (!Client::isAvailible()) {
             return;
         }
 

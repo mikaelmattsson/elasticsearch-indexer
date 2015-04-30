@@ -64,12 +64,12 @@ class Client extends ElasticSearchClient
         return $this;
     }
 
-    public function isAvailible()
+    public static function isAvailible()
     {
-        return (bool) $this->getStatus();
+        return (bool) static::getStatus();
     }
 
-    public function getIndices()
+    public static function getIndices()
     {
         try {
             $client = new HttpClient();
@@ -81,7 +81,7 @@ class Client extends ElasticSearchClient
         }
     }
 
-    public function getStatus()
+    public static function getStatus()
     {
         try {
             $client = new HttpClient();

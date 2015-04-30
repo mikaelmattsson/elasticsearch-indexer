@@ -87,8 +87,7 @@ class Admin
      */
     public static function getStatus()
     {
-        $client  = new Client();
-        $indices = $client->getIndices();
+        $indices = Client::getIndices();
         require ESI_PATH . '/views/admin/status.php';
     }
 
