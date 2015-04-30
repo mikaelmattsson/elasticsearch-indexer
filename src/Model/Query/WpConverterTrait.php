@@ -95,10 +95,13 @@ trait WpConverterTrait
         } elseif (is_string($q['post_type'])) {
             $q['post_type'] = explode(' ', str_replace(',', ' ', $q['post_type']));
         }
-        if ($wpQuery->is_search() && $q['orderby'] == 'menu_order title') {
-            $q['orderby'] = 'relevance';
-        } elseif (empty($q['orderby'])) {
+        if (empty($q['orderby'])) {
             $q['orderby'] = 'none';
+        }
+        if ($wpQuery->is_search()) {
+            if ($q['orderby'] == 'none' || $q['orderby'] == 'menu_order title') {
+                $q['orderby'] = 'relevance';
+            }
         }
         if (empty($q['post_status'])) {
             $q['post_status'] = ['publish'];
