@@ -113,17 +113,17 @@ class Indexer extends Client
         if (!is_object($post)) {
             $post = get_post($post);
         }
-        $post_args = static::preparePost($post);
+        $postArgs = static::preparePost($post);
 
-        if (apply_filters('esi_post_sync_kill', false, $post_args, $post->ID)) {
+        if (apply_filters('esi_post_sync_kill', false, $postArgs, $post->ID)) {
             return false;
         }
 
         $response = $this->index([
             'index' => $this->getIndexName(),
             'type' => 'post',
-            'id' => $post['post_id'],
-            'body' => $post,
+            'id' => $postArgs->post_id,
+            'body' => $postArgs,
         ]);
 
         return $response;
