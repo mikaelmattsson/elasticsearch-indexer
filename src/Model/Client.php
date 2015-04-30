@@ -64,9 +64,21 @@ class Client extends ElasticSearchClient
         return $this;
     }
 
-    public static function isAvailible()
+    public function isAvailable()
     {
-        return (bool) static::getStatus();
+        return (bool) static::indicesExists($this->getIndexName());
+    }
+
+    public static function indicesExists($index)
+    {
+        try {
+            $client = new HttpClient();
+            $host   = explode(',', get_option('esi_hosts', '127.0.0.1:9200'));
+            $res    = $client->get('http://' . $host[0] . '/' . $index)->send();
+            return $res->getBody();
+        } catch (CurlException $e) {
+            return false;
+        }
     }
 
     public static function getIndices()
