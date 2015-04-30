@@ -20,3 +20,6 @@ The plugin requires that you have Elasticsearch installed on your server
  - [WooCommerce 10 000 products without elasticsearch](http://disabled-1.es-demo.wallmanderco.se/)
  - [WooCommerce 135 000 products](http://enabled-2.es-demo.wallmanderco.se/)
  - [WooCommerce 135 000 products without elasticsearch](http://disabled-2.es-demo.wallmanderco.se/)
+
+## License
+Elasticsearch Indexer is licensed under [General Public License (GPLv2)](LICENSE).
