@@ -55,10 +55,10 @@ trait BuilderTrait
     {
         $tmp      = &$this->filterBuildingPoint;
         $relation = strtolower($relation);
-        if ($relation = 'and') { //alias
+        if ($relation == 'and') { //alias
             $relation = 'must';
         }
-        if ($relation = 'or') { //alias
+        if ($relation == 'or') { //alias
             $relation = 'should';
         }
         $this->filterBuildingPoint = &$this->filterBuildingPoint[]['bool'][$relation];
