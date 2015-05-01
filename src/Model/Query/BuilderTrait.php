@@ -87,7 +87,6 @@ trait BuilderTrait
     public function where($arg1, $arg2 = null, $arg3 = null, $not = null)
     {
 
-
         if (is_array($arg1)) {
             $this->filterBuildingPoint[] = [
                 'terms' => $arg1
@@ -132,24 +131,28 @@ trait BuilderTrait
                 $this->filterBuildingPoint[]['bool'][$must]['range'] = [
                     $arg1 => ['gte' => $arg3]
                 ];
+                break;
 
             case '<=': // used by meta_query
             case 'lte':
                 $this->filterBuildingPoint[]['bool'][$must]['range'] = [
                     $arg1 => ['lte' => $arg3]
                 ];
+                break;
 
             case '>': // used by meta_query
             case 'gt':
                 $this->filterBuildingPoint[]['bool'][$must]['range'] = [
                     $arg1 => ['gt' => $arg3]
                 ];
+                break;
 
             case '<': // used by meta_query
             case 'lt':
                 $this->filterBuildingPoint[]['bool'][$must]['range'] = [
                     $arg1 => ['lt' => $arg3]
                 ];
+                break;
 
         }
 
