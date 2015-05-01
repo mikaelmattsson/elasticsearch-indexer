@@ -13,6 +13,7 @@ namespace Wallmander\ElasticsearchIndexer\Model\Query;
 
 use Wallmander\ElasticsearchIndexer\Model\Indexer;
 use Wp_Query;
+use WP_Date_Query;
 
 /**
  * Trait WpConverterTrait
@@ -144,11 +145,6 @@ trait WpConverterTrait
         }
     }
 
-    public function argM($value, &$q)
-    {
-        //
-    }
-
     public function argP($value, &$q)
     {
         $this->where('post_id', $value);
@@ -214,37 +210,42 @@ trait WpConverterTrait
 
     public function argSecond($value, &$q)
     {
-        //
+        $this->where('post_date_object.second', $value);
     }
 
     public function argMinute($value, &$q)
     {
-        //
+        $this->where('post_date_object.minute', $value);
     }
 
     public function argHour($value, &$q)
     {
-        //
+        $this->where('post_date_object.hour', $value);
     }
 
     public function argDay($value, &$q)
     {
-        //
+        $this->where('post_date_object.day', $value);
     }
 
     public function argMonthnum($value, &$q)
     {
-        //
+        $this->where('post_date_object.month', $value);
     }
 
     public function argYear($value, &$q)
     {
-        //
+        $this->where('post_date_object.year', $value);
     }
 
     public function argW($value, &$q)
     {
-        //
+        $this->where('post_date_object.week', $value);
+    }
+
+    public function argM($value, &$q)
+    {
+        $this->where('post_date_object.m', $value);
     }
 
     public function argCategoryName($value, &$q)
@@ -589,11 +590,7 @@ trait WpConverterTrait
 
     public function argMetaQuery($value, &$q)
     {
-        if (empty($value['relation'])) {
-            $value['relation'] = 'and';
-        }
         $this->bool(function ($filter) use ($value, $q) {
-
             foreach ($value as $key => $mq) {
                 if ($key === 'relation') {
                     continue;
@@ -604,6 +601,58 @@ trait WpConverterTrait
                 $filter->where('post_meta.' . $mq['key'] . '.raw', $mq['compare'], $mq['value']);
             }
 
-        }, $value['relation']);
+        }, !empty($value['relation']) ? $value['relation'] : 'and');
+    }
+
+    public function argDateQuery($value, &$q)
+    {
+        $this->bool(function ($filter) use ($value, $q) {
+            foreach ($value as $dq) {
+                $column    = !empty($dq['column']) ? $dq['column'] : 'post_date';
+                $inclusive = !empty($dq['inclusive']);
+                foreach ($dq as $key => $value) {
+                    switch ($key) {
+                        case 'before':
+                            $date       = static::buildDatetime($value, $inclusive);
+                            $comparator = 'lt';
+                            if ($inclusive) {
+                                $comparator .= 'e';
+                            }
+                            $filter->where($column, $comparator, $date);
+                            break;
+                        case 'after':
+                            $date       = static::buildDatetime($value, !$inclusive);
+                            $comparator = 'gt';
+                            if ($inclusive) {
+                                $comparator .= 'e';
+                            }
+                            $filter->where($column, $comparator, $date);
+                            break;
+                        case 'week' :
+                        case 'w' :
+                            $this->where($column . '_object.week', $value);
+                            break;
+                        case 'year' :
+                        case 'month' :
+                        case 'dayofyear' :
+                        case 'day' :
+                        case 'dayofweek' :
+                        case 'dayofweek_iso' :
+                        case 'hour' :
+                        case 'minute' :
+                        case 'second' :
+                            $this->where($column . '_object.' . $key, $value);
+                            break;
+                    }
+                }
+
+            }
+        }, !empty($value['relation']) ? $value['relation'] : 'and');
+    }
+
+    public static function buildDatetime($date, $inclusive = false)
+    {
+        $wpDateQuery = new WP_Date_Query([]);
+        return $wpDateQuery->build_mysql_datetime($date, $inclusive);
     }
 }

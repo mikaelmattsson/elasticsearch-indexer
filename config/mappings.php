@@ -4,6 +4,53 @@
  * Full Credits to 10up/ElasticPress
  */
 
+$dateTermFields = [
+    //4 digit year (e.g. 2011)
+    'year' => [
+        'type' => 'integer',
+    ],
+    //Month number (from 1 to 12) alternate name "monthnum"
+    'month' => [
+        'type' => 'integer',
+    ],
+    //YearMonth (For e.g.: 201307)
+    'm' => [
+        'type' => 'integer',
+    ],
+    //Week of the year (from 0 to 53) alternate name "w"
+    'week' => [
+        'type' => 'integer',
+    ],
+    //Day of the month (from 1 to 31)
+    'day' => [
+        'type' => 'integer',
+    ],
+    //Accepts numbers 1-7 (1 is Sunday)
+    'dayofweek' => [
+        'type' => 'integer',
+    ],
+    //Accepts numbers 1-7 (1 is Monday)
+    'dayofweek_iso' => [
+        'type' => 'integer',
+    ],
+    //Accepts numbers 1-366
+    'dayofyear' => [
+        'type' => 'integer',
+    ],
+    //Hour (from 0 to 23)
+    'hour' => [
+        'type' => 'integer',
+    ],
+    //Minute (from 0 to 59)
+    'minute' => [
+        'type' => 'integer',
+    ],
+    //Second (0 to 59)
+    'second' => [
+        'type' => 'integer',
+    ]
+];
+
 return [
     'post' => [
         'date_detection' => false,
@@ -184,44 +231,25 @@ return [
             'post_meta_num' => [
                 'type' => 'object'
             ],
-            'date_terms' => [
+            'post_date_object' => [
                 'type' => 'object',
                 'path' => 'full',
-                'fields' => [
-                    'year' => [//4 digit year (e.g. 2011)
-                        'type' => 'integer',
-                    ],
-                    'month' => [//Month number (from 1 to 12) alternate name "monthnum"
-                        'type' => 'integer',
-                    ],
-                    'm' => [//YearMonth (For e.g.: 201307)
-                        'type' => 'integer',
-                    ],
-                    'week' => [//Week of the year (from 0 to 53) alternate name "w"
-                        'type' => 'integer',
-                    ],
-                    'day' => [//Day of the month (from 1 to 31)
-                        'type' => 'integer',
-                    ],
-                    'dayofweek' => [//Accepts numbers 1-7 (1 is Sunday)
-                        'type' => 'integer',
-                    ],
-                    'dayofweek_iso' => [//Accepts numbers 1-7 (1 is Monday)
-                        'type' => 'integer',
-                    ],
-                    'dayofyear' => [//Accepts numbers 1-366
-                        'type' => 'integer',
-                    ],
-                    'hour' => [//Hour (from 0 to 23)
-                        'type' => 'integer',
-                    ],
-                    'minute' => [//Minute (from 0 to 59)
-                        'type' => 'integer',
-                    ],
-                    'second' => [//Second (0 to 59)
-                        'type' => 'integer',
-                    ]
-                ]
+                'fields' => $dateTermFields,
+            ],
+            'post_date_gmt_object' => [
+                'type' => 'object',
+                'path' => 'full',
+                'fields' => $dateTermFields,
+            ],
+            'post_modified_object' => [
+                'type' => 'object',
+                'path' => 'full',
+                'fields' => $dateTermFields,
+            ],
+            'post_modified_gmt_object' => [
+                'type' => 'object',
+                'path' => 'full',
+                'fields' => $dateTermFields,
             ],
             'menu_order' => [
                 'type' => 'long',
@@ -233,7 +261,7 @@ return [
                 'index' => 'not_analyzed',
                 'include_in_all' => false
             ],
-            'guid' =>[
+            'guid' => [
                 'type' => 'string'
             ]
         ]
