@@ -204,4 +204,9 @@ trait BuilderTrait
         $this->args['size'] = max($size, 0);
         return $this;
     }
+
+    public function getArgs()
+    {
+        return $this->args;
+    }
 }

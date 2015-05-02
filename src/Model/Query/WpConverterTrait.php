@@ -72,7 +72,7 @@ trait WpConverterTrait
         // Fill again in case pre_get_posts unset some vars.
         $q = $wpQuery->fill_query_vars($wpQuery->query_vars);
 
-        //dd($q);
+        $q = apply_filters('esi_before_format_args',$q, $this);
 
         if ($wpQuery->is_posts_page) {
             $q['pagename'] = '';
@@ -131,7 +131,7 @@ trait WpConverterTrait
             }
         }
 
-        //jd($this->args);
+        do_action('esi_after_format_args', $this);
         return $this;
     }
 
@@ -250,22 +250,22 @@ trait WpConverterTrait
 
     public function argCategoryName($value, &$q)
     {
-        //
+        $this->where('terms.category.slug', $value);
     }
 
     public function argTag($value, &$q)
     {
-        //
+        $this->where('terms.post_tag.slug', $value);
     }
 
     public function argCat($value, &$q)
     {
-        //
+        $this->where('terms.category.term_id', $value);
     }
 
     public function argTagId($value, &$q)
     {
-        //
+        $this->where('terms.post_tag.term_id', $value);
     }
 
     public function argAuthor($value, &$q)

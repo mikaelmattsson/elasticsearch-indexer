@@ -12,6 +12,7 @@
 namespace Wallmander\ElasticsearchIndexer\Model;
 
 use WP_Query;
+use WP_User;
 
 /**
  * Class Indexer
