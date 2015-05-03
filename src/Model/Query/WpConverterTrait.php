@@ -42,6 +42,9 @@ trait WpConverterTrait
                 return false;
             }
         }
+        if ($q['fields'] == 'ids' || $q['fields'] == 'id=>parent') {
+            return false;
+        }
         if (!empty($q['post_status'])) {
             if (is_string($q['post_status'])) {
                 $q['post_status'] = explode(' ', str_replace(',', ' ', $q['post_status']));
@@ -72,7 +75,7 @@ trait WpConverterTrait
         // Fill again in case pre_get_posts unset some vars.
         $q = $wpQuery->fill_query_vars($wpQuery->query_vars);
 
-        $q = apply_filters('esi_before_format_args',$q, $this);
+        $q = apply_filters('esi_before_format_args', $q, $this);
 
         if ($wpQuery->is_posts_page) {
             $q['pagename'] = '';
@@ -191,7 +194,8 @@ trait WpConverterTrait
 
     public function argStatic($value, &$q)
     {
-        //
+        $this->where('post_type', 'page');
+        $this->isSingle = false;
     }
 
     public function argPagename($value, &$q)
@@ -361,17 +365,17 @@ trait WpConverterTrait
 
     public function argCategoryIn($value, &$q)
     {
-        // note:  $value is an array
+        $this->where('terms.category.term_id', $value);
     }
 
     public function argCategoryNotIn($value, &$q)
     {
-        // note:  $value is an array
+        $this->whereNot('terms.category.term_id', $value);
     }
 
     public function argCategoryAnd($value, &$q)
     {
-        // note:  $value is an array
+        $this->where('terms.category.term_id', '=', $value);
     }
 
     public function argPostIn($value, &$q)
@@ -386,27 +390,27 @@ trait WpConverterTrait
 
     public function argTagIn($value, &$q)
     {
-        // note:  $value is an array
+        $this->where('terms.post_tag.term_id', $value);
     }
 
     public function argTagNotIn($value, &$q)
     {
-        // note:  $value is an array
+        $this->whereNot('terms.post_tag.term_id', $value);
     }
 
     public function argTagAnd($value, &$q)
     {
-        // note:  $value is an array
+        $this->where('terms.post_tag.term_id', '=', $value);
     }
 
     public function argTagSlugIn($value, &$q)
     {
-        // note:  $value is an array
+        $this->where('terms.post_tag.slug', $value);
     }
 
     public function argTagSlugAnd($value, &$q)
     {
-        // note:  $value is an array
+        $this->where('terms.post_tag.slug', '=', $value);
     }
 
     public function argPostParentIn($value, &$q)

@@ -80,7 +80,6 @@ return [
                     'path_match' => 'post_meta_num.*',
                     'mapping' => [
                         'type' => 'long',
-                        'index' => 'analyzed'
                     ]
                 ]
             ],
@@ -220,7 +219,8 @@ return [
                 'include_in_all' => false
             ],
             'permalink' => [
-                'type' => 'string'
+                'type' => 'string',
+                'index' => 'not_analyzed',
             ],
             'terms' => [
                 'type' => 'object'
@@ -262,7 +262,8 @@ return [
                 'include_in_all' => false
             ],
             'guid' => [
-                'type' => 'string'
+                'type' => 'string',
+                'index' => 'not_analyzed'
             ]
         ]
     ]
