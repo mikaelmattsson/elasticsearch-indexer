@@ -81,10 +81,10 @@ trait BuilderTrait
      * @param string|array $arg1
      * @param string|array|null $arg2
      * @param string|array|null $arg3
-     * @param bool|null $not
+     * @param bool $not
      * @return $this
      */
-    public function where($arg1, $arg2 = null, $arg3 = null, $not = null)
+    public function where($arg1, $arg2 = null, $arg3 = null, $not = false)
     {
 
         if (is_array($arg1)) {
@@ -94,7 +94,7 @@ trait BuilderTrait
             return $this;
         }
 
-        if ($arg3 === null && $not === null) {
+        if ($arg3 === null) {
             $arg3 = $arg2;
             $arg2 = 'in';
         }
