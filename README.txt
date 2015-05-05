@@ -1,9 +1,9 @@
 === Elasticsearch Indexer ===
-Contributors: weblyan
+Contributors: wallmanderco
 Tags: elasticsearch, indexer, performance, search engine
 Requires at least: 3.6
-Tested up to: 4.1
-Stable tag: 0.1.0
+Tested up to: 4.2
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,9 @@ The plugin works to by indexing all posts and post meta data and redirecting the
 
 The plugin requires that you have Elasticsearch installed on your server
 
+[View the project on Github](https://github.com/wallmanderco/elasticsearch-indexer) for more info.
+
 == Installation ==
-1. Upload 'advanced-custom-fields' to the '/wp-content/plugins/' directory
+1. Upload 'elasticsearch-indexer' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Click on the new menu item and press the button “Reindex all posts”.

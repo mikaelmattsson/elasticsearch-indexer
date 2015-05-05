@@ -2,9 +2,10 @@
 
 /**
  * @wordpress-plugin
+ * Plugin URI:        http://wallmanderco.github.io/elasticsearch-indexer/
  * Plugin Name:       Elasticsearch Indexer
  * Description:       Elasticsearch indexer for Wordpress and Woocommerce
- * Version:           0.1.0
+ * Version:           1.0.0
  * Author:            Mikael Mattsson
  * Text Domain:       elasticsearch-indexer
  */

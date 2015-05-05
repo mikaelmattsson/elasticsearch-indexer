@@ -37,5 +37,8 @@ The plugin requires that you have Elasticsearch installed on your server
  1. Activate the plugin in the wordpress admin panel.
  1. Click on the new menu item and press the button “Reindex all posts”.
 
+## Links
+ - Wordpress plugin page: https://wordpress.org/plugins/elasticsearch-indexer/
+
 ## License
 Elasticsearch Indexer is licensed under [General Public License (GPLv2)](LICENSE).
