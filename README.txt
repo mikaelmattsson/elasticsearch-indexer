@@ -23,5 +23,8 @@ The plugin requires that you have Elasticsearch installed on your server
 
 == Installation ==
 1. Upload 'elasticsearch-indexer' to the '/wp-content/plugins/' directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Click on the new menu item and press the button “Reindex all posts”.
+1. [Install Elasticsearch](http://www.elastic.co/guide/en/elasticsearch/reference/1.5/_installation.html) if you haven't already.
+1. Make sure that Elasticsearch is installed and running on your server  
+(You can test this by running `curl -XGET -i 'http://127.0.0.1:9200'` in the command line)
+1. Activate the plugin through the 'Plugins' menu in WordPress
+1. Click on the new menu item and press the button “Reindex all posts”.
