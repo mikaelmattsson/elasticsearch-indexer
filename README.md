@@ -16,9 +16,10 @@ The plugin requires that you have Elasticsearch installed on your server
  - [WooCommerce 135 000 products without elasticsearch](http://disabled-2.es-demo.wallmanderco.se/)
 
 ## Installation from Github
- 1. Download the zip file from github.
+ 1. Download the [zip](https://github.com/wallmanderco/elasticsearch-indexer/archive/master.zip) file from github.
  1. Unzip and put the new directory inside you plugins directory (`/wp-content/plugins/`) in wordpress.
  1. run `composer install` inside the new directory.
+ 1. [Install Elasticsearch](http://www.elastic.co/guide/en/elasticsearch/reference/1.5/_installation.html) if you haven't already.
  1. Make sure that Elasticsearch is installed and running on your server  
 (You can test this by running `curl -XGET -i 'http://127.0.0.1:9200'` in the command line)
  1. Activate the plugin in the wordpress admin panel.
