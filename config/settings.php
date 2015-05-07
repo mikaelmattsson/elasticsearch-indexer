@@ -6,8 +6,8 @@
 
 return [
     'index' => [
-        'number_of_shards' => (int) get_option('esi_shards'),
-        'number_of_replicas' => (int) get_option('esi_replicas'),
+        'number_of_shards' => (int) get_option('esi_shards', 5),
+        'number_of_replicas' => (int) get_option('esi_replicas', 1),
     ],
     'analysis' => [
         'analyzer' => [
