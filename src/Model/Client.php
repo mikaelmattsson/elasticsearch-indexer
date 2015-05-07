@@ -13,7 +13,7 @@ namespace Wallmander\ElasticsearchIndexer\Model;
 
 use Elasticsearch\Client as ElasticSearchClient;
 use Guzzle\Http\Client as HttpClient;
-use Guzzle\Http\Exception\CurlException;
+use Guzzle\Http\Exception\RequestException;
 
 /**
  * Class Client
@@ -76,7 +76,7 @@ class Client extends ElasticSearchClient
             $host   = explode(',', get_option('esi_hosts', '127.0.0.1:9200'));
             $res    = $client->get('http://' . $host[0] . '/' . $index)->send();
             return $res->getBody();
-        } catch (CurlException $e) {
+        } catch (RequestException $e) {
             return false;
         }
     }
@@ -88,7 +88,7 @@ class Client extends ElasticSearchClient
             $host   = explode(',', get_option('esi_hosts', '127.0.0.1:9200'));
             $res    = $client->get('http://' . $host[0] . '/_cat/indices?v')->send();
             return $res->getBody();
-        } catch (CurlException $e) {
+        } catch (RequestException $e) {
             return $e->getError();
         }
     }
@@ -100,7 +100,7 @@ class Client extends ElasticSearchClient
             $host   = explode(',', get_option('esi_hosts', '127.0.0.1:9200'));
             $res    = $client->get('http://' . $host[0] . '/_status')->send();
             return $res->getBody();
-        } catch (CurlException $e) {
+        } catch (RequestException $e) {
             return false;
         }
     }
