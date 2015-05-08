@@ -1,5 +1,6 @@
 Elasticsearch Indexer
 =========
+![Elasticsearch Indexer](http://mikael.ninja/github/assets/elasticsearch-indexer/banner-1544x500.png)
 
 A plugin that integrates [WordPress](https://github.com/WordPress/WordPress) with [Elasticsearch](https://www.elastic.co/products/elasticsearch).
 
