@@ -11,6 +11,7 @@
 
 namespace Wallmander\ElasticsearchIndexer\Model;
 
+use Exception;
 use WP_Query;
 use WP_User;
 
@@ -191,11 +192,15 @@ class Indexer extends Client
      */
     public function deletePost($postsID)
     {
-        $this->delete([
-            'index' => $this->getIndexName(),
-            'type' => 'post',
-            'id' => $postsID,
-        ]);
+        try {
+            $this->delete([
+                'index' => $this->getIndexName(),
+                'type' => 'post',
+                'id' => $postsID,
+            ]);
+        } catch (Exception $e) {
+
+        }
     }
 
     /**
