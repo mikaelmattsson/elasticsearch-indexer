@@ -31,9 +31,12 @@ class Indexer extends Client
     {
         add_filter('esi_skip_query_integration', '__return_true');
         $indexed = 0;
-        $total = 0;
+        $total   = 0;
+        if ($from == 0) {
+            $this->setRefreshInterval('-1');
+        }
         if (is_multisite()) {
-            foreach (ep_get_sites() as $site) {
+            foreach (wp_get_sites() as $site) {
                 switch_to_blog($site['blog_id']);
                 $this->setBlog($site['blog_id']);
                 list($postCount, $foundPosts) = $this->reindexBlog($from, $size);
@@ -47,8 +50,10 @@ class Indexer extends Client
             $indexed += $postCount;
             $total += $foundPosts;
         }
-        if ($indexed >= $total){
+        if ($indexed >= $total) {
             echo "Finished indexing $indexed/$total posts…\n";
+            $this->setRefreshInterval('10s');
+            static::optimize();
         } else {
             echo "Indexed  $indexed/$total posts…\n";
         }
@@ -65,7 +70,7 @@ class Indexer extends Client
     {
         set_time_limit(200);
 
-        if ($offset == 0){
+        if ($offset == 0) {
             $this->flush();
         }
 
@@ -74,7 +79,9 @@ class Indexer extends Client
             'post_type' => static::getIndexablePostTypes(),
             'post_status' => static::getIndexablePostStati(),
             'offset' => $offset,
-            'ignore_sticky_posts' => true
+            'ignore_sticky_posts' => true,
+            'orderby' => 'id',
+            'order' => 'asc',
         ]);
 
         $query = new WP_Query($args);
@@ -102,6 +109,22 @@ class Indexer extends Client
                 'mappings' => Config::get('mappings'),
             ],
         ]);
+    }
+
+    /**
+     * Set refresh_interval on all indexes
+     *
+     * @param string $interval
+     */
+    public function setRefreshInterval($interval = '1s')
+    {
+        $sites = is_multisite() ? wp_get_sites() : [['blog_id' => get_current_blog_id()]];
+        foreach ($sites as $site) {
+            $index = $this->getIndexName($site['blog_id']);
+            static::setSettings($index, [
+                'index' => ['refresh_interval' => $interval]
+            ]);
+        }
     }
 
     /**
@@ -168,6 +191,11 @@ class Indexer extends Client
      */
     public function deletePost($postsID)
     {
+        $this->delete([
+            'index' => $this->getIndexName(),
+            'type' => 'post',
+            'id' => $postsID,
+        ]);
     }
 
     /**

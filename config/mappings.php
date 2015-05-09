@@ -3,7 +3,6 @@
 /**
  * Full Credits to 10up/ElasticPress
  */
-
 $dateTermFields = [
     //4 digit year (e.g. 2011)
     'year' => [
@@ -123,7 +122,7 @@ return [
             ]
         ],
         '_all' => [
-            'analyzer' => 'simple'
+            'enabled' => false
         ],
         'properties' => [
             'post_id' => [

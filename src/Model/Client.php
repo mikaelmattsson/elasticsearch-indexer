@@ -37,16 +37,20 @@ class Client extends ElasticSearchClient
     }
 
     /**
+     * @param int|null $blogId
      * @return string
      * @author 10up/ElasticPress
      */
-    public function getIndexName()
+    public function getIndexName($blogId = null)
     {
-        $siteUrl = get_site_url($this->blogID);
+        if ($blogId === null) {
+            $blogId = $this->blogID;
+        }
+        $siteUrl = get_site_url($blogId);
 
         if (!empty($siteUrl)) {
             $indexName = preg_replace('#https?://(www\.)?#i', '', $siteUrl);
-            $indexName = preg_replace('#[^\w]#', '', $indexName) . '-' . $this->blogID;
+            $indexName = preg_replace('#[^\w]#', '', $indexName) . '-' . $blogId;
         } else {
             $indexName = false;
         }
@@ -64,45 +68,137 @@ class Client extends ElasticSearchClient
         return $this;
     }
 
+    /**
+     * Evaluate if the we can search for posts
+     *
+     * @return bool
+     */
     public function isAvailable()
     {
         return (bool) static::indicesExists($this->getIndexName());
     }
 
+    /**
+     * Send a simple get request to the Elasticsearch server
+     *
+     * @param $uri
+     * @return \Guzzle\Http\Message\Response
+     */
+    public static function httpGet($uri)
+    {
+        $client = new HttpClient();
+        $host   = explode(',', get_option('esi_hosts', '127.0.0.1:9200'));
+        return $client->get('http://' . $host[0] . '/' . $uri)->send();
+    }
+
+    /**
+     * Send a simple post request to the Elasticsearch server
+     *
+     * @param $uri
+     * @param array $data
+     * @return \Guzzle\Http\Message\Response
+     */
+    public static function httpPost($uri, $data = null)
+    {
+        $client = new HttpClient();
+        $host   = explode(',', get_option('esi_hosts', '127.0.0.1:9200'));
+        if ($data) {
+            $data = json_encode($data);
+        }
+        return $client->post('http://' . $host[0] . '/' . $uri, null, $data)->send();
+    }
+
+    /**
+     * Send a simple put request to the Elasticsearch server
+     *
+     * @param $uri
+     * @param array $data
+     * @return \Guzzle\Http\Message\Response
+     */
+    public static function httpPut($uri, $data = null)
+    {
+        $client = new HttpClient();
+        $host   = explode(',', get_option('esi_hosts', '127.0.0.1:9200'));
+        if ($data) {
+            $data = json_encode($data);
+        }
+        return $client->put('http://' . $host[0] . '/' . $uri, null, $data)->send();
+    }
+
+    /**
+     * Check if Elasticsearch is running and the index exists
+     *
+     * @param $index
+     * @return bool|\Guzzle\Http\EntityBodyInterface|string
+     */
     public static function indicesExists($index)
     {
         try {
-            $client = new HttpClient();
-            $host   = explode(',', get_option('esi_hosts', '127.0.0.1:9200'));
-            $res    = $client->get('http://' . $host[0] . '/' . $index)->send();
-            return $res->getBody();
+            return static::httpGet($index)->getBody();
         } catch (RequestException $e) {
             return false;
         }
     }
 
+    /**
+     * Get a neat list of all indexes as a single string
+     *
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     */
     public static function getIndices()
     {
         try {
-            $client = new HttpClient();
-            $host   = explode(',', get_option('esi_hosts', '127.0.0.1:9200'));
-            $res    = $client->get('http://' . $host[0] . '/_cat/indices?v')->send();
-            return $res->getBody();
+            return static::httpGet('_cat/indices?v')->getBody();
         } catch (RequestException $e) {
-            return $e->getError();
+            return $e->getRequest()->getResponse();
         }
     }
 
+    /**
+     * Get Elasticsearch status
+     *
+     * @return bool|\Guzzle\Http\EntityBodyInterface|string
+     */
     public static function getStatus()
     {
         try {
-            $client = new HttpClient();
-            $host   = explode(',', get_option('esi_hosts', '127.0.0.1:9200'));
-            $res    = $client->get('http://' . $host[0] . '/_status')->send();
-            return $res->getBody();
+            return static::httpGet('_status')->getBody();
         } catch (RequestException $e) {
             return false;
         }
     }
 
+    /**
+     * @param $index
+     * @param array|object $data
+     * @return bool|\Guzzle\Http\EntityBodyInterface|string
+     */
+    public static function setSettings($index, $data)
+    {
+        try {
+            return static::httpPut($index . '/_settings', $data)->getBody();
+        } catch (RequestException $e) {
+            echo $e->getRequest()->getResponse();
+            return false;
+        }
+    }
+
+    /**
+     * Optimize the index for searches
+     *
+     * @param $index
+     * @return bool|\Guzzle\Http\EntityBodyInterface|string
+     */
+    public static function optimize($index = null)
+    {
+        try {
+            if ($index) {
+                return static::httpPost($index . '/_optimize')->getBody();
+            } else {
+                return static::httpPost('_optimize')->getBody();
+            }
+        } catch (RequestException $e) {
+            return false;
+        }
+    }
 }

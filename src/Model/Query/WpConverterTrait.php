@@ -12,8 +12,8 @@
 namespace Wallmander\ElasticsearchIndexer\Model\Query;
 
 use Wallmander\ElasticsearchIndexer\Model\Indexer;
-use Wp_Query;
 use WP_Date_Query;
+use Wp_Query;
 
 /**
  * Trait WpConverterTrait
@@ -649,7 +649,6 @@ trait WpConverterTrait
                             break;
                     }
                 }
-
             }
         }, !empty($value['relation']) ? $value['relation'] : 'and');
     }

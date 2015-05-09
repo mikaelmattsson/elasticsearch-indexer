@@ -18,7 +18,6 @@ namespace Wallmander\ElasticsearchIndexer\Model\Query;
  */
 trait BuilderTrait
 {
-
     protected $args = [];
 
     protected $filterBuildingPoint = null;
@@ -86,7 +85,6 @@ trait BuilderTrait
      */
     public function where($arg1, $arg2 = null, $arg3 = null, $not = false)
     {
-
         if (is_array($arg1)) {
             $this->filterBuildingPoint[] = [
                 'terms' => $arg1

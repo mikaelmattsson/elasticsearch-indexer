@@ -98,5 +98,4 @@ class Hooks
 
         //add_filter('split_the_query', '__return_false', 10, 2);
     }
-
 }

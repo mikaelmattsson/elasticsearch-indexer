@@ -11,8 +11,8 @@
 
 namespace Wallmander\ElasticsearchIndexer\Controller;
 
-use Wallmander\ElasticsearchIndexer\Model\Indexer;
 use Wallmander\ElasticsearchIndexer\Model\Client;
+use Wallmander\ElasticsearchIndexer\Model\Indexer;
 
 /**
  * Class Admin
@@ -105,5 +105,4 @@ class Admin
         $indexer->reindex($from, $size);
         die();
     }
-
 }
