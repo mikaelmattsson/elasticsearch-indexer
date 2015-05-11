@@ -21,6 +21,10 @@ The plugin requires that you have Elasticsearch installed on your server
 
 [View the project on Github](https://github.com/wallmanderco/elasticsearch-indexer) for more info.
 
+ - Website: https://wallmanderco.github.io/elasticsearch-indexer/
+ - Documentation: https://wallmanderco.github.io/elasticsearch-indexer/docs/
+ - Source code: https://github.com/wallmanderco/elasticsearch-indexer
+
 == Installation ==
 1. Upload 'elasticsearch-indexer' to the '/wp-content/plugins/' directory
 1. [Install Elasticsearch](http://www.elastic.co/guide/en/elasticsearch/reference/1.5/_installation.html) if you haven't already.

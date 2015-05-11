@@ -10,7 +10,12 @@ The plugin works to by indexing all posts and post meta data and redirecting the
 
 The plugin requires that you have Elasticsearch installed on your server
 
-### Demo
+## Links
+ - Website: https://wallmanderco.github.io/elasticsearch-indexer/
+ - Documentation: https://wallmanderco.github.io/elasticsearch-indexer/docs/
+ - Wordpress Repository: https://wordpress.org/plugins/elasticsearch-indexer/
+
+## Demo
  - [WooCommerce 10 000 products](http://enabled-1.es-demo.wallmanderco.se/)
  - [WooCommerce 10 000 products without elasticsearch](http://disabled-1.es-demo.wallmanderco.se/)
  - [WooCommerce 135 000 products](http://enabled-2.es-demo.wallmanderco.se/)
@@ -26,13 +31,10 @@ The plugin requires that you have Elasticsearch installed on your server
  1. Activate the plugin in the wordpress admin panel.
  1. Click on the new menu item and press the button “Reindex all posts”.
 
-### Not supported
+## Not supported
  - Sticky posts
  - Password protected posts
  - Random sorting
-
-## Links
- - Wordpress plugin page: https://wordpress.org/plugins/elasticsearch-indexer/
 
 ## License
 Elasticsearch Indexer is licensed under [General Public License (GPLv2)](LICENSE).
