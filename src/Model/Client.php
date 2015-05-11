@@ -47,12 +47,12 @@ class Client extends ElasticSearchClient
             $blogId = $this->blogID;
         }
         $siteUrl = get_site_url($blogId);
+        
+        $indexName = false;
 
         if (!empty($siteUrl)) {
             $indexName = preg_replace('#https?://(www\.)?#i', '', $siteUrl);
             $indexName = preg_replace('#[^\w]#', '', $indexName) . '-' . $blogId;
-        } else {
-            $indexName = false;
         }
 
         return apply_filters('esi_index_name', $indexName);
@@ -194,9 +194,9 @@ class Client extends ElasticSearchClient
         try {
             if ($index) {
                 return static::httpPost($index . '/_optimize')->getBody();
-            } else {
-                return static::httpPost('_optimize')->getBody();
             }
+            
+            return static::httpPost('_optimize')->getBody();
         } catch (RequestException $e) {
             return false;
         }
