@@ -13,7 +13,7 @@ The plugin requires that you have Elasticsearch installed on your server
 ## Links
  - Website: https://wallmanderco.github.io/elasticsearch-indexer/
  - Documentation: https://wallmanderco.github.io/elasticsearch-indexer/docs/
- - Wordpress Repository: https://wordpress.org/plugins/elasticsearch-indexer/
+ - WordPress Repository: https://wordpress.org/plugins/elasticsearch-indexer/
 
 ## Demo
  - [WooCommerce 10 000 products](http://enabled-1.es-demo.wallmanderco.se/)
