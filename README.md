@@ -2,7 +2,7 @@ Elasticsearch Indexer
 =========
 ![Elasticsearch Indexer](http://mikael.ninja/github/assets/elasticsearch-indexer/banner-728x236.png)
 
-[![StyleCI](https://styleci.io/repos/34813501/shield)](https://styleci.io/repos/34813501)
+[![StyleCI](https://styleci.io/repos/34813501/shield?style=flat)](https://styleci.io/repos/34813501)
 [![Latest Version](https://img.shields.io/github/release/wallmanderco/elasticsearch-indexer.svg?style=flat)](https://github.com/wallmanderco/elasticsearch-indexer/releases)
 [![License](https://img.shields.io/packagist/l/wallmanderco/elasticsearch-indexer.svg?style=flat)](https://packagist.org/packages/wallmanderco/elasticsearch-indexer)
 
