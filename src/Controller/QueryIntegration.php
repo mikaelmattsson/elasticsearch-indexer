@@ -15,7 +15,7 @@ use Wallmander\ElasticsearchIndexer\Model\Query;
 use WP_Query;
 
 /**
- * Class QueryIntegration
+ * Class QueryIntegration.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
@@ -27,8 +27,9 @@ class QueryIntegration
      * Filter query string used for get_posts(). Search for posts and save for later.
      * Return a query that will return nothing.
      *
-     * @param string $request
+     * @param string    $request
      * @param \WP_Query $query
+     *
      * @return string
      */
     public static function filterPostsRequest($request, WP_Query $query)
@@ -39,6 +40,7 @@ class QueryIntegration
 
         if (!Query::isCompatible($query)) {
             $query->is_elasticsearch_compatible = false;
+
             return $request;
         }
 
@@ -50,10 +52,11 @@ class QueryIntegration
     }
 
     /**
-     * Remove the found_rows from the SQL Query
+     * Remove the found_rows from the SQL Query.
      *
-     * @param string $sql
+     * @param string    $sql
      * @param \WP_Query $query
+     *
      * @return string
      */
     public static function filterFoundPostsQuery($sql, WP_Query $query)
@@ -89,11 +92,12 @@ class QueryIntegration
     }
 
     /**
-     * @param array $posts
+     * @param array     $posts
      * @param \WP_Query &$query
+     *
      * @return array
      */
-    public static function filterThePosts($posts, WP_Query &$query)
+    public static function filterThePosts($posts, WP_Query & $query)
     {
         if (apply_filters('esi_skip_query_integration', false, $query)) {
             return $posts;
@@ -112,7 +116,7 @@ class QueryIntegration
     }
 
     /**
-     * Switch to the correct site if the post site id is different than the actual one
+     * Switch to the correct site if the post site id is different than the actual one.
      *
      * @param array $post
      */
@@ -144,7 +148,7 @@ class QueryIntegration
     }
 
     /**
-     * Ensure we've started a loop before we allow ourselves to change the blog
+     * Ensure we've started a loop before we allow ourselves to change the blog.
      *
      * @param \WP_Query $query
      */
@@ -158,7 +162,7 @@ class QueryIntegration
     }
 
     /**
-     * Make sure the correct blog is restored
+     * Make sure the correct blog is restored.
      *
      * @param \WP_Query $query
      */

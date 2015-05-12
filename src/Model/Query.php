@@ -16,7 +16,7 @@ use WP_Post;
 use WP_Query;
 
 /**
- * Class Query
+ * Class Query.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
@@ -46,7 +46,8 @@ class Query extends Client
 
     /**
      * @param \WP_Query $wpQuery
-     * @param string $scope
+     * @param string    $scope
+     *
      * @return \Wallmander\ElasticsearchIndexer\Model\Query
      */
     public static function fromWpQuery(WP_Query $wpQuery, $scope)
@@ -54,6 +55,7 @@ class Query extends Client
         $q        = new static();
         $q->scope = $scope;
         $q->applyWpQuery($wpQuery);
+
         return $q;
     }
 
@@ -76,8 +78,8 @@ class Query extends Client
         }
         $result = $this->search([
             'index' => $this->getIndexName(),
-            'type' => 'post',
-            'body' => $this->args,
+            'type'  => 'post',
+            'body'  => $this->args,
         ]);
 
         $this->found_posts = $result['hits']['total'];
@@ -91,7 +93,7 @@ class Query extends Client
 
         foreach ($result['hits']['hits'] as $p) {
             $p                 = $p['_source'];
-            $this->posts[]     = $post = new WP_Post(new stdClass());
+            $this->posts[]     = $post     = new WP_Post(new stdClass());
             $post->ID          = $p['post_id'];
             $post->site_id     = get_current_blog_id();
             $post->post_author = $p['post_author']['id'];
@@ -122,11 +124,11 @@ class Query extends Client
             if ($this->updatePostTermCache) {
                 foreach ($p['terms'] as $taxonomy => $terms) {
                     foreach ($terms as $key => $value) {
-                        $terms[$key]     = $value = (object) $value;
+                        $terms[$key]     = $value     = (object) $value;
                         $value->taxonomy = $taxonomy;
                         $value->filter   = 'raw';
                     }
-                    wp_cache_add($post->ID, $terms, $taxonomy . '_relationships');
+                    wp_cache_add($post->ID, $terms, $taxonomy.'_relationships');
                 }
             }
 

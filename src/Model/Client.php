@@ -16,13 +16,12 @@ use Guzzle\Http\Client as HttpClient;
 use Guzzle\Http\Exception\RequestException;
 
 /**
- * Class Client
+ * Class Client.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
 class Client extends ElasticSearchClient
 {
-
     protected $blogID;
 
     /**
@@ -31,6 +30,7 @@ class Client extends ElasticSearchClient
     public function __construct($blogId = null)
     {
         $this->setBlog($blogId);
+
         return parent::__construct([
             'hosts' => explode(',', get_option('esi_hosts', '127.0.0.1:9200')),
         ]);
@@ -38,7 +38,9 @@ class Client extends ElasticSearchClient
 
     /**
      * @param int|null $blogId
+     *
      * @return string
+     *
      * @author 10up/ElasticPress
      */
     public function getIndexName($blogId = null)
@@ -47,12 +49,12 @@ class Client extends ElasticSearchClient
             $blogId = $this->blogID;
         }
         $siteUrl = get_site_url($blogId);
-        
+
         $indexName = false;
 
         if (!empty($siteUrl)) {
             $indexName = preg_replace('#https?://(www\.)?#i', '', $siteUrl);
-            $indexName = preg_replace('#[^\w]#', '', $indexName) . '-' . $blogId;
+            $indexName = preg_replace('#[^\w]#', '', $indexName).'-'.$blogId;
         }
 
         return apply_filters('esi_index_name', $indexName);
@@ -60,16 +62,18 @@ class Client extends ElasticSearchClient
 
     /**
      * @param int|null $blogId
+     *
      * @return $this
      */
     public function setBlog($blogId = null)
     {
         $this->blogID = $blogId ? $blogId : get_current_blog_id();
+
         return $this;
     }
 
     /**
-     * Evaluate if the we can search for posts
+     * Evaluate if the we can search for posts.
      *
      * @return bool
      */
@@ -79,23 +83,26 @@ class Client extends ElasticSearchClient
     }
 
     /**
-     * Send a simple get request to the Elasticsearch server
+     * Send a simple get request to the Elasticsearch server.
      *
      * @param $uri
+     *
      * @return \Guzzle\Http\Message\Response
      */
     public static function httpGet($uri)
     {
         $client = new HttpClient();
         $host   = explode(',', get_option('esi_hosts', '127.0.0.1:9200'));
-        return $client->get('http://' . $host[0] . '/' . $uri)->send();
+
+        return $client->get('http://'.$host[0].'/'.$uri)->send();
     }
 
     /**
-     * Send a simple post request to the Elasticsearch server
+     * Send a simple post request to the Elasticsearch server.
      *
      * @param $uri
      * @param array $data
+     *
      * @return \Guzzle\Http\Message\Response
      */
     public static function httpPost($uri, $data = null)
@@ -105,14 +112,16 @@ class Client extends ElasticSearchClient
         if ($data) {
             $data = json_encode($data);
         }
-        return $client->post('http://' . $host[0] . '/' . $uri, null, $data)->send();
+
+        return $client->post('http://'.$host[0].'/'.$uri, null, $data)->send();
     }
 
     /**
-     * Send a simple put request to the Elasticsearch server
+     * Send a simple put request to the Elasticsearch server.
      *
      * @param $uri
      * @param array $data
+     *
      * @return \Guzzle\Http\Message\Response
      */
     public static function httpPut($uri, $data = null)
@@ -122,13 +131,15 @@ class Client extends ElasticSearchClient
         if ($data) {
             $data = json_encode($data);
         }
-        return $client->put('http://' . $host[0] . '/' . $uri, null, $data)->send();
+
+        return $client->put('http://'.$host[0].'/'.$uri, null, $data)->send();
     }
 
     /**
-     * Check if Elasticsearch is running and the index exists
+     * Check if Elasticsearch is running and the index exists.
      *
      * @param $index
+     *
      * @return bool|\Guzzle\Http\EntityBodyInterface|string
      */
     public static function indicesExists($index)
@@ -141,7 +152,7 @@ class Client extends ElasticSearchClient
     }
 
     /**
-     * Get a neat list of all indexes as a single string
+     * Get a neat list of all indexes as a single string.
      *
      * @return \Guzzle\Http\EntityBodyInterface|string
      */
@@ -155,7 +166,7 @@ class Client extends ElasticSearchClient
     }
 
     /**
-     * Get Elasticsearch status
+     * Get Elasticsearch status.
      *
      * @return bool|\Guzzle\Http\EntityBodyInterface|string
      */
@@ -171,31 +182,34 @@ class Client extends ElasticSearchClient
     /**
      * @param $index
      * @param array|object $data
+     *
      * @return bool|\Guzzle\Http\EntityBodyInterface|string
      */
     public static function setSettings($index, $data)
     {
         try {
-            return static::httpPut($index . '/_settings', $data)->getBody();
+            return static::httpPut($index.'/_settings', $data)->getBody();
         } catch (RequestException $e) {
             echo $e->getRequest()->getResponse();
+
             return false;
         }
     }
 
     /**
-     * Optimize the index for searches
+     * Optimize the index for searches.
      *
      * @param $index
+     *
      * @return bool|\Guzzle\Http\EntityBodyInterface|string
      */
     public static function optimize($index = null)
     {
         try {
             if ($index) {
-                return static::httpPost($index . '/_optimize')->getBody();
+                return static::httpPost($index.'/_optimize')->getBody();
             }
-            
+
             return static::httpPost('_optimize')->getBody();
         } catch (RequestException $e) {
             return false;

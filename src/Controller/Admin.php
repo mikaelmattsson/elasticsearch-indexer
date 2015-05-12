@@ -15,14 +15,14 @@ use Wallmander\ElasticsearchIndexer\Model\Client;
 use Wallmander\ElasticsearchIndexer\Model\Indexer;
 
 /**
- * Class Admin
+ * Class Admin.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
 class Admin
 {
     /**
-     * Hooked on admin_menu. Adds the menu items to the admin sidebar
+     * Hooked on admin_menu. Adds the menu items to the admin sidebar.
      */
     public static function actionAdminMenu()
     {
@@ -54,12 +54,12 @@ class Admin
     }
 
     /**
-     * Hooked on admin_init. Registers the options and enqueues admin style and javascript
+     * Hooked on admin_init. Registers the options and enqueues admin style and javascript.
      */
     public static function actionAdminInit()
     {
-        wp_enqueue_style('elasticsearch-indexer', ESI_URL . 'assets/admin/style.css');
-        wp_enqueue_script('elasticsearch-indexer', ESI_URL . 'assets/admin/script.js', ['jquery']);
+        wp_enqueue_style('elasticsearch-indexer', ESI_URL.'assets/admin/style.css');
+        wp_enqueue_script('elasticsearch-indexer', ESI_URL.'assets/admin/script.js', ['jquery']);
         register_setting('esi_options_group', 'esi_hosts');
         register_setting('esi_options_group', 'esi_shards');
         register_setting('esi_options_group', 'esi_replicas');
@@ -67,32 +67,32 @@ class Admin
     }
 
     /**
-     * Admin Indexing Page
+     * Admin Indexing Page.
      */
     public static function getIndex()
     {
-        require ESI_PATH . '/views/admin/index.php';
+        require ESI_PATH.'/views/admin/index.php';
     }
 
     /**
-     * Admin Settings Page
+     * Admin Settings Page.
      */
     public static function getSettings()
     {
-        require ESI_PATH . '/views/admin/settings.php';
+        require ESI_PATH.'/views/admin/settings.php';
     }
 
     /**
-     * Admin Status Page
+     * Admin Status Page.
      */
     public static function getStatus()
     {
         $indices = Client::getIndices();
-        require ESI_PATH . '/views/admin/status.php';
+        require ESI_PATH.'/views/admin/status.php';
     }
 
     /**
-     * Admin reindex, requested by the index page
+     * Admin reindex, requested by the index page.
      */
     public static function ajaxReindex()
     {
@@ -101,7 +101,7 @@ class Admin
         }
         $from    = $_POST['from'];
         $size    = $_POST['size'];
-        $indexer = new Indexer;
+        $indexer = new Indexer();
         $indexer->reindex($from, $size);
         die();
     }

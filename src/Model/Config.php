@@ -12,20 +12,21 @@
 namespace Wallmander\ElasticsearchIndexer\Model;
 
 /**
- * Class Config
+ * Class Config.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
 class Config
 {
     /**
-     * Fetch config array from a file in the config directory
+     * Fetch config array from a file in the config directory.
      *
      * @param string $config
+     *
      * @return array
      */
     public static function get($config)
     {
-        return require ESI_PATH . 'config/' . $config . '.php';
+        return require ESI_PATH.'config/'.$config.'.php';
     }
 }
