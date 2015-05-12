@@ -2,6 +2,10 @@ Elasticsearch Indexer
 =========
 ![Elasticsearch Indexer](http://mikael.ninja/github/assets/elasticsearch-indexer/banner-728x236.png)
 
+[![StyleCI](https://styleci.io/repos/34813501/shield)](https://styleci.io/repos/34813501)
+[![Latest Version](https://img.shields.io/github/release/wallmanderco/elasticsearch-indexer.svg?style=flat)](https://github.com/wallmanderco/elasticsearch-indexer/releases)
+[![License](https://img.shields.io/packagist/l/wallmanderco/elasticsearch-indexer.svg?style=flat)](https://packagist.org/packages/wallmanderco/elasticsearch-indexer)
+
 A plugin that integrates [WordPress](https://github.com/WordPress/WordPress) with [Elasticsearch](https://www.elastic.co/products/elasticsearch).
 
 Aside from super fast full text search, this plugin will speed up post listings of any post type, including [WooCommerce](http://www.woothemes.com/woocommerce/) products.
