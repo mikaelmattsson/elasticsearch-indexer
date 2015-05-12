@@ -14,18 +14,19 @@ namespace Wallmander\ElasticsearchIndexer\Controller;
 use Wallmander\ElasticsearchIndexer\Model\Indexer;
 
 /**
- * Class Sync
+ * Class Sync.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
 class Sync
 {
     /**
-     * Hooked on transition_post_status. Called when a post is updated
+     * Hooked on transition_post_status. Called when a post is updated.
      *
      * @param string $newStatus
      * @param string $oldStatus
      * @param object $post
+     *
      * @author 10up/ElasticPress
      */
     public static function actionTransitionPostStatus($newStatus, $oldStatus, $post)
@@ -69,7 +70,7 @@ class Sync
     }
 
     /**
-     * Hooked on delete_post. Called when a post is deleted
+     * Hooked on delete_post. Called when a post is deleted.
      *
      * @param int $postsID
      */

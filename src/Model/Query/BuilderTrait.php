@@ -12,7 +12,7 @@
 namespace Wallmander\ElasticsearchIndexer\Model\Query;
 
 /**
- * Trait BuilderTrait
+ * Trait BuilderTrait.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
@@ -32,6 +32,7 @@ trait BuilderTrait
     {
         $this->args['sort'] = [];
         $this->addSort($field, $order);
+
         return $this;
     }
 
@@ -47,6 +48,7 @@ trait BuilderTrait
         } else {
             $this->args['sort'][] = [$field => ['order' => $order]];
         }
+
         return $this;
     }
 
@@ -64,6 +66,7 @@ trait BuilderTrait
         $this->filterBuildingPoint = [];
         $callable($this);
         $this->filterBuildingPoint = &$tmp;
+
         return $this;
     }
 
@@ -75,20 +78,22 @@ trait BuilderTrait
      *           where('age', '=', [20, 21]) // exact match
      *           where('age', '==', [20, 21]) // same as above
      *           where('age', '!=', 20)
-     *           where('age', 'exists', true) //warning: arg3 is needed or else it will check if age = 'exists'
+     *           where('age', 'exists', true) //warning: arg3 is needed or else it will check if age = 'exists'.
      *
-     * @param string|array $arg1
+     * @param string|array      $arg1
      * @param string|array|null $arg2
      * @param string|array|null $arg3
-     * @param bool $not
+     * @param bool              $not
+     *
      * @return $this
      */
     public function where($arg1, $arg2 = null, $arg3 = null, $not = false)
     {
         if (is_array($arg1)) {
             $this->filterBuildingPoint[] = [
-                'terms' => $arg1
+                'terms' => $arg1,
             ];
+
             return $this;
         }
 
@@ -105,13 +110,13 @@ trait BuilderTrait
             case '=': // used by meta_query
             case '==':
                 $this->filterBuildingPoint[]['bool'][$must] = [
-                    'term' => [$arg1 => $arg3]
+                    'term' => [$arg1 => $arg3],
                 ];
                 break;
 
             case 'in':
                 $this->filterBuildingPoint[]['bool'][$must] = [
-                    is_array($arg3) ? 'terms' : 'term' => [$arg1 => $arg3]
+                    is_array($arg3) ? 'terms' : 'term' => [$arg1 => $arg3],
                 ];
                 break;
 
@@ -120,35 +125,35 @@ trait BuilderTrait
             case 'exists': // used by meta_query
             case 'has':
                 $this->filterBuildingPoint[]['bool'][$must]['exists'] = [
-                    'field' => $arg1
+                    'field' => $arg1,
                 ];
                 break;
 
             case '>=': // used by meta_query
             case 'gte':
                 $this->filterBuildingPoint[]['bool'][$must]['range'] = [
-                    $arg1 => ['gte' => $arg3]
+                    $arg1 => ['gte' => $arg3],
                 ];
                 break;
 
             case '<=': // used by meta_query
             case 'lte':
                 $this->filterBuildingPoint[]['bool'][$must]['range'] = [
-                    $arg1 => ['lte' => $arg3]
+                    $arg1 => ['lte' => $arg3],
                 ];
                 break;
 
             case '>': // used by meta_query
             case 'gt':
                 $this->filterBuildingPoint[]['bool'][$must]['range'] = [
-                    $arg1 => ['gt' => $arg3]
+                    $arg1 => ['gt' => $arg3],
                 ];
                 break;
 
             case '<': // used by meta_query
             case 'lt':
                 $this->filterBuildingPoint[]['bool'][$must]['range'] = [
-                    $arg1 => ['lt' => $arg3]
+                    $arg1 => ['lt' => $arg3],
                 ];
                 break;
 
@@ -160,6 +165,7 @@ trait BuilderTrait
     public function whereNot($arg1, $arg2 = null, $arg3 = null)
     {
         $this->where($arg1, $arg2, $arg3, 1);
+
         return $this;
     }
 
@@ -168,12 +174,13 @@ trait BuilderTrait
         $should = [];
         foreach ($input as $key => $value) {
             $should[] = [
-                is_array($value) ? 'terms' : 'term' => [$key => $value]
+                is_array($value) ? 'terms' : 'term' => [$key => $value],
             ];
         }
         $this->filterBuildingPoint[] = [
-            'bool' => ['should' => $should]
+            'bool' => ['should' => $should],
         ];
+
         return $this;
     }
 
@@ -182,24 +189,27 @@ trait BuilderTrait
         $must = [];
         foreach ($input as $key => $value) {
             $must[] = [
-                is_array($value) ? 'terms' : 'term' => [$key => $value]
+                is_array($value) ? 'terms' : 'term' => [$key => $value],
             ];
         }
         $this->filterBuildingPoint[] = [
-            'bool' => ['must' => $must]
+            'bool' => ['must' => $must],
         ];
+
         return $this;
     }
 
     public function setFrom($from)
     {
         $this->args['from'] = max($from, 0);
+
         return $this;
     }
 
     public function setSize($size)
     {
         $this->args['size'] = max($size, 0);
+
         return $this;
     }
 

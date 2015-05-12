@@ -16,7 +16,7 @@ use WP_Date_Query;
 use Wp_Query;
 
 /**
- * Trait WpConverterTrait
+ * Trait WpConverterTrait.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
@@ -67,6 +67,7 @@ trait WpConverterTrait
                 }
             }
         }
+
         return true;
     }
 
@@ -128,13 +129,14 @@ trait WpConverterTrait
             if (!$value) {
                 continue;
             }
-            $f = 'arg' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+            $f = 'arg'.str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
             if (method_exists($this, $f)) {
                 $this->$f($q[$key], $q);
             }
         }
 
         do_action('esi_after_format_args', $this);
+
         return $this;
     }
 
@@ -160,7 +162,7 @@ trait WpConverterTrait
     }
 
     /**
-     * Automatic alias for subpost
+     * Automatic alias for subpost.
      *
      * @param $value
      * @param $q
@@ -174,7 +176,7 @@ trait WpConverterTrait
     }
 
     /**
-     * Automatic alias for subpost_id
+     * Automatic alias for subpost_id.
      *
      * @param $value
      * @param $q
@@ -339,7 +341,7 @@ trait WpConverterTrait
                                 'post_title',
                                 'post_excerpt',
                             ]),
-                            'like_text' => $value,
+                            'like_text'      => $value,
                             'min_similarity' => apply_filters('esi_min_similarity', 0.75),
                         ],
                     ],
@@ -533,16 +535,16 @@ trait WpConverterTrait
                     break;
 
                 case 'meta_value_num':
-                    $this->addSort('post_meta_num.' . $q['meta_key'], $o);
+                    $this->addSort('post_meta_num.'.$q['meta_key'], $o);
                     break;
 
                 case 'meta_value':
-                    $this->addSort('post_meta.' . $q['meta_key'], $o);
+                    $this->addSort('post_meta.'.$q['meta_key'], $o);
                     break;
 
                 case 'relevance':
                     $this->addSort([
-                        '_score' => 'desc',
+                        '_score'     => 'desc',
                         'menu_order' => 'asc',
                         'post_title' => 'asc',
                     ]);
@@ -554,7 +556,7 @@ trait WpConverterTrait
                     break;
 
                 default:
-                    $this->addSort('post_' . $key, $o);
+                    $this->addSort('post_'.$key, $o);
                     break;
             }
         }
@@ -564,13 +566,13 @@ trait WpConverterTrait
     {
         if (!empty($q['term'])) {
             $this->should([
-                    'terms.' . $value . '.all_slugs' => $q['term']
+                    'terms.'.$value.'.all_slugs' => $q['term'],
                 ]
             );
         } elseif (!empty($q['term_id'])) {
             $this->should([
-                    'terms.' . $value . '.term_id' => $q['term_id'],
-                    'terms.' . $value . '.parent' => $q['term_id']
+                    'terms.'.$value.'.term_id' => $q['term_id'],
+                    'terms.'.$value.'.parent'  => $q['term_id'],
                 ]
             );
         }
@@ -602,7 +604,7 @@ trait WpConverterTrait
                 if (empty($mq['compare']) || $mq['compare'] == '=') {
                     $mq['compare'] = 'in'; // ”=” is handled as ”in” in meta query
                 }
-                $filter->where('post_meta.' . $mq['key'] . '.raw', $mq['compare'], $mq['value']);
+                $filter->where('post_meta.'.$mq['key'].'.raw', $mq['compare'], $mq['value']);
             }
 
         }, !empty($value['relation']) ? $value['relation'] : 'and');
@@ -612,12 +614,12 @@ trait WpConverterTrait
     {
         $this->bool(function ($filter) use ($value, $q) {
             foreach ($value as $dq) {
-                $column    = !empty($dq['column']) ? $dq['column'] : 'post_date';
+                $column = !empty($dq['column']) ? $dq['column'] : 'post_date';
                 $inclusive = !empty($dq['inclusive']);
                 foreach ($dq as $key => $value) {
                     switch ($key) {
                         case 'before':
-                            $date       = static::buildDatetime($value, $inclusive);
+                            $date = static::buildDatetime($value, $inclusive);
                             $comparator = 'lt';
                             if ($inclusive) {
                                 $comparator .= 'e';
@@ -625,7 +627,7 @@ trait WpConverterTrait
                             $filter->where($column, $comparator, $date);
                             break;
                         case 'after':
-                            $date       = static::buildDatetime($value, !$inclusive);
+                            $date = static::buildDatetime($value, !$inclusive);
                             $comparator = 'gt';
                             if ($inclusive) {
                                 $comparator .= 'e';
@@ -634,7 +636,7 @@ trait WpConverterTrait
                             break;
                         case 'week' :
                         case 'w' :
-                            $this->where($column . '_object.week', $value);
+                            $this->where($column.'_object.week', $value);
                             break;
                         case 'year' :
                         case 'month' :
@@ -645,7 +647,7 @@ trait WpConverterTrait
                         case 'hour' :
                         case 'minute' :
                         case 'second' :
-                            $this->where($column . '_object.' . $key, $value);
+                            $this->where($column.'_object.'.$key, $value);
                             break;
                     }
                 }
@@ -656,6 +658,7 @@ trait WpConverterTrait
     public static function buildDatetime($date, $inclusive = false)
     {
         $wpDateQuery = new WP_Date_Query([]);
+
         return $wpDateQuery->build_mysql_datetime($date, $inclusive);
     }
 }

@@ -14,20 +14,20 @@ namespace Wallmander\ElasticsearchIndexer;
 use Wallmander\ElasticsearchIndexer\Model\Client;
 
 /**
- * Class Hooks
+ * Class Hooks.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
 class Hooks
 {
     /**
-     * Setup hooks
+     * Setup hooks.
      */
     public static function setup()
     {
         static::setupAdmin();
 
-        $client = new Client;
+        $client = new Client();
         if (!$client->isAvailable()) {
             return;
         }
@@ -37,7 +37,7 @@ class Hooks
     }
 
     /**
-     * Setup Admin hooks
+     * Setup Admin hooks.
      */
     public static function setupAdmin()
     {
@@ -53,7 +53,7 @@ class Hooks
     }
 
     /**
-     * Setup Sync hooks
+     * Setup Sync hooks.
      */
     public static function setupSync()
     {
@@ -68,7 +68,7 @@ class Hooks
     }
 
     /**
-     * Setup QueryIntegration hooks
+     * Setup QueryIntegration hooks.
      */
     public static function setupQueryIntegration()
     {

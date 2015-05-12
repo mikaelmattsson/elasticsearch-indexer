@@ -1,7 +1,16 @@
 <?php
 
+/*
+ * This file is part of Elasticsearch Indexer.
+ *
+ * (c) Wallmander & Co <mikael@wallmanderco.se>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 /**
- * Full Credits to 10up/ElasticPress
+ * Full Credits to 10up/ElasticPress.
  */
 $dateTermFields = [
     //4 digit year (e.g. 2011)
@@ -47,223 +56,223 @@ $dateTermFields = [
     //Second (0 to 59)
     'second' => [
         'type' => 'integer',
-    ]
+    ],
 ];
 
 return [
     'post' => [
-        'date_detection' => false,
+        'date_detection'    => false,
         'dynamic_templates' => [
             [
                 'template_meta' => [
                     'path_match' => 'post_meta.*',
-                    'mapping' => [
-                        'type' => 'multi_field',
-                        'path' => 'full',
+                    'mapping'    => [
+                        'type'   => 'multi_field',
+                        'path'   => 'full',
                         'fields' => [
                             '{name}' => [
-                                'type' => 'string',
-                                'index' => 'analyzed'
+                                'type'  => 'string',
+                                'index' => 'analyzed',
                             ],
                             'raw' => [
-                                'type' => 'string',
-                                'index' => 'not_analyzed',
-                                'include_in_all' => false
-                            ]
-                        ]
-                    ]
-                ]
+                                'type'           => 'string',
+                                'index'          => 'not_analyzed',
+                                'include_in_all' => false,
+                            ],
+                        ],
+                    ],
+                ],
             ],
             [
                 'template_meta_num' => [
                     'path_match' => 'post_meta_num.*',
-                    'mapping' => [
+                    'mapping'    => [
                         'type' => 'long',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'template_terms' => [
                     'path_match' => 'terms.*',
-                    'mapping' => [
-                        'type' => 'object',
-                        'path' => 'full',
+                    'mapping'    => [
+                        'type'       => 'object',
+                        'path'       => 'full',
                         'properties' => [
                             'name' => [
-                                'type' => 'string',
-                                'index' => 'analyzed'
+                                'type'  => 'string',
+                                'index' => 'analyzed',
                             ],
                             'term_id' => [
-                                'type' => 'long'
+                                'type' => 'long',
                             ],
                             'parent' => [
-                                'type' => 'long'
+                                'type' => 'long',
                             ],
                             'slug' => [
-                                'type' => 'string',
-                                'index' => 'not_analyzed'
+                                'type'  => 'string',
+                                'index' => 'not_analyzed',
                             ],
                             'all_slugs' => [
-                                'type' => 'string',
-                                'index' => 'not_analyzed'
-                            ]
-                        ]
-                    ]
-                ]
+                                'type'  => 'string',
+                                'index' => 'not_analyzed',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             [
                 'term_suggest' => [
                     'path_match' => 'term_suggest_*',
-                    'mapping' => [
-                        'type' => 'completion',
+                    'mapping'    => [
+                        'type'     => 'completion',
                         'analyzer' => 'default',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ],
         '_all' => [
-            'enabled' => false
+            'enabled' => false,
         ],
         'properties' => [
             'post_id' => [
-                'type' => 'long',
-                'index' => 'not_analyzed',
-                'include_in_all' => false
+                'type'           => 'long',
+                'index'          => 'not_analyzed',
+                'include_in_all' => false,
             ],
             'post_author' => [
-                'type' => 'object',
-                'path' => 'full',
+                'type'   => 'object',
+                'path'   => 'full',
                 'fields' => [
                     'display_name' => [
-                        'type' => 'string',
+                        'type'     => 'string',
                         'analyzer' => 'standard',
                     ],
                     'login' => [
-                        'type' => 'string',
+                        'type'     => 'string',
                         'analyzer' => 'standard',
                     ],
                     'id' => [
-                        'type' => 'long',
-                        'index' => 'not_analyzed'
+                        'type'  => 'long',
+                        'index' => 'not_analyzed',
                     ],
                     'raw' => [
-                        'type' => 'string',
-                        'index' => 'not_analyzed',
-                        'include_in_all' => false
-                    ]
-                ]
+                        'type'           => 'string',
+                        'index'          => 'not_analyzed',
+                        'include_in_all' => false,
+                    ],
+                ],
             ],
             'post_date' => [
-                'type' => 'date',
-                'format' => 'YYYY-MM-dd HH:mm:ss',
-                'include_in_all' => false
+                'type'           => 'date',
+                'format'         => 'YYYY-MM-dd HH:mm:ss',
+                'include_in_all' => false,
             ],
             'post_date_gmt' => [
-                'type' => 'date',
-                'format' => 'YYYY-MM-dd HH:mm:ss',
-                'include_in_all' => false
+                'type'           => 'date',
+                'format'         => 'YYYY-MM-dd HH:mm:ss',
+                'include_in_all' => false,
             ],
             'post_title' => [
-                'type' => 'multi_field',
+                'type'   => 'multi_field',
                 'fields' => [
                     'post_title' => [
-                        'type' => 'string',
+                        'type'     => 'string',
                         'analyzer' => 'standard',
-                        'store' => 'yes',
+                        'store'    => 'yes',
                     ],
                     'raw' => [
-                        'type' => 'string',
-                        'index' => 'not_analyzed',
-                        'include_in_all' => false
-                    ]
-                ]
+                        'type'           => 'string',
+                        'index'          => 'not_analyzed',
+                        'include_in_all' => false,
+                    ],
+                ],
             ],
             'post_excerpt' => [
-                'type' => 'string'
+                'type' => 'string',
             ],
             'post_content' => [
-                'type' => 'string',
-                'analyzer' => 'default'
+                'type'     => 'string',
+                'analyzer' => 'default',
             ],
             'post_status' => [
-                'type' => 'string',
-                'index' => 'not_analyzed'
+                'type'  => 'string',
+                'index' => 'not_analyzed',
             ],
             'post_name' => [
-                'type' => 'string',
-                'index' => 'not_analyzed'
+                'type'  => 'string',
+                'index' => 'not_analyzed',
             ],
             'post_modified' => [
-                'type' => 'date',
-                'format' => 'YYYY-MM-dd HH:mm:ss',
-                'include_in_all' => false
+                'type'           => 'date',
+                'format'         => 'YYYY-MM-dd HH:mm:ss',
+                'include_in_all' => false,
             ],
             'post_modified_gmt' => [
-                'type' => 'date',
-                'format' => 'YYYY-MM-dd HH:mm:ss',
-                'include_in_all' => false
+                'type'           => 'date',
+                'format'         => 'YYYY-MM-dd HH:mm:ss',
+                'include_in_all' => false,
             ],
             'post_parent' => [
-                'type' => 'long',
-                'index' => 'not_analyzed',
-                'include_in_all' => false
+                'type'           => 'long',
+                'index'          => 'not_analyzed',
+                'include_in_all' => false,
             ],
             'post_type' => [
-                'type' => 'string',
-                'index' => 'not_analyzed'
+                'type'  => 'string',
+                'index' => 'not_analyzed',
             ],
             'post_mime_type' => [
-                'type' => 'string',
-                'index' => 'not_analyzed',
-                'include_in_all' => false
+                'type'           => 'string',
+                'index'          => 'not_analyzed',
+                'include_in_all' => false,
             ],
             'permalink' => [
-                'type' => 'string',
+                'type'  => 'string',
                 'index' => 'not_analyzed',
             ],
             'terms' => [
-                'type' => 'object'
+                'type' => 'object',
             ],
             'post_meta' => [
-                'type' => 'object'
+                'type' => 'object',
             ],
             'post_meta_num' => [
-                'type' => 'object'
+                'type' => 'object',
             ],
             'post_date_object' => [
-                'type' => 'object',
-                'path' => 'full',
+                'type'   => 'object',
+                'path'   => 'full',
                 'fields' => $dateTermFields,
             ],
             'post_date_gmt_object' => [
-                'type' => 'object',
-                'path' => 'full',
+                'type'   => 'object',
+                'path'   => 'full',
                 'fields' => $dateTermFields,
             ],
             'post_modified_object' => [
-                'type' => 'object',
-                'path' => 'full',
+                'type'   => 'object',
+                'path'   => 'full',
                 'fields' => $dateTermFields,
             ],
             'post_modified_gmt_object' => [
-                'type' => 'object',
-                'path' => 'full',
+                'type'   => 'object',
+                'path'   => 'full',
                 'fields' => $dateTermFields,
             ],
             'menu_order' => [
-                'type' => 'long',
-                'index' => 'not_analyzed',
-                'include_in_all' => false
+                'type'           => 'long',
+                'index'          => 'not_analyzed',
+                'include_in_all' => false,
             ],
             'comment_count' => [
-                'type' => 'long',
-                'index' => 'not_analyzed',
-                'include_in_all' => false
+                'type'           => 'long',
+                'index'          => 'not_analyzed',
+                'include_in_all' => false,
             ],
             'guid' => [
-                'type' => 'string',
-                'index' => 'not_analyzed'
-            ]
-        ]
-    ]
+                'type'  => 'string',
+                'index' => 'not_analyzed',
+            ],
+        ],
+    ],
 ];
