@@ -34,7 +34,7 @@ class Indexer extends Client
         $indexed = 0;
         $total   = 0;
         if ($from == 0) {
-            $this->setRefreshInterval('-1');
+            //$this->setRefreshInterval('-1');
         }
         if (is_multisite()) {
             foreach (wp_get_sites() as $site) {
