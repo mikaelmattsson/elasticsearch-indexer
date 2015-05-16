@@ -407,6 +407,10 @@ class Indexer extends Client
      */
     public static function getIndexablePostTypes()
     {
+        if (Config::option('index_private_post_types')) {
+            return get_post_types();
+        }
+
         return get_post_types(['exclude_from_search' => false]);
     }
 
@@ -415,6 +419,18 @@ class Indexer extends Client
      */
     public static function getIndexablePostStati()
     {
+        if (Config::option('index_private_post_types')) {
+            return get_post_stati();
+        }
+
         return get_post_stati(['exclude_from_search' => false]);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSearchablePostTypes()
+    {
+        return get_post_types(['exclude_from_search' => false]);
     }
 }

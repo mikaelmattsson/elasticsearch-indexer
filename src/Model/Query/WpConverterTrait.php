@@ -12,6 +12,7 @@
 namespace Wallmander\ElasticsearchIndexer\Model\Query;
 
 use Wallmander\ElasticsearchIndexer\Model\Indexer;
+use Wallmander\ElasticsearchIndexer\Model\Query;
 use WP_Date_Query;
 use Wp_Query;
 
@@ -28,7 +29,8 @@ trait WpConverterTrait
 
     public static function isCompatible(Wp_Query $wpQuery)
     {
-        $q                    = $wpQuery->query_vars;
+        $q = $wpQuery->query_vars;
+
         $unsupportedQueryArgs = [
             'suppress_filters',
             'has_password',
@@ -42,9 +44,11 @@ trait WpConverterTrait
                 return false;
             }
         }
+
         if ($q['fields'] == 'ids' || $q['fields'] == 'id=>parent') {
             return false;
         }
+
         if (!empty($q['post_status'])) {
             if (is_string($q['post_status'])) {
                 $q['post_status'] = explode(' ', str_replace(',', ' ', $q['post_status']));
@@ -56,6 +60,7 @@ trait WpConverterTrait
                 }
             }
         }
+
         if (!empty($q['post_type']) && $q['post_type'] !== 'any') {
             if (is_string($q['post_type'])) {
                 $q['post_type'] = explode(' ', str_replace(',', ' ', $q['post_type']));
@@ -71,7 +76,7 @@ trait WpConverterTrait
         return true;
     }
 
-    public function formatArgs($wpQuery)
+    public function formatArgs(Wp_Query $wpQuery)
     {
         // Fill again in case pre_get_posts unset some vars.
         $q = $wpQuery->fill_query_vars($wpQuery->query_vars);
@@ -463,7 +468,7 @@ trait WpConverterTrait
     public function argPostType($value, &$q)
     {
         if ($value == 'any' || isset($value[0]) && $value[0] == 'any') {
-            $pt = get_post_types(['exclude_from_search' => false]);
+            $pt = Indexer::getSearchablePostTypes();
             $this->where('post_type', array_values($pt));
         } else {
             $this->where('post_type', $value);
@@ -596,7 +601,7 @@ trait WpConverterTrait
 
     public function argMetaQuery($value, &$q)
     {
-        $this->bool(function ($filter) use ($value, $q) {
+        $this->bool(function (Query $filter) use ($value, $q) {
             foreach ($value as $key => $mq) {
                 if ($key === 'relation') {
                     continue;
@@ -612,14 +617,14 @@ trait WpConverterTrait
 
     public function argDateQuery($value, &$q)
     {
-        $this->bool(function ($filter) use ($value, $q) {
+        $this->bool(function (Query $filter) use ($value, $q) {
             foreach ($value as $dq) {
-                $column = !empty($dq['column']) ? $dq['column'] : 'post_date';
+                $column    = !empty($dq['column']) ? $dq['column'] : 'post_date';
                 $inclusive = !empty($dq['inclusive']);
                 foreach ($dq as $key => $value) {
                     switch ($key) {
                         case 'before':
-                            $date = static::buildDatetime($value, $inclusive);
+                            $date       = static::buildDatetime($value, $inclusive);
                             $comparator = 'lt';
                             if ($inclusive) {
                                 $comparator .= 'e';
@@ -627,7 +632,7 @@ trait WpConverterTrait
                             $filter->where($column, $comparator, $date);
                             break;
                         case 'after':
-                            $date = static::buildDatetime($value, !$inclusive);
+                            $date       = static::buildDatetime($value, !$inclusive);
                             $comparator = 'gt';
                             if ($inclusive) {
                                 $comparator .= 'e';

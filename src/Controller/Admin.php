@@ -12,6 +12,7 @@
 namespace Wallmander\ElasticsearchIndexer\Controller;
 
 use Wallmander\ElasticsearchIndexer\Model\Client;
+use Wallmander\ElasticsearchIndexer\Model\Config;
 use Wallmander\ElasticsearchIndexer\Model\Indexer;
 
 /**
@@ -60,10 +61,9 @@ class Admin
     {
         wp_enqueue_style('elasticsearch-indexer', ESI_URL.'assets/admin/style.css');
         wp_enqueue_script('elasticsearch-indexer', ESI_URL.'assets/admin/script.js', ['jquery']);
-        register_setting('esi_options_group', 'esi_hosts');
-        register_setting('esi_options_group', 'esi_shards');
-        register_setting('esi_options_group', 'esi_replicas');
-        register_setting('esi_options_group', 'esi_filter_subtaxes');
+        foreach (Config::get('defaults') as $key => $value) {
+            register_setting('esi_options_group', Config::OPTION_PREFIX.$key);
+        }
     }
 
     /**

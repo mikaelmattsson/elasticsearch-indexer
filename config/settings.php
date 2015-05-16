@@ -9,14 +9,16 @@
  * file that was distributed with this source code.
  */
 
-/**
+use Wallmander\ElasticsearchIndexer\Model\Config;
+
+/*
  * Full Credits to 10up/ElasticPress.
  */
 
 return [
     'index' => [
-        'number_of_shards'   => (int) get_option('esi_shards', 5),
-        'number_of_replicas' => (int) get_option('esi_replicas', 1),
+        'number_of_shards'   => (int) Config::option('shards'),
+        'number_of_replicas' => (int) Config::option('replicas'),
     ],
     'analysis' => [
         'analyzer' => [
