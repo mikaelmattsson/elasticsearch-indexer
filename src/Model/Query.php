@@ -16,24 +16,45 @@ use WP_Post;
 use WP_Query;
 
 /**
- * Class Query.
+ * Fetches posts.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
 class Query extends Client
 {
-    public $wpQuery;
+    /**
+     * @var WP_Query|null
+     */
+    public $wp_query;
 
+    /**
+     * @var int
+     */
     public $found_posts = 0;
 
+    /**
+     * @var array
+     */
     public $posts = [];
 
+    /**
+     * @var bool
+     */
     public $disabled = false;
 
+    /**
+     * @var bool
+     */
     public $updatePostTermCache = false;
 
+    /**
+     * @var bool
+     */
     public $updatePostMetaCache = false;
 
+    /**
+     * @var string
+     */
     public $scope;
 
     use Query\WpConverterTrait;

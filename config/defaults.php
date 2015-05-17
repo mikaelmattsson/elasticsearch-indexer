@@ -10,7 +10,7 @@
  */
 
 return [
-    'host'                                => '127.0.0.1:9200',
+    'hosts'                               => '127.0.0.1:9200',
     'shards'                              => 5,
     'replicas'                            => 1,
     'include_posts_from_child_taxonomies' => true,

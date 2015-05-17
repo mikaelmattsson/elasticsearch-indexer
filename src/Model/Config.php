@@ -12,7 +12,7 @@
 namespace Wallmander\ElasticsearchIndexer\Model;
 
 /**
- * Class Config.
+ * Fetches config files and handles WordPress options.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */

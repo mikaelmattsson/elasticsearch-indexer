@@ -16,7 +16,7 @@ use WP_Query;
 use WP_User;
 
 /**
- * Class Indexer.
+ * Keeps the MySQL database in sync with the Elasticsearch database.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
@@ -54,7 +54,7 @@ class Indexer extends Client
         if ($indexed >= $total) {
             echo "Finished indexing $indexed/$total posts…\n";
             $this->setRefreshInterval('10s');
-            static::optimize();
+            Service\Elasticsearch::optimize();
         } else {
             echo "Indexed  $indexed/$total posts…\n";
         }
@@ -123,7 +123,7 @@ class Indexer extends Client
         $sites = is_multisite() ? wp_get_sites() : [['blog_id' => get_current_blog_id()]];
         foreach ($sites as $site) {
             $index = $this->getIndexName($site['blog_id']);
-            static::setSettings($index, [
+            Service\Elasticsearch::setSettings($index, [
                 'index' => ['refresh_interval' => $interval],
             ]);
         }

@@ -17,7 +17,7 @@ use WP_Date_Query;
 use Wp_Query;
 
 /**
- * Trait WpConverterTrait.
+ * Builds an Elasticsearch query from Wp_Query using the query builder.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */

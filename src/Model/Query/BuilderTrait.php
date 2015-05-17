@@ -12,7 +12,7 @@
 namespace Wallmander\ElasticsearchIndexer\Model\Query;
 
 /**
- * Trait BuilderTrait.
+ * Querybuilder for Elasticsearch.
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
