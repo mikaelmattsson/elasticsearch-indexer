@@ -97,7 +97,7 @@ class QueryIntegration
      *
      * @return array
      */
-    public static function filterThePosts($posts, WP_Query & $query)
+    public static function filterThePosts($posts, WP_Query $query)
     {
         if (apply_filters('esi_skip_query_integration', false, $query)) {
             return $posts;
