@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
     })
       .always(function (data) {
         $('.es-reindex-output').append($('<div>').html(data));
-        if (data.indexOf('Indexed') === 0) {
+        if (data.indexOf('Finished') !== 0) {
           from += size;
           requestReindex(from, size);
         } else {
