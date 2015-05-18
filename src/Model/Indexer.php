@@ -33,9 +33,6 @@ class Indexer extends Client
         add_filter('esi_skip_query_integration', '__return_true');
         $indexed = 0;
         $total   = 0;
-        if ($from == 0) {
-            //$this->setRefreshInterval('-1');
-        }
         if (is_multisite()) {
             foreach (wp_get_sites() as $site) {
                 switch_to_blog($site['blog_id']);
@@ -53,7 +50,6 @@ class Indexer extends Client
         }
         if ($indexed >= $total) {
             echo "Finished indexing $indexed/$total posts…\n";
-            $this->setRefreshInterval('1s');
             Service\Elasticsearch::optimize();
         } else {
             echo "Indexed  $indexed/$total posts…\n";
@@ -107,8 +103,8 @@ class Indexer extends Client
         $this->indices()->create([
             'index' => $indexName,
             'body'  => [
-                'settings' => Config::get('settings'),
-                'mappings' => Config::get('mappings'),
+                'settings' => Config::load('settings'),
+                'mappings' => Config::load('mappings'),
             ],
         ]);
     }

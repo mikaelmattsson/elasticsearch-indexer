@@ -30,7 +30,7 @@ class Config
      *
      * @return array
      */
-    public static function get($config)
+    public static function load($config)
     {
         return require ESI_PATH.'config/'.$config.'.php';
     }
@@ -48,7 +48,7 @@ class Config
         if ($o !== null) {
             return $o;
         }
-        $defaults = static::get('defaults');
+        $defaults = static::load('defaults');
 
         return $defaults[$key];
     }

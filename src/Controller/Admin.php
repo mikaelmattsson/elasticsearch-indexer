@@ -61,7 +61,7 @@ class Admin
     {
         wp_enqueue_style('elasticsearch-indexer', ESI_URL.'assets/admin/style.css');
         wp_enqueue_script('elasticsearch-indexer', ESI_URL.'assets/admin/script.js', ['jquery']);
-        foreach (Config::get('defaults') as $key => $value) {
+        foreach (Config::load('defaults') as $key => $value) {
             register_setting('esi_options_group', Config::OPTION_PREFIX.$key);
         }
     }
