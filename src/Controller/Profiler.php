@@ -33,7 +33,7 @@ class Profiler
     }
 
     /**
-     * Add profiler style
+     * Add profiler style.
      */
     public static function actionWpEnqueueScripts()
     {
@@ -41,7 +41,7 @@ class Profiler
     }
 
     /**
-     * Dump the collected data
+     * Dump the collected data.
      */
     public static function actionShutdown()
     {
@@ -54,7 +54,7 @@ class Profiler
         });
 
         $totalCount = count($queries);
-        $totalTime = (float) 0;
+        $totalTime  = (float) 0;
 
         foreach ($queries as $q) {
             $totalTime += $q[1];

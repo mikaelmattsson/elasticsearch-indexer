@@ -30,7 +30,7 @@ class Client extends ElasticSearchClient
         $this->setBlog($blogId);
 
         return parent::__construct([
-            'hosts' => explode(',', Config::option('hosts')),
+            'hosts' => Config::getHosts(),
         ]);
     }
 

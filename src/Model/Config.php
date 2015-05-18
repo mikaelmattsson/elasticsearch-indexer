@@ -76,4 +76,23 @@ class Config
     {
         return static::OPTION_PREFIX.$key;
     }
+
+    public static function getHosts()
+    {
+        $hosts = [];
+        foreach (explode(',', static::option('hosts')) as $h) {
+            if (strpos($h, '://') === false) {
+                $hosts[] = 'http://'.$h;
+            } else {
+                $hosts[] = $h;
+            }
+        }
+
+        return $hosts;
+    }
+
+    public static function getFirstHost()
+    {
+        return static::getHosts()[0];
+    }
 }

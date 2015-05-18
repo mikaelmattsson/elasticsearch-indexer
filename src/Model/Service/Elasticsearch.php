@@ -32,9 +32,9 @@ class Elasticsearch
     public static function httpGet($uri)
     {
         $client = new HttpClient();
-        $host   = explode(',', Config::option('hosts'));
+        $host   = Config::getFirstHost();
 
-        return $client->get('http://'.$host[0].'/'.$uri)->send();
+        return $client->get($host.'/'.$uri)->send();
     }
 
     /**
@@ -48,12 +48,12 @@ class Elasticsearch
     public static function httpPost($uri, $data = null)
     {
         $client = new HttpClient();
-        $host   = explode(',', Config::option('hosts'));
+        $host   = Config::getFirstHost();
         if ($data) {
             $data = json_encode($data);
         }
 
-        return $client->post('http://'.$host[0].'/'.$uri, null, $data)->send();
+        return $client->post($host.'/'.$uri, null, $data)->send();
     }
 
     /**
@@ -67,12 +67,12 @@ class Elasticsearch
     public static function httpPut($uri, $data = null)
     {
         $client = new HttpClient();
-        $host   = explode(',', Config::option('hosts'));
+        $host   = Config::getFirstHost();
         if ($data) {
             $data = json_encode($data);
         }
 
-        return $client->put('http://'.$host[0].'/'.$uri, null, $data)->send();
+        return $client->put($host.'/'.$uri, null, $data)->send();
     }
 
     /**
