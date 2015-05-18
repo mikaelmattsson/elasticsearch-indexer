@@ -12,6 +12,7 @@
 namespace Wallmander\ElasticsearchIndexer;
 
 use Wallmander\ElasticsearchIndexer\Model\Client;
+use Wallmander\ElasticsearchIndexer\Model\Config;
 
 /**
  * Class Hooks.
@@ -25,6 +26,14 @@ class Hooks
      */
     public static function setup()
     {
+        if (is_admin() && Config::option('profile_admin')) {
+            static::setupProfiler();
+        }
+
+        if (!is_admin() && Config::option('profile_frontend')) {
+            static::setupProfiler();
+        }
+
         static::setupAdmin();
 
         $client = new Client();
@@ -33,7 +42,21 @@ class Hooks
         }
 
         static::setupSync();
-        static::setupQueryIntegration();
+
+        if (Config::option('enable_integration')) {
+            static::setupQueryIntegration();
+        }
+    }
+
+    /**
+     * Setup Profiler Admin hooks.
+     */
+    public static function setupProfiler()
+    {
+        $class = 'Wallmander\ElasticsearchIndexer\Controller\Profiler';
+        $class = apply_filters('esi_controller_profiler', $class);
+
+        $class::setup();
     }
 
     /**

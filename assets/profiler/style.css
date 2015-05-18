@@ -1,0 +1,36 @@
+
+#esi-profiler {
+    font-size: 8px;
+    background: #fff;
+    margin-left: 160px;
+}
+
+#esi-profiler table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#esi-profiler td {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    padding: 2px 9px;
+    font-size: 10px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+}
+
+#esi-profiler th {
+    text-align: left;
+}
+
+#esi-profiler .esi-time {
+    word-break: normal;
+    word-wrap: normal;
+}
+
+#esi-profiler .esi-totals{
+    width: 300px;
+}
+
