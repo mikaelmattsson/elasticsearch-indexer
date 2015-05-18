@@ -53,7 +53,7 @@ class Indexer extends Client
         }
         if ($indexed >= $total) {
             echo "Finished indexing $indexed/$total posts…\n";
-            $this->setRefreshInterval('10s');
+            $this->setRefreshInterval('1s');
             Service\Elasticsearch::optimize();
         } else {
             echo "Indexed  $indexed/$total posts…\n";
