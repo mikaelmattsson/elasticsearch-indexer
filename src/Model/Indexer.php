@@ -338,36 +338,25 @@ class Indexer extends Client
      * @param $post
      *
      * @return array
-     *
-     * @author 10up/ElasticPress
      */
     protected static function prepareTerms($post)
     {
-        $taxonomies          = get_object_taxonomies($post->post_type, 'objects');
-        $selected_taxonomies = [];
+        $taxonomies = get_object_taxonomies($post->post_type, 'objects');
+        $terms      = [];
 
         foreach ($taxonomies as $taxonomy) {
-            if ($taxonomy->public) {
-                $selected_taxonomies[] = $taxonomy;
-            }
-        }
+            $objectTerms = get_the_terms($post->ID, $taxonomy->name);
 
-        $selected_taxonomies = apply_filters('ep_sync_taxonomies', $selected_taxonomies, $post);
-
-        if (empty($selected_taxonomies)) {
-            return [];
-        }
-
-        $terms = [];
-
-        foreach ($selected_taxonomies as $taxonomy) {
-            $object_terms = get_the_terms($post->ID, $taxonomy->name);
-
-            if (!$object_terms || is_wp_error($object_terms)) {
+            if (is_wp_error($objectTerms)) {
                 continue;
             }
 
-            foreach ($object_terms as $term) {
+            if (!$objectTerms) {
+                $terms[$taxonomy->name] = [];
+                continue;
+            }
+
+            foreach ($objectTerms as $term) {
                 $terms[$term->taxonomy][] = [
                     'term_id' => $term->term_id,
                     'slug'    => $term->slug,
