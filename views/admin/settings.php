@@ -26,12 +26,15 @@ use Wallmander\ElasticsearchIndexer\Model\Config;
             </tr>
 
             <tr valign="top">
-                <th>Host</th>
+                <th>Host(s)</th>
                 <td>
                     <input type="text" name="<?php echo Config::optionKey('hosts') ?>"
                            value="<?php echo Config::option('hosts'); ?>"/>
 
-                    <p class="description">Multiple separated by commas</p>
+                    <p class="description">
+                        Example: <code>127.0.0.1:9000</code>, <code>http://127.0.0.1:9000</code> or <code>https://127.0.0.1:9000</code><br>
+                        Multiple separated by commas. No spaces.
+                    </p>
                 </td>
             </tr>
 
