@@ -290,18 +290,6 @@ class Indexer extends Client
             }
         }
 
-        //Add parent slug
-        foreach ($post_args->terms as $taxSlug => $terms) {
-            foreach ($terms as $i => $termData) {
-                $post_args->terms[$taxSlug][$i]['all_slugs'] = [$termData['slug']];
-                if ($termData['parent']) {
-                    if ($parent = get_term_by('id', $termData['parent'], $taxSlug)) {
-                        $post_args->terms[$taxSlug][$i]['all_slugs'][] = $parent->slug;
-                    }
-                }
-            }
-        }
-
         $post_args = apply_filters('esi_post_sync_args', $post_args, $post->ID);
 
         return $post_args;
@@ -357,11 +345,19 @@ class Indexer extends Client
             }
 
             foreach ($objectTerms as $term) {
+                $allSlugs = [$term->slug];
+
+                //Add parent slug
+                if ($parent = get_term_by('id', $term->parent, $term->taxonomy)) {
+                    $allSlugs[] = $parent->slug;
+                }
+
                 $terms[$term->taxonomy][] = [
-                    'term_id' => $term->term_id,
-                    'slug'    => $term->slug,
-                    'name'    => $term->name,
-                    'parent'  => $term->parent,
+                    'term_id'   => $term->term_id,
+                    'slug'      => $term->slug,
+                    'name'      => $term->name,
+                    'parent'    => $term->parent,
+                    'all_slugs' => $allSlugs,
                 ];
             }
         }
