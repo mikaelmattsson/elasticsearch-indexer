@@ -3,7 +3,7 @@
 use Wallmander\ElasticsearchIndexer\Model\Config;
 
 ?>
-<div class="wrap">
+<div class="wrap esi-settings">
     <h2>Elasticsearch Indexer Settings</h2>
 
     <p>Remember to reindex posts after changing options</p>
@@ -28,13 +28,14 @@ use Wallmander\ElasticsearchIndexer\Model\Config;
             <tr valign="top">
                 <th>Host(s)</th>
                 <td>
-                    <input type="text" name="<?php echo Config::optionKey('hosts') ?>"
-                           value="<?php echo Config::option('hosts'); ?>"/>
+                    <textarea name="<?php echo Config::optionKey('hosts') ?>"><?php echo Config::option('hosts'); ?></textarea>
 
                     <p class="description">
                         Example: <code>127.0.0.1:9000</code>, <code>http://127.0.0.1:9000</code> or <code>https://127.0.0.1:9000</code><br>
-                        Multiple separated by commas. No spaces.
+                        Split multiple hosts between lines.<br/>
+                        Note! Default port is 80. If using https, you will have to specify the port. Example <code>https://user:pass@xxxx.bonsai.io:443</code>
                     </p>
+
                 </td>
             </tr>
 

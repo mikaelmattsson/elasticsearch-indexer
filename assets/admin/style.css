@@ -9,3 +9,8 @@
     word-break: break-all;
     word-wrap: break-word;
 }
+
+.esi-settings textarea{
+    width: 100%;
+    max-width: 650px;
+}

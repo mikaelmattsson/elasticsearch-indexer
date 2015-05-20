@@ -10,8 +10,11 @@
     margin-bottom: 20px;
 }
 
-#esi-profiler td {
+#esi-profiler{
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+#esi-profiler td {
     padding: 2px 9px;
     font-size: 10px;
     line-height: 1.42857143;
@@ -19,10 +22,13 @@
     word-break: break-all;
     word-wrap: break-word;
     background-color: #f5f5f5;
+    text-align: left;
 }
 
 #esi-profiler th {
     text-align: left;
+    font-size: 10px;
+    font-weight: bold;
 }
 
 #esi-profiler .esi-time {

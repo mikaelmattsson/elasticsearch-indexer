@@ -80,11 +80,13 @@ class Config
     public static function getHosts()
     {
         $hosts = [];
-        foreach (explode(',', static::option('hosts')) as $h) {
+        // hosts separated by comma (,) is deprecated.
+        $option = str_replace(',', "\n", static::option('hosts'));
+        foreach (explode("\n", $option) as $h) {
             if (strpos($h, '://') === false) {
-                $hosts[] = 'http://'.$h;
+                $hosts[] = trim('http://'.$h);
             } else {
-                $hosts[] = $h;
+                $hosts[] = trim($h);
             }
         }
 
