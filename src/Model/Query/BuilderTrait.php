@@ -28,6 +28,13 @@ trait BuilderTrait
         $this->filterBuildingPoint   = &$this->args['filter']['and'];
     }
 
+    public function setQuery(array $query)
+    {
+        $this->args['query'] = $query;
+
+        return $this;
+    }
+
     public function setSort($field, $order = 'asc')
     {
         $this->args['sort'] = [];

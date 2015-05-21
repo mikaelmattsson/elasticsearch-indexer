@@ -326,7 +326,7 @@ trait WpConverterTrait
 
     public function argS($value, &$q)
     {
-        $this->args['query'] = [
+        $this->setQuery([
             'bool' => [
                 'should' => [
                     [
@@ -352,7 +352,7 @@ trait WpConverterTrait
                     ],
                 ],
             ],
-        ];
+        ]);
     }
 
     public function argSentence($value, &$q)
