@@ -32,9 +32,44 @@ use Wallmander\ElasticsearchIndexer\Model\Config;
 
                     <p class="description">
                         Example: <code>127.0.0.1:9000</code>, <code>http://127.0.0.1:9000</code> or <code>https://127.0.0.1:9000</code><br>
-                        Split multiple hosts between lines.<br/>
-                        Note! Default port is 80. If using https, you will have to specify the port. Example <code>https://user:pass@xxxx.bonsai.io:443</code>
+                        Split multiple hosts between lines.<br>
+                        Note! Default port is 80. If using https, you will have to specify the port. Example <code>https://user:pass@xxxx.bonsai.io:443</code><br>
                     </p>
+                    <table class="esi-connection">
+                        <?php foreach ($hostsStatus as $i => $status) : ?>
+                            <tr>
+                                <td>
+                                    Host Status<?php echo count($hostsStatus) > 1 ? ' ('.($i + 1).')' : '' ?>
+                                </td>
+                                <td>
+                                    <?php if ($status['time'] < 50) : ?>
+                                        <span class="esi-connection-ok">
+                                            <?php echo number_format($status['time'], 3, '.', '&nbsp;') ?>&nbsp;ms
+                                        </span>
+                                    <?php elseif ($status['time'] < 150) : ?>
+                                        <span class="esi-connection-warning">
+                                            <?php echo number_format($status['time'], 3, '.', '&nbsp;') ?>&nbsp;ms
+                                        </span>
+                                    <?php else : ?>
+                                        <span class="esi-connection-error">
+                                            <?php echo number_format($status['time'], 3, '.', '&nbsp;') ?>&nbsp;ms
+                                        </span>
+                                    <?php endif ?>
+                                </td>
+                                <td>
+                                    <?php if ($status['success']) : ?>
+                                        <span class="esi-connection-ok">
+                                            <?php echo $status['status'] ?>
+                                        </span>
+                                    <?php else : ?>
+                                        <span class="esi-connection-error">
+                                            <?php echo $status['status'] ?>
+                                        </span>
+                                    <?php endif ?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    </table>
 
                 </td>
             </tr>

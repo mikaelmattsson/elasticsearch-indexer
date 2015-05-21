@@ -155,4 +155,32 @@ class Elasticsearch
             return false;
         }
     }
+
+    /**
+     * Ping a server and get the status and time.
+     *
+     * @param string $host
+     *
+     * @return array
+     */
+    public static function ping($host)
+    {
+        $start   = microtime(true);
+        $status  = 'OK';
+        $success = true;
+        try {
+            $client  = new HttpClient();
+            $client->get($host)->send();
+        } catch (RequestException $e) {
+            $status  = $e->getMessage();
+            $success = false;
+        }
+        $end = microtime(true);
+
+        return [
+            'status'  => $status,
+            'time'    => ($end - $start) * 1000,
+            'success' => $success,
+        ];
+    }
 }

@@ -79,6 +79,11 @@ class Admin
      */
     public static function getSettings()
     {
+        $hostsStatus = [];
+        foreach (Config::getHosts() as $host) {
+            $hostsStatus[] = Elasticsearch::ping($host);
+        }
+
         require ESI_PATH.'/views/admin/settings.php';
     }
 

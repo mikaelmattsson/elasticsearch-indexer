@@ -10,7 +10,27 @@
     word-wrap: break-word;
 }
 
-.esi-settings textarea{
+.esi-settings textarea {
     width: 100%;
     max-width: 650px;
+}
+
+.esi-connection {
+    margin: 10px 0;
+}
+
+.esi-connection td {
+    padding: 0 10px 0 0;
+}
+
+.esi-connection-ok {
+    color: #3c763d
+}
+
+.esi-connection-warning {
+    color: #aa6708
+}
+
+.esi-connection-error {
+    color: #ce4844
 }
