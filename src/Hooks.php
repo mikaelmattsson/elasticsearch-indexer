@@ -36,10 +36,8 @@ class Hooks
         }
 
         static::setupSync();
-
-        if (Config::option('enable_integration')) {
-            static::setupQueryIntegration();
-        }
+        static::setupQueryIntegration();
+        static::setupWooCommerceAdmin();
     }
 
     /**
@@ -99,6 +97,10 @@ class Hooks
      */
     public static function setupQueryIntegration()
     {
+        if (!Config::option('enable_integration')) {
+            return;
+        }
+
         $class = 'Wallmander\ElasticsearchIndexer\Controller\QueryIntegration';
         $class = apply_filters('esi_controller_queryintegration', $class);
 
@@ -124,5 +126,46 @@ class Hooks
         //add_action('the_post', [$class, 'actionThePost'], 10, 1); //see todo in README.md
 
         //add_filter('split_the_query', '__return_false', 10, 2);
+    }
+
+    /**
+     * Setup WooCommerceAdmin hooks.
+     */
+    public static function setupWooCommerceAdmin()
+    {
+        add_action('init', function () {
+            if (!class_exists('WooCommerce') || !Config::option('index_private_post_types')) {
+                return;
+            }
+
+            $class = 'Wallmander\ElasticsearchIndexer\Controller\WooCommerceAdmin';
+            $class = apply_filters('esi_controller_woocommerceadmin', $class);
+            add_filter('esi_post_sync_args', [$class, 'filterPostSyncArgs'], 10, 2);
+
+            if (Config::option('enable_integration')) {
+                static::forceRemoveAction('parse_query', 'shop_order_search_custom_fields');
+                add_action('esi_after_format_args', [$class, 'actionOrderSearch']);
+            }
+        }, 15);
+    }
+
+    /**
+     * Remove a hook without a reference to the instance.
+     *
+     * @param string $tag
+     * @param string $functionToRemove
+     * @param int    $priority
+     */
+    public static function forceRemoveAction($tag, $functionToRemove, $priority = 10)
+    {
+        global $wp_filter;
+
+        if (!empty($wp_filter[$tag][$priority])) {
+            foreach ($wp_filter[$tag][$priority] as $key => $function) {
+                if (substr($key, 32) == $functionToRemove) {
+                    unset($wp_filter[$tag][$priority][$key]);
+                }
+            }
+        }
     }
 }

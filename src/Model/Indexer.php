@@ -290,7 +290,7 @@ class Indexer extends Client
             }
         }
 
-        $post_args = apply_filters('esi_post_sync_args', $post_args, $post->ID);
+        $post_args = apply_filters('esi_post_sync_args', $post_args, $post);
 
         return $post_args;
     }
