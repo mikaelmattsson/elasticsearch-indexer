@@ -273,6 +273,10 @@ return [
                 'type'  => 'string',
                 'index' => 'not_analyzed',
             ],
+            'order_item_names' => [
+                'type'  => 'string',
+                'index' => 'not_analyzed',
+            ],
         ],
     ],
 ];

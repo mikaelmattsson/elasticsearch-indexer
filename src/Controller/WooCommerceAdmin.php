@@ -11,7 +11,9 @@
 
 namespace Wallmander\ElasticsearchIndexer\Controller;
 
+use stdClass;
 use Wallmander\ElasticsearchIndexer\Model\Query;
+use WP_Post;
 
 /**
  * Class WooCommerceAdmin.
@@ -37,6 +39,10 @@ class WooCommerceAdmin
         }
 
         $searchFields = apply_filters('woocommerce_shop_order_search_fields', [
+            '_billing_first_name',
+            '_billing_last_name',
+            '_shipping_first_name',
+            '_shipping_last_name',
             '_order_key',
             '_billing_company',
             '_billing_address_1',
@@ -64,6 +70,8 @@ class WooCommerceAdmin
             $searchOrderId = 0;
         }
 
+        $searchFields[] = 'order_item_names';
+
         $query->setQuery([
             'bool' => [
                 'should' => [
@@ -90,5 +98,35 @@ class WooCommerceAdmin
         ]);
 
         $query->setSort('post_date', 'desc');
+    }
+
+    /**
+     * Add more fields to the index.
+     *
+     * @param stdClass $queryArgs
+     * @param WP_Post  $post
+     *
+     * @return array
+     */
+    public static function filterPostSyncArgs(stdClass $queryArgs, WP_Post $post)
+    {
+        global $wpdb;
+        if ($post->post_type !== 'shop_order') {
+            return $queryArgs;
+        }
+
+        $orderItemNames = $wpdb->get_col(
+            $wpdb->prepare("
+					SELECT order_item_name
+					FROM {$wpdb->prefix}woocommerce_order_items as order_items
+					WHERE order_id = %d
+					",
+                $post->ID
+            )
+        );
+
+        $queryArgs->order_item_names = $orderItemNames;
+
+        return $queryArgs;
     }
 }

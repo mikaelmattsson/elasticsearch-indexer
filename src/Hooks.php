@@ -42,14 +42,8 @@ class Hooks
         }
 
         static::setupSync();
-
-        if (Config::option('enable_integration')) {
-            static::setupQueryIntegration();
-
-            if (Config::option('index_private_post_types')) {
-                add_action('init', [get_class(), 'setupWooCommerceAdmin'], 15);
-            }
-        }
+        static::setupQueryIntegration();
+        static::setupWooCommerceAdmin();
     }
 
     /**
@@ -99,6 +93,10 @@ class Hooks
      */
     public static function setupQueryIntegration()
     {
+        if (!Config::option('enable_integration')) {
+            return;
+        }
+
         $class = 'Wallmander\ElasticsearchIndexer\Controller\QueryIntegration';
         $class = apply_filters('esi_controller_queryintegration', $class);
 
@@ -131,11 +129,20 @@ class Hooks
      */
     public static function setupWooCommerceAdmin()
     {
-        $class = 'Wallmander\ElasticsearchIndexer\Controller\WooCommerceAdmin';
-        $class = apply_filters('esi_controller_woocommerceadmin', $class);
+        add_action('init', function () {
+            if (!class_exists('WooCommerce') || !Config::option('index_private_post_types')) {
+                return;
+            }
 
-        static::forceRemoveAction('parse_query', 'shop_order_search_custom_fields');
-        add_action('esi_after_format_args', [$class, 'actionOrderSearch']);
+            $class = 'Wallmander\ElasticsearchIndexer\Controller\WooCommerceAdmin';
+            $class = apply_filters('esi_controller_woocommerceadmin', $class);
+            add_filter('esi_post_sync_args', [$class, 'filterPostSyncArgs'], 10, 2);
+
+            if (Config::option('enable_integration')) {
+                static::forceRemoveAction('parse_query', 'shop_order_search_custom_fields');
+                add_action('esi_after_format_args', [$class, 'actionOrderSearch']);
+            }
+        }, 15);
     }
 
     /**
