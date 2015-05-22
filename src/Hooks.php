@@ -26,13 +26,7 @@ class Hooks
      */
     public static function setup()
     {
-        if (is_admin() && Config::option('profile_admin')) {
-            static::setupProfiler();
-        }
-
-        if (!is_admin() && Config::option('profile_frontend')) {
-            static::setupProfiler();
-        }
+        static::setupProfiler();
 
         static::setupAdmin();
 
@@ -53,6 +47,16 @@ class Hooks
      */
     public static function setupProfiler()
     {
+        if (defined('DOING_AJAX') && DOING_AJAX) {
+            return;
+        }
+        if (!is_admin() && !Config::option('profile_frontend')) {
+            return;
+        }
+        if (is_admin() && !Config::option('profile_admin')) {
+            return;
+        }
+
         $class = 'Wallmander\ElasticsearchIndexer\Controller\Profiler';
         $class = apply_filters('esi_controller_profiler', $class);
 
