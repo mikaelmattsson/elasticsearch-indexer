@@ -31,7 +31,7 @@ use Wallmander\ElasticsearchIndexer\Model\Config;
                     <textarea name="<?php echo Config::optionKey('hosts') ?>"><?php echo Config::option('hosts'); ?></textarea>
 
                     <p class="description">
-                        Example: <code>127.0.0.1:9000</code>, <code>http://127.0.0.1:9000</code> or <code>https://127.0.0.1:9000</code><br>
+                        Example: <code>127.0.0.1:9200</code>, <code>http://127.0.0.1:9200</code> or <code>https://127.0.0.1:9200</code><br>
                         Split multiple hosts between lines.<br>
                         Note! Default port is 80. If using https, you will have to specify the port. Example <code>https://user:pass@xxxx.bonsai.io:443</code><br>
                     </p>
