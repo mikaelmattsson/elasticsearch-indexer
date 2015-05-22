@@ -372,72 +372,72 @@ trait WpConverterTrait
 
     public function argCategoryIn($value, &$q)
     {
-        $this->where('terms.category.term_id', $value);
+        $this->where('terms.category.term_id', array_values($value));
     }
 
     public function argCategoryNotIn($value, &$q)
     {
-        $this->whereNot('terms.category.term_id', $value);
+        $this->whereNot('terms.category.term_id', array_values($value));
     }
 
     public function argCategoryAnd($value, &$q)
     {
-        $this->where('terms.category.term_id', '=', $value);
+        $this->where('terms.category.term_id', '=', array_values($value));
     }
 
     public function argPostIn($value, &$q)
     {
-        $this->where('post_id', $value);
+        $this->where('post_id', array_values($value));
     }
 
     public function argPostNotIn($value, &$q)
     {
-        $this->whereNot('post_id', $value);
+        $this->whereNot('post_id', array_values($value));
     }
 
     public function argTagIn($value, &$q)
     {
-        $this->where('terms.post_tag.term_id', $value);
+        $this->where('terms.post_tag.term_id', array_values($value));
     }
 
     public function argTagNotIn($value, &$q)
     {
-        $this->whereNot('terms.post_tag.term_id', $value);
+        $this->whereNot('terms.post_tag.term_id', array_values($value));
     }
 
     public function argTagAnd($value, &$q)
     {
-        $this->where('terms.post_tag.term_id', '=', $value);
+        $this->where('terms.post_tag.term_id', '=', array_values($value));
     }
 
     public function argTagSlugIn($value, &$q)
     {
-        $this->where('terms.post_tag.slug', $value);
+        $this->where('terms.post_tag.slug', array_values($value));
     }
 
     public function argTagSlugAnd($value, &$q)
     {
-        $this->where('terms.post_tag.slug', '=', $value);
+        $this->where('terms.post_tag.slug', '=', array_values($value));
     }
 
     public function argPostParentIn($value, &$q)
     {
-        $this->where('post_parent', $value);
+        $this->where('post_parent', array_values($value));
     }
 
     public function argPostParentNotIn($value, &$q)
     {
-        $this->whereNot('post_parent', $value);
+        $this->whereNot('post_parent', array_values($value));
     }
 
     public function argAuthorIn($value, &$q)
     {
-        $this->where('post_author.id', $value);
+        $this->where('post_author.id', array_values($value));
     }
 
     public function argAuthorNotIn($value, &$q)
     {
-        $this->whereNot('post_author.id', $value);
+        $this->whereNot('post_author.id', array_values($value));
     }
 
     public function argCacheResults($value, &$q)
