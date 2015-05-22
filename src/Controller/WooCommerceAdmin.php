@@ -24,7 +24,7 @@ class WooCommerceAdmin
      * Search custom fields as well as content.
      * Replaces WC_Admin_Post_Types::Replaces shop_order_search_custom_fields.
      *
-     * @param WP_Query $wpQuery
+     * @param \Wallmander\ElasticsearchIndexer\Model\Query $query
      */
     public static function actionOrderSearch(Query $query)
     {
@@ -36,7 +36,7 @@ class WooCommerceAdmin
             return;
         }
 
-        $searchMetas = apply_filters('woocommerce_shop_order_search_fields', [
+        $searchFields = apply_filters('woocommerce_shop_order_search_fields', [
             '_order_key',
             '_billing_company',
             '_billing_address_1',
@@ -55,13 +55,13 @@ class WooCommerceAdmin
             '_shipping_state',
         ]);
 
-        foreach ($searchMetas as $key => $value) {
-            $searchMetas[$key] = 'post_meta.'.$value;
+        foreach ($searchFields as $key => $value) {
+            $searchFields[$key] = 'post_meta.'.$value;
         }
 
-        $search_order_id = str_replace( 'Order #', '', $wpQuery->query_vars['s'] );
-        if ( ! is_numeric( $search_order_id ) ) {
-            $search_order_id = 0;
+        $searchOrderId = str_replace('Order #', '', $wpQuery->query_vars['s']);
+        if (!is_numeric($searchOrderId)) {
+            $searchOrderId = 0;
         }
 
         $query->setQuery([
@@ -69,22 +69,22 @@ class WooCommerceAdmin
                 'should' => [
                     [
                         'multi_match' => [
-                            'fields' => $searchMetas,
+                            'fields' => $searchFields,
                             'query'  => $wpQuery->query_vars['s'],
                         ],
                     ],
                     [
                         'fuzzy_like_this' => [
-                            'fields'         => $searchMetas,
+                            'fields'         => $searchFields,
                             'like_text'      => $wpQuery->query_vars['s'],
                             'min_similarity' => apply_filters('esi_min_similarity', 0.75),
                         ],
                     ],
                     [
                         'term' => [
-                            'post_id' => $search_order_id,
-                        ]
-                    ]
+                            'post_id' => $searchOrderId,
+                        ],
+                    ],
                 ],
             ],
         ]);
