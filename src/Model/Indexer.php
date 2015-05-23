@@ -143,12 +143,18 @@ class Indexer extends Client
             return false;
         }
 
-        $response = $this->index([
-            'index' => $this->getIndexName(),
-            'type'  => 'post',
-            'id'    => $postArgs->post_id,
-            'body'  => $postArgs,
-        ]);
+        try {
+            $response = $this->index([
+                'index' => $this->getIndexName(),
+                'type'  => 'post',
+                'id'    => $postArgs->post_id,
+                'body'  => $postArgs,
+            ]);
+        } catch (Exception $e) {
+            Log::add('Failed to index post '.$postArgs->post_id.'. Message: '.$e->getMessage());
+
+            return false;
+        }
 
         return $response;
     }
@@ -172,14 +178,15 @@ class Indexer extends Client
         }
         $responses = $this->bulk(['body' => $body]);
         if ($responses['errors']) {
-            echo "Errors: \n";
             if ($responses['items']) {
                 foreach ($responses['items'] as $item) {
                     if ($item['index']['status'] !== 201) {
-                        echo 'Could not index: '.$item['index']['_id']."\n";
-                        echo $item['index']['error']."\n";
+                        Log::add('Failed to index post '.$item['index']['_id'].' Message: '.$item['index']['error']);
                     }
                 }
+            } else {
+                //Failed for some other reason
+                Log::add('indexer failed. Response: '.print_r($responses['errors'], 1));
             }
         }
     }
@@ -281,7 +288,7 @@ class Indexer extends Client
             'post_meta_num'            => [],
         ];
 
-        $metaInts = apply_filters('esi_post_meta_nums', ['_price'], $post);
+        $metaInts = apply_filters('esi_post_meta_nums', ['_price', '_order_total'], $post);
 
         //for range filters
         foreach ($metaInts as $metaKey) {

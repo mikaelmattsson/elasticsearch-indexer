@@ -13,6 +13,7 @@ namespace Wallmander\ElasticsearchIndexer\Controller;
 
 use Wallmander\ElasticsearchIndexer\Model\Config;
 use Wallmander\ElasticsearchIndexer\Model\Indexer;
+use Wallmander\ElasticsearchIndexer\Model\Log;
 use Wallmander\ElasticsearchIndexer\Model\Service\Elasticsearch;
 
 /**
@@ -93,6 +94,7 @@ class Admin
     public static function getStatus()
     {
         $indices = Elasticsearch::getIndices();
+        $logs    = Log::get();
         require ESI_PATH.'/views/admin/status.php';
     }
 

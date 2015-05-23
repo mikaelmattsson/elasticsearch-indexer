@@ -30,7 +30,9 @@ class Client extends ElasticSearchClient
         $this->setBlog($blogId);
 
         return parent::__construct([
-            'hosts' => Config::getHosts(),
+            'hosts'   => Config::getHosts(),
+            'logging' => true,
+            'logPath' => ESI_PATH.'../logs/elasticsearch-indexer.log',
         ]);
     }
 

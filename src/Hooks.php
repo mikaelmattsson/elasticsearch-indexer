@@ -26,8 +26,8 @@ class Hooks
      */
     public static function setup()
     {
+        static::setupInstall();
         static::setupProfiler();
-
         static::setupAdmin();
 
         $client = new Client();
@@ -38,6 +38,15 @@ class Hooks
         static::setupSync();
         static::setupQueryIntegration();
         static::setupWooCommerceAdmin();
+    }
+
+    /**
+     * Setup Installer hook.
+     */
+    public static function setupInstall()
+    {
+        $class = __NAMESPACE__.'\Controller\Install';
+        register_activation_hook(ESI_PLUGINFILE, [$class, 'actionActivate']);
     }
 
     /**
@@ -55,7 +64,7 @@ class Hooks
             return;
         }
 
-        $class = 'Wallmander\ElasticsearchIndexer\Controller\Profiler';
+        $class = __NAMESPACE__.'\Controller\Profiler';
         $class = apply_filters('esi_controller_profiler', $class);
 
         $class::setup();
@@ -69,7 +78,7 @@ class Hooks
         if (!is_admin()) {
             return;
         }
-        $class = 'Wallmander\ElasticsearchIndexer\Controller\Admin';
+        $class = __NAMESPACE__.'\Controller\Admin';
         $class = apply_filters('esi_controller_admin', $class);
 
         add_action('admin_menu', [$class, 'actionAdminMenu']);
@@ -82,7 +91,7 @@ class Hooks
      */
     public static function setupSync()
     {
-        $class = 'Wallmander\ElasticsearchIndexer\Controller\Sync';
+        $class = __NAMESPACE__.'\Controller\Sync';
         $class = apply_filters('esi_controller_sync', $class);
 
         // Sync post on update
@@ -101,7 +110,7 @@ class Hooks
             return;
         }
 
-        $class = 'Wallmander\ElasticsearchIndexer\Controller\QueryIntegration';
+        $class = __NAMESPACE__.'\Controller\QueryIntegration';
         $class = apply_filters('esi_controller_queryintegration', $class);
 
         // Make sure we return nothing for MySQL posts query
@@ -138,7 +147,7 @@ class Hooks
                 return;
             }
 
-            $class = 'Wallmander\ElasticsearchIndexer\Controller\WooCommerceAdmin';
+            $class = __NAMESPACE__.'\Controller\WooCommerceAdmin';
             $class = apply_filters('esi_controller_woocommerceadmin', $class);
             add_filter('esi_post_sync_args', [$class, 'filterPostSyncArgs'], 10, 2);
 
