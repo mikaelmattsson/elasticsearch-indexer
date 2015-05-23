@@ -71,8 +71,9 @@ return [
                         'path'   => 'full',
                         'fields' => [
                             '{name}' => [
-                                'type'  => 'string',
-                                'index' => 'analyzed',
+                                'type'     => 'string',
+                                'index'    => 'analyzed',
+                                'analyzer' => 'esi_search_analyzer',
                             ],
                             'raw' => [
                                 'type'           => 'string',
@@ -99,8 +100,9 @@ return [
                         'path'       => 'full',
                         'properties' => [
                             'name' => [
-                                'type'  => 'string',
-                                'index' => 'analyzed',
+                                'type'     => 'string',
+                                'index'    => 'analyzed',
+                                'analyzer' => 'esi_search_analyzer',
                             ],
                             'term_id' => [
                                 'type' => 'long',
@@ -125,7 +127,7 @@ return [
                     'path_match' => 'term_suggest_*',
                     'mapping'    => [
                         'type'     => 'completion',
-                        'analyzer' => 'default',
+                        'analyzer' => 'esi_search_analyzer',
                     ],
                 ],
             ],
@@ -177,7 +179,7 @@ return [
                 'fields' => [
                     'post_title' => [
                         'type'     => 'string',
-                        'analyzer' => 'standard',
+                        'analyzer' => 'esi_search_analyzer',
                         'store'    => 'yes',
                     ],
                     'raw' => [
@@ -192,7 +194,8 @@ return [
             ],
             'post_content' => [
                 'type'     => 'string',
-                'analyzer' => 'default',
+                'analyzer' => 'esi_search_analyzer',
+                'index'    => 'analyzed',
             ],
             'post_status' => [
                 'type'  => 'string',

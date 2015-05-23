@@ -11,10 +11,6 @@
 
 use Wallmander\ElasticsearchIndexer\Model\Config;
 
-/*
- * Full Credits to 10up/ElasticPress.
- */
-
 return [
     'index' => [
         'number_of_shards'   => (int) Config::option('shards'),
@@ -22,36 +18,22 @@ return [
     ],
     'analysis' => [
         'analyzer' => [
-            'default' => [
-                'tokenizer' => 'standard',
-                'filter'    => ['standard', 'ewp_word_delimiter', 'lowercase', 'stop', 'ewp_snowball'],
-                'language'  => apply_filters('esi_analyzer_language', 'English'),
-            ],
-            'shingle_analyzer' => [
+            'esi_search_analyzer' => [
                 'type'      => 'custom',
                 'tokenizer' => 'standard',
-                'filter'    => ['lowercase', 'shingle_filter'],
+                'filter'    => ['standard', 'lowercase', 'stop', 'esi_ngram', 'esi_snowball'],
+                'language'  => apply_filters('esi_analyzer_language', 'English'),
             ],
         ],
         'filter' => [
-            'shingle_filter' => [
-                'type'             => 'shingle',
-                'min_shingle_size' => 2,
-                'max_shingle_size' => 5,
+            'esi_ngram' => [
+                'type'     => 'nGram',
+                'min_gram' => 3,
+                'max_gram' => 20,
             ],
-            'ewp_word_delimiter' => [
-                'type'              => 'word_delimiter',
-                'preserve_original' => true,
-            ],
-            'ewp_snowball' => [
+            'esi_snowball' => [
                 'type'     => 'snowball',
                 'language' => apply_filters('esi_analyzer_language', 'English'),
-            ],
-            'edge_ngram' => [
-                'side'     => 'front',
-                'max_gram' => 10,
-                'min_gram' => 3,
-                'type'     => 'edgeNGram',
             ],
         ],
     ],
