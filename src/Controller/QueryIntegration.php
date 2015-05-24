@@ -107,12 +107,7 @@ class QueryIntegration
             return $posts;
         }
 
-        $scope = 'current';
-        if (!empty($query->query_vars['sites'])) {
-            $scope = $query->query_vars['sites'];
-        }
-
-        return Query::fromWpQuery($query, $scope)->getPosts();
+        return Query::fromWpQuery($query)->getPosts();
     }
 
     /**

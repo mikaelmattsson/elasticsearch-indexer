@@ -507,7 +507,7 @@ trait WpConverterTrait
             return;
         }
 
-        $o = strtolower($q['order']);
+        $o = !empty($q['order']) ? strtolower($q['order']) : 'desc';
         foreach (explode(' ', $value) as $key) {
             $key = str_replace('wp_posts.', '', $key);
             switch ($key) {

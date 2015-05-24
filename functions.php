@@ -9,7 +9,27 @@
  * file that was distributed with this source code.
  */
 
+use Wallmander\ElasticsearchIndexer\Model\Query;
+
+/**
+ * @return bool
+ */
 function esi_plugin_activated()
 {
     return true;
+}
+
+/**
+ * @param null|WP_Query $wpQuery
+ *
+ * @return \Wallmander\ElasticsearchIndexer\Model\Query
+ */
+function ES_Query($wpQuery = null)
+{
+    $esq = new Query();
+    if ($wpQuery instanceof WP_Query) {
+        $esq->applyWpQuery($wpQuery);
+    }
+
+    return $esq;
 }

@@ -52,11 +52,6 @@ class Query extends Client
      */
     public $updatePostMetaCache = false;
 
-    /**
-     * @var string
-     */
-    public $scope;
-
     use Query\WpConverterTrait;
 
     public function __construct()
@@ -67,14 +62,12 @@ class Query extends Client
 
     /**
      * @param \WP_Query $wpQuery
-     * @param string    $scope
      *
      * @return \Wallmander\ElasticsearchIndexer\Model\Query
      */
-    public static function fromWpQuery(WP_Query $wpQuery, $scope)
+    public static function fromWpQuery(WP_Query $wpQuery)
     {
         $q        = new static();
-        $q->scope = $scope;
         $q->applyWpQuery($wpQuery);
 
         return $q;
@@ -107,7 +100,8 @@ class Query extends Client
         if ($this->wp_query) {
             $wpQuery                = $this->wp_query;
             $wpQuery->found_posts   = $this->found_posts;
-            $wpQuery->max_num_pages = ceil($this->found_posts / $wpQuery->get('posts_per_page'));
+            $ppp = $wpQuery->get('posts_per_page') ? $wpQuery->get('posts_per_page') : get_option('posts_per_page');
+            $wpQuery->max_num_pages = ceil($this->found_posts / $ppp);
         }
 
         $this->posts = [];
