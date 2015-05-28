@@ -115,9 +115,9 @@ class Admin
         $size    = (int) $_POST['size'];
 
         try {
-            $indexer       = new Indexer();
+            $indexer               = new Indexer();
             list($indexed, $total) = $indexer->reindex($site, $from, $size);
-            $data = (object) [
+            $data                  = (object) [
                 'success' => false,
                 'indexed' => $indexed,
                 'total'   => $total,
