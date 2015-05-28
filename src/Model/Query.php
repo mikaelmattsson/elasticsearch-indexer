@@ -100,7 +100,7 @@ class Query extends Client
         if ($this->wp_query) {
             $wpQuery                = $this->wp_query;
             $wpQuery->found_posts   = $this->found_posts;
-            $ppp = $wpQuery->get('posts_per_page') ? $wpQuery->get('posts_per_page') : get_option('posts_per_page');
+            $ppp                    = $wpQuery->get('posts_per_page') ? $wpQuery->get('posts_per_page') : get_option('posts_per_page');
             $wpQuery->max_num_pages = ceil($this->found_posts / $ppp);
         }
 

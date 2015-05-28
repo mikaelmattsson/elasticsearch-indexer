@@ -27,11 +27,6 @@ class Log
     public static $log = null;
 
     /**
-     * @var string
-     */
-    public static $filename = 'logs/elasticsearch-indexer-simple.log';
-
-    /**
      * Get the logger instance.
      *
      * @return \Monolog\Logger
@@ -40,7 +35,7 @@ class Log
     {
         if (static::$log === null) {
             static::$log = new Logger('elasticsearch-indexer');
-            static::$log->pushHandler(new StreamHandler(ESI_PATH.'../'.static::$filename, Logger::ERROR));
+            static::$log->pushHandler(new StreamHandler(static::getFilePath(), Logger::ERROR));
         }
 
         return static::$log;
@@ -63,6 +58,18 @@ class Log
      */
     public static function get()
     {
-        return file_get_contents(ESI_PATH.'../'.static::$filename);
+        return file_get_contents(static::getFilePath());
+    }
+
+    /**
+     * Get the full path to a log file.
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    public static function getFilePath($filename = 'elasticsearch-indexer')
+    {
+        return ESI_PATH.'../../uploads/logs/'.$filename.'.log';
     }
 }

@@ -23,7 +23,7 @@ class Install
      */
     public static function actionActivate()
     {
-        $logDir = ESI_PATH.'../logs/';
+        $logDir = ESI_PATH.'../../uploads/logs/';
         if (!file_exists($logDir)) {
             mkdir($logDir, 0777, true);
         }

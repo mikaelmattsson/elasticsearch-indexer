@@ -32,7 +32,7 @@ class Client extends ElasticSearchClient
         return parent::__construct([
             'hosts'   => Config::getHosts(),
             'logging' => true,
-            'logPath' => ESI_PATH.'../logs/elasticsearch-indexer.log',
+            'logPath' => Log::getFilePath('elasticsearch'),
         ]);
     }
 
