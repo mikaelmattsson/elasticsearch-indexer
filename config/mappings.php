@@ -76,9 +76,9 @@ return [
                                 'analyzer' => 'esi_search_analyzer',
                             ],
                             'raw' => [
-                                'type'           => 'string',
-                                'index'          => 'not_analyzed',
-                                'include_in_all' => false,
+                                'type'         => 'string',
+                                'index'        => 'not_analyzed',
+                                'ignore_above' => 256,
                             ],
                         ],
                     ],
@@ -137,9 +137,8 @@ return [
         ],
         'properties' => [
             'post_id' => [
-                'type'           => 'long',
-                'index'          => 'not_analyzed',
-                'include_in_all' => false,
+                'type'  => 'long',
+                'index' => 'not_analyzed',
             ],
             'post_author' => [
                 'type'   => 'object',
@@ -158,21 +157,18 @@ return [
                         'index' => 'not_analyzed',
                     ],
                     'raw' => [
-                        'type'           => 'string',
-                        'index'          => 'not_analyzed',
-                        'include_in_all' => false,
+                        'type'  => 'string',
+                        'index' => 'not_analyzed',
                     ],
                 ],
             ],
             'post_date' => [
-                'type'           => 'date',
-                'format'         => 'YYYY-MM-dd HH:mm:ss',
-                'include_in_all' => false,
+                'type'   => 'date',
+                'format' => 'YYYY-MM-dd HH:mm:ss',
             ],
             'post_date_gmt' => [
-                'type'           => 'date',
-                'format'         => 'YYYY-MM-dd HH:mm:ss',
-                'include_in_all' => false,
+                'type'   => 'date',
+                'format' => 'YYYY-MM-dd HH:mm:ss',
             ],
             'post_title' => [
                 'type'   => 'multi_field',
@@ -183,9 +179,8 @@ return [
                         'store'    => 'yes',
                     ],
                     'raw' => [
-                        'type'           => 'string',
-                        'index'          => 'not_analyzed',
-                        'include_in_all' => false,
+                        'type'  => 'string',
+                        'index' => 'not_analyzed',
                     ],
                 ],
             ],
@@ -206,28 +201,24 @@ return [
                 'index' => 'not_analyzed',
             ],
             'post_modified' => [
-                'type'           => 'date',
-                'format'         => 'YYYY-MM-dd HH:mm:ss',
-                'include_in_all' => false,
+                'type'   => 'date',
+                'format' => 'YYYY-MM-dd HH:mm:ss',
             ],
             'post_modified_gmt' => [
-                'type'           => 'date',
-                'format'         => 'YYYY-MM-dd HH:mm:ss',
-                'include_in_all' => false,
+                'type'   => 'date',
+                'format' => 'YYYY-MM-dd HH:mm:ss',
             ],
             'post_parent' => [
-                'type'           => 'long',
-                'index'          => 'not_analyzed',
-                'include_in_all' => false,
+                'type'  => 'long',
+                'index' => 'not_analyzed',
             ],
             'post_type' => [
                 'type'  => 'string',
                 'index' => 'not_analyzed',
             ],
             'post_mime_type' => [
-                'type'           => 'string',
-                'index'          => 'not_analyzed',
-                'include_in_all' => false,
+                'type'  => 'string',
+                'index' => 'not_analyzed',
             ],
             'permalink' => [
                 'type'  => 'string',
@@ -263,14 +254,12 @@ return [
                 'fields' => $dateTermFields,
             ],
             'menu_order' => [
-                'type'           => 'long',
-                'index'          => 'not_analyzed',
-                'include_in_all' => false,
+                'type'  => 'long',
+                'index' => 'not_analyzed',
             ],
             'comment_count' => [
-                'type'           => 'long',
-                'index'          => 'not_analyzed',
-                'include_in_all' => false,
+                'type'  => 'long',
+                'index' => 'not_analyzed',
             ],
             'guid' => [
                 'type'  => 'string',

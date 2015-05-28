@@ -24,6 +24,10 @@ return [
                 'filter'    => ['standard', 'lowercase', 'stop', 'esi_ngram', 'esi_snowball'],
                 'language'  => apply_filters('esi_analyzer_language', 'English'),
             ],
+            'esi_index_analyzer' => [
+                'type'      => 'custom',
+                'tokenizer' => 'keyword',
+            ],
         ],
         'filter' => [
             'esi_ngram' => [
