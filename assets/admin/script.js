@@ -82,7 +82,7 @@ jQuery(document).ready(function ($) {
       if (this.totalPosts) {
         percent = this.indexedPosts / this.totalPosts * 100;
       }
-      var html = '<div class="esi-progress-bar" style="width: ' + percent + '%;">' + percent + '%</div>';
+      var html = '<div class="esi-progress-bar" style="width: ' + percent + '%;">' + Math.round(percent) + '%</div>';
       this.$progress.html(html);
     }
 
