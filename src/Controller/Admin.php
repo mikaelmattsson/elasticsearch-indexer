@@ -11,10 +11,12 @@
 
 namespace Wallmander\ElasticsearchIndexer\Controller;
 
+use Exception;
 use Wallmander\ElasticsearchIndexer\Model\Config;
 use Wallmander\ElasticsearchIndexer\Model\Indexer;
 use Wallmander\ElasticsearchIndexer\Model\Log;
 use Wallmander\ElasticsearchIndexer\Model\Service\Elasticsearch;
+use Wallmander\ElasticsearchIndexer\Model\Service\WordPress;
 
 /**
  * Class Admin.
@@ -72,6 +74,7 @@ class Admin
      */
     public static function getIndex()
     {
+        $sites = WordPress::getSites();
         require ESI_PATH.'/views/admin/index.php';
     }
 
@@ -103,13 +106,34 @@ class Admin
      */
     public static function ajaxReindex()
     {
-        if (!isset($_POST['from']) || empty($_POST['size'])) {
+        if (!isset($_POST['site']) || !isset($_POST['from']) || empty($_POST['size'])) {
             die('invalid request');
         }
-        $from    = $_POST['from'];
-        $size    = $_POST['size'];
-        $indexer = new Indexer();
-        $indexer->reindex($from, $size);
+
+        $site    = (int) $_POST['site'];
+        $from    = (int) $_POST['from'];
+        $size    = (int) $_POST['size'];
+
+        try {
+            $indexer       = new Indexer();
+            list($indexed, $total) = $indexer->reindex($site, $from, $size);
+            $data = (object) [
+                'success' => false,
+                'indexed' => $indexed,
+                'total'   => $total,
+            ];
+            $data->success = true;
+            header('Content-Type: application/json');
+            echo json_encode($data);
+        } catch (Exception $e) {
+            $data = (object) [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($data);
+        }
+
         die();
     }
 }

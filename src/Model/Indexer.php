@@ -12,6 +12,8 @@
 namespace Wallmander\ElasticsearchIndexer\Model;
 
 use Exception;
+use Wallmander\ElasticsearchIndexer\Model\Service\Elasticsearch;
+use Wallmander\ElasticsearchIndexer\Model\Service\WordPress;
 use WP_Query;
 use WP_User;
 
@@ -25,35 +27,27 @@ class Indexer extends Client
     /**
      * Called in admin to reindex all posts in all blogs.
      *
+     * @param int $site
      * @param int $from
      * @param int $size
+     *
+     * @return array
      */
-    public function reindex($from, $size)
+    public function reindex($site, $from, $size)
     {
         add_filter('esi_skip_query_integration', '__return_true');
-        $indexed = 0;
-        $total   = 0;
-        if (is_multisite()) {
-            foreach (wp_get_sites() as $site) {
-                switch_to_blog($site['blog_id']);
-                $this->setBlog($site['blog_id']);
-                list($postCount, $foundPosts) = $this->reindexBlog($from, $size);
-                $indexed += $postCount;
-                $total += $foundPosts;
-                restore_current_blog();
-                $this->setBlog();
-            }
-        } else {
-            list($postCount, $foundPosts) = $this->reindexBlog($from, $size);
-            $indexed += $postCount;
-            $total += $foundPosts;
-        }
+
+        WordPress::switchToBlog($site);
+        $this->setBlog($site);
+        list($indexed, $total) = $this->reindexBlog($from, $size);
+        WordPress::restoreCurrentBlog();
+        $this->setBlog();
+
         if ($indexed >= $total) {
-            echo "Finished indexing $indexed/$total posts…\n";
-            Service\Elasticsearch::optimize();
-        } else {
-            echo "Indexed  $indexed/$total posts…\n";
+            Elasticsearch::optimize();
         }
+
+        return [$indexed, $total];
     }
 
     /**
@@ -88,7 +82,7 @@ class Indexer extends Client
             $this->indexPosts($query->posts);
         }
 
-        return [$query->post_count + $offset, $query->found_posts];
+        return [$query->post_count + $offset, (int) $query->found_posts];
     }
 
     /**
@@ -119,7 +113,7 @@ class Indexer extends Client
         $sites = is_multisite() ? wp_get_sites() : [['blog_id' => get_current_blog_id()]];
         foreach ($sites as $site) {
             $index = $this->getIndexName($site['blog_id']);
-            Service\Elasticsearch::setSettings($index, [
+            Elasticsearch::setSettings($index, [
                 'index' => ['refresh_interval' => $interval],
             ]);
         }
