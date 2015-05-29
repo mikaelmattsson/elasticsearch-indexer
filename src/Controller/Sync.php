@@ -21,52 +21,34 @@ use Wallmander\ElasticsearchIndexer\Model\Indexer;
 class Sync
 {
     /**
-     * Hooked on transition_post_status. Called when a post is updated.
+     * Hooked on save_post. Called when a post is updated.
      *
-     * @param string $newStatus
-     * @param string $oldStatus
-     * @param object $post
-     *
-     * @author 10up/ElasticPress
+     * @param int $postID
      */
-    public static function actionTransitionPostStatus($newStatus, $oldStatus, $post)
+    public static function actionSavePost($postID)
     {
         global $importer;
-        //die('awd');
 
         // If we have an importer we must be doing an import - let's abort
         if (!empty($importer)) {
             return;
         }
 
-        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return;
-        }
+        $post = get_post($postID);
 
-        $indexablePostStatuses = Indexer::getIndexablePostStati();
-
-        if (!in_array($newStatus, $indexablePostStatuses) && !in_array($oldStatus, $indexablePostStatuses)) {
-            return;
-        }
-
-        if (!current_user_can('edit_post', $post->ID) || 'revision' === get_post_type($post->ID)) {
-            return;
-        }
-
-        if (!in_array($newStatus, $indexablePostStatuses)) {
-            // The post is no longer an indexable post type
+        if (!in_array($post->post_status, Indexer::getIndexablePostStati())) {
+            // The post is not indexable but might have been. Try to delete.
             $indexer = new Indexer();
             $indexer->deletePost($post->ID);
-        } else {
-            $post_type = get_post_type($post->ID);
 
-            $indexablePostTypes = Indexer::getIndexablePostTypes();
+            return;
+        }
 
-            if (in_array($post_type, $indexablePostTypes)) {
-                do_action('epi_index_on_transition', $post);
-                $indexer = new Indexer();
-                $indexer->indexPost($post);
-            }
+        if (in_array($post->post_type, Indexer::getIndexablePostTypes())) {
+            do_action('esi_before_post_save', $post);
+
+            $indexer = new Indexer();
+            $indexer->indexPost($post);
         }
     }
 

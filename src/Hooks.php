@@ -94,8 +94,8 @@ class Hooks
         $class = __NAMESPACE__.'\Controller\Sync';
         $class = apply_filters('esi_controller_sync', $class);
 
-        // Sync post on update
-        add_action('transition_post_status', [$class, 'actionTransitionPostStatus'], 10, 3);
+        // Sync post on create or update
+        add_action('save_post', [$class, 'actionSavePost'], 90, 3);
 
         // Delete posts
         add_action('delete_post', [$class, 'actionDeletePost']);
