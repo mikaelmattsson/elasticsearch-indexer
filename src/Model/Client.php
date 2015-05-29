@@ -48,6 +48,7 @@ class Client extends ElasticSearchClient
         if ($blogID === null) {
             $blogID = $this->blogID;
         }
+
         return Config::getIndexName($blogID);
     }
 

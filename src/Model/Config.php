@@ -115,5 +115,4 @@ class Config
 
         return apply_filters('esi_index_name', $indexName);
     }
-    
 }
