@@ -18,7 +18,7 @@ jQuery(document).ready(function ($) {
       this.interval = interval;
       this.$wrapper = $(targetWrapper);
       this.$progress = $('<div class="esi-indexer-progress">').appendTo(this.$wrapper);
-      this.$progressBar = $('<div class="esi-indexer-progress-bar">').appendTo(this.$progress);
+      this.$progressBar = $('<div class="esi-indexer-progress-bar active">').appendTo(this.$progress);
       this.$message = $('<div class="esi-indexer-message">').appendTo(this.$wrapper);
       this.$errors = $('<div class="esi-indexer-errors">').appendTo(this.$wrapper);
       this.$message.html("Starting… Don't close this page until the process is finished\n");
@@ -69,6 +69,7 @@ jQuery(document).ready(function ($) {
           this.$message.append(' Done.');
           this.isIndexing = false;
           $('.esi-reindex').removeClass('button-disabled');
+          this.$progressBar.removeClass('active');
           return;
         }
       }
