@@ -58,7 +58,11 @@ class Log
      */
     public static function get()
     {
-        return file_get_contents(static::getFilePath());
+        if (file_exists(static::getFilePath())) {
+            return file_get_contents(static::getFilePath());
+        }
+
+        return '';
     }
 
     /**
