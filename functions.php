@@ -24,7 +24,7 @@ function esi_plugin_activated()
  *
  * @return \Wallmander\ElasticsearchIndexer\Model\Query
  */
-function ES_Query($wpQuery = null)
+function es_query($wpQuery = null)
 {
     $esq = new Query();
     if ($wpQuery instanceof WP_Query) {
