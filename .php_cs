@@ -71,7 +71,6 @@ $fixers = [
 
 $excludes = [
     'vendor',
-    'views',
 ];
 
 Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader($header);
