@@ -37,27 +37,18 @@ class Client extends ElasticSearchClient
     }
 
     /**
-     * @param int|null $blogId
+     * @param int|null $blogID
      *
      * @return string
      *
      * @author 10up/ElasticPress
      */
-    public function getIndexName($blogId = null)
+    public function getIndexName($blogID = null)
     {
-        if ($blogId === null) {
-            $blogId = $this->blogID;
+        if ($blogID === null) {
+            $blogID = $this->blogID;
         }
-        $siteUrl = get_site_url($blogId);
-
-        $indexName = false;
-
-        if (!empty($siteUrl)) {
-            $indexName = preg_replace('#https?://(www\.)?#i', '', $siteUrl);
-            $indexName = preg_replace('#[^\w]#', '', $indexName).'-'.$blogId;
-        }
-
-        return apply_filters('esi_index_name', $indexName);
+        return Config::getIndexName($blogID);
     }
 
     /**

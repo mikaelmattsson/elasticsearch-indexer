@@ -75,6 +75,20 @@ use Wallmander\ElasticsearchIndexer\Model\Config;
             </tr>
 
             <tr valign="top">
+                <th>Index Name</th>
+                <td>
+                    <input type="text" name="<?php echo Config::optionKey('index_name') ?>"
+                           value="<?php echo Config::option('index_name'); ?>"/>
+
+                    <p class="description">
+                        Name of the index. Should be unique for your site. No spaces or special characters.<br>
+                        There is no need to create this index manually like you would with a MySQL database.<br>
+                        Blog ID will automatically be appended to the index name.
+                    </p>
+                </td>
+            </tr>
+
+            <tr valign="top">
                 <th>Shards</th>
                 <td>
                     <input type="number" name="<?php echo Config::optionKey('shards') ?>" min="1"

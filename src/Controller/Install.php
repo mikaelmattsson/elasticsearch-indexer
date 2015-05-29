@@ -11,6 +11,8 @@
 
 namespace Wallmander\ElasticsearchIndexer\Controller;
 
+use Wallmander\ElasticsearchIndexer\Model\Config;
+
 /**
  * Class Profiler.
  *
@@ -27,5 +29,6 @@ class Install
         if (!file_exists($logDir)) {
             mkdir($logDir, 0777, true);
         }
+        Config::getIndexName(get_current_blog_id()); // Will generate a name if not set.
     }
 }

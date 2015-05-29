@@ -32,6 +32,7 @@ class Sync
     public static function actionTransitionPostStatus($newStatus, $oldStatus, $post)
     {
         global $importer;
+        //die('awd');
 
         // If we have an importer we must be doing an import - let's abort
         if (!empty($importer)) {

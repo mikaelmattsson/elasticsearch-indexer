@@ -97,4 +97,23 @@ class Config
     {
         return static::getHosts()[0];
     }
+
+    public static function getIndexName($blogID)
+    {
+        $indexName = static::option('index_name');
+
+        if (!$indexName) {
+            // Generate a name
+            $siteUrl = get_site_url($blogID);
+
+            $indexName = preg_replace('#https?://(www\.)?#i', '', $siteUrl);
+            $indexName = preg_replace('#[^\w]#', '', $indexName);
+            static::setOption('index_name', $indexName);
+        }
+
+        $indexName .= '-'.$blogID;
+
+        return apply_filters('esi_index_name', $indexName);
+    }
+    
 }
