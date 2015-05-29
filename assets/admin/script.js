@@ -10,6 +10,7 @@ jQuery(document).ready(function ($) {
         return;
       }
       this.isIndexing = true;
+      $('.esi-reindex').addClass('button-disabled');
       this.currentSite = 0;
       this.indexedPosts = 0;
       this.totalPosts = 0;
@@ -17,6 +18,7 @@ jQuery(document).ready(function ($) {
       this.interval = interval;
       this.$wrapper = $(targetWrapper);
       this.$progress = $('<div class="esi-indexer-progress">').appendTo(this.$wrapper);
+      this.$progressBar = $('<div class="esi-indexer-progress-bar">').appendTo(this.$progress);
       this.$message = $('<div class="esi-indexer-message">').appendTo(this.$wrapper);
       this.$errors = $('<div class="esi-indexer-errors">').appendTo(this.$wrapper);
       this.$message.html("Starting… Don't close this page until the process is finished\n");
@@ -49,7 +51,7 @@ jQuery(document).ready(function ($) {
         this.$errors.append('<pre>' + data.message + '</pre>');
         return;
       }
-      console.log(data);
+
       this.indexedPosts = data.indexed;
       this.totalPosts = data.total;
       this.$message.html('Indexed ' + this.indexedPosts + '/' + this.totalPosts + ' posts.')
@@ -57,7 +59,7 @@ jQuery(document).ready(function ($) {
 
       if (this.indexedPosts >= this.totalPosts) {
         // finised with current site.
-        if(this.currentSite + 1 < this.sites.length) {
+        if (this.currentSite + 1 < this.sites.length) {
           this.currentSite++;
           this.indexedPosts = 0;
           this.totalPosts = 0;
@@ -66,6 +68,7 @@ jQuery(document).ready(function ($) {
           // no more sites to index
           this.$message.append(' Done.');
           this.isIndexing = false;
+          $('.esi-reindex').removeClass('button-disabled');
           return;
         }
       }
@@ -82,15 +85,14 @@ jQuery(document).ready(function ($) {
       if (this.totalPosts) {
         percent = this.indexedPosts / this.totalPosts * 100;
       }
-      var html = '<div class="esi-progress-bar" style="width: ' + percent + '%;">' + Math.round(percent) + '%</div>';
-      this.$progress.html(html);
+      this.$progressBar.width(percent + '%').html(Math.floor(percent) + '%');
     }
 
   };
 
-  $('.es-reindex').click(function (e) {
+  $('.esi-reindex').click(function (e) {
     e.preventDefault();
     var sites = $(e.target).attr('data-sites').split(',');
-    indexer.start(sites, 500, '.es-reindex-output');
+    indexer.start(sites, 500, '.esi-reindex-output');
   });
 });
