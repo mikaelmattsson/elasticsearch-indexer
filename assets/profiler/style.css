@@ -2,15 +2,21 @@
 #esi-profiler {
     font-size: 8px;
     background: #fff;
-    margin-left: 160px;
+    margin: 8px;
+}
+
+.wp-admin #esi-profiler {
+    margin-left: 168px;
 }
 
 #esi-profiler table {
     width: 100%;
     margin-bottom: 20px;
+    border-collapse: separate;
+    border-spacing: 2px;
 }
 
-#esi-profiler{
+#esi-profiler {
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
@@ -23,6 +29,7 @@
     word-wrap: break-word;
     background-color: #f5f5f5;
     text-align: left;
+    vertical-align: top;
 }
 
 #esi-profiler th {
@@ -36,7 +43,7 @@
     word-wrap: normal;
 }
 
-#esi-profiler .esi-totals{
+#esi-profiler .esi-totals {
     width: 300px;
 }
 
