@@ -120,11 +120,9 @@ class Indexer extends Client
     }
 
     /**
-     * @param $post
+     * @param int|object $post
      *
      * @return array|bool
-     *
-     * @author 10up/ElasticPress
      */
     public function indexPost($post)
     {
@@ -182,6 +180,27 @@ class Indexer extends Client
                 //Failed for some other reason
                 Log::add('indexer failed. Response: '.print_r($responses['errors'], 1));
             }
+        }
+    }
+
+    /**
+     * Update post index.
+     *
+     * @param int $postsID
+     */
+    public function updatePost($postsID, $data)
+    {
+        try {
+            $this->update([
+                'index' => $this->getIndexName(),
+                'type'  => 'post',
+                'id'    => $postsID,
+                'body'  => [
+                    'doc' => $data,
+                ],
+            ]);
+        } catch (Exception $e) {
+            Log::add('Unable to update post '.$postsID);
         }
     }
 
@@ -370,8 +389,6 @@ class Indexer extends Client
      * @param $post
      *
      * @return array
-     *
-     * @author 10up/ElasticPress
      */
     public static function prepareMeta($post)
     {

@@ -40,8 +40,6 @@ class Client extends ElasticSearchClient
      * @param int|null $blogID
      *
      * @return string
-     *
-     * @author 10up/ElasticPress
      */
     public function getIndexName($blogID = null)
     {

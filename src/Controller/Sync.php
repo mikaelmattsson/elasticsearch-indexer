@@ -62,4 +62,23 @@ class Sync
         $indexer = new Indexer();
         $indexer->deletePost($postsID);
     }
+
+    /**
+     * Hooked on added_post_meta, updated_post_meta and deleted_post_meta. Called when post meta data is modified.
+     *
+     * @param int    $incrementID
+     * @param int    $postID
+     * @param string $metaKey
+     * @param        $metaValue
+     */
+    public static function actionUpdatedPostMeta($incrementID, $postID, $metaKey, $metaValue)
+    {
+        $data = [
+            'post_meta' => [
+                $metaKey => get_post_meta($postID, $metaKey),
+            ],
+        ];
+        $indexer = new Indexer();
+        $indexer->updatePost($postID, $data);
+    }
 }

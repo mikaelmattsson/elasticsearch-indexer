@@ -97,8 +97,13 @@ class Hooks
         // Sync post on create or update
         add_action('save_post', [$class, 'actionSavePost'], 90, 3);
 
-        // Delete posts
+        // Sync post delete
         add_action('delete_post', [$class, 'actionDeletePost']);
+
+        // Sync new, deleted or changed metadata
+        add_action('added_post_meta', [$class, 'actionUpdatedPostMeta'], 10, 4);
+        add_action('updated_post_meta', [$class, 'actionUpdatedPostMeta'], 10, 4);
+        add_action('deleted_post_meta', [$class, 'actionUpdatedPostMeta'], 10, 4);
     }
 
     /**
