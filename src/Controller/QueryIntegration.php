@@ -12,6 +12,7 @@
 namespace Wallmander\ElasticsearchIndexer\Controller;
 
 use Wallmander\ElasticsearchIndexer\Model\Query;
+use Wallmander\ElasticsearchIndexer\Model\Query\WpConverter;
 use WP_Query;
 
 /**
@@ -38,7 +39,7 @@ class QueryIntegration
             return $request;
         }
 
-        if (!Query::isCompatible($query)) {
+        if (!WpConverter::isCompatible($query)) {
             $query->is_elasticsearch_compatible = false;
 
             return $request;

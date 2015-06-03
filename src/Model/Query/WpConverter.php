@@ -21,12 +21,8 @@ use Wp_Query;
  *
  * @author Mikael Mattsson <mikael@wallmanderco.se>
  */
-trait WpConverterTrait
+class WpConverter
 {
-    use BuilderTrait;
-
-    protected $isSingle = false;
-
     public static function isCompatible(Wp_Query $wpQuery)
     {
         $q = $wpQuery->query_vars;
@@ -76,12 +72,12 @@ trait WpConverterTrait
         return true;
     }
 
-    public function formatArgs(Wp_Query $wpQuery)
+    public static function formatArgs(Query $query, Wp_Query $wpQuery)
     {
         // Fill again in case pre_get_posts unset some vars.
         $q = $wpQuery->fill_query_vars($wpQuery->query_vars);
 
-        $q = apply_filters('esi_before_format_args', $q, $this);
+        $q = apply_filters('esi_before_format_args', $q, $query);
 
         if ($wpQuery->is_posts_page) {
             $q['pagename'] = '';
@@ -127,7 +123,7 @@ trait WpConverterTrait
             $q['post_status'] = explode(' ', str_replace(',', ' ', $q['post_status']));
         }
 
-        $q = apply_filters('esi_before_query_building', $q, $this);
+        $q = apply_filters('esi_before_query_building', $q, $query);
 
         // Loop all query arguments
         foreach ($q as $key => $value) {
@@ -135,35 +131,34 @@ trait WpConverterTrait
                 continue;
             }
             $f = 'arg'.str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-            if (method_exists($this, $f)) {
-                $this->$f($q[$key], $q);
+            $c = get_class();
+            if (method_exists($c, $f)) {
+                $c::$f($query, $q[$key], $q);
             }
         }
 
-        do_action('esi_after_format_args', $this);
-
-        return $this;
+        do_action('esi_after_format_args', $query);
     }
 
-    public function argPostStatus($value, &$q)
+    public static function argPostStatus(Query $query, $value, &$q)
     {
         if ($value == 'any') {
             $ips = Indexer::getIndexablePostStati();
-            $this->where('post_status', $ips);
+            $query->where('post_status', $ips);
         } else {
-            $this->where('post_status', $value);
+            $query->where('post_status', $value);
         }
     }
 
-    public function argP($value, &$q)
+    public static function argP(Query $query, $value, &$q)
     {
-        $this->where('post_id', $value);
-        $this->isSingle = true;
+        $query->where('post_id', $value);
+        $query->isSingle = true;
     }
 
-    public function argPostParent($value, &$q)
+    public static function argPostParent(Query $query, $value, &$q)
     {
-        $this->where('post_parent', $value);
+        $query->where('post_parent', $value);
     }
 
     /**
@@ -172,11 +167,11 @@ trait WpConverterTrait
      * @param $value
      * @param $q
      */
-    public function argAttachment($value, &$q)
+    public static function argAttachment(Query $query, $value, &$q)
     {
         $q['attachment'] = sanitize_title_for_query(wp_basename($value));
         $q['name']       = $q['attachment'];
-        $this->isSingle  = true;
+        $query->isSingle = true;
         $q['post_type']  = 'attachment';
     }
 
@@ -186,147 +181,147 @@ trait WpConverterTrait
      * @param $value
      * @param $q
      */
-    public function argAttachmentId($value, &$q)
+    public static function argAttachmentId(Query $query, $value, &$q)
     {
-        $this->where('post_id', $value);
-        $this->isSingle = true;
-        $q['post_type'] = 'attachment';
+        $query->where('post_id', $value);
+        $query->isSingle = true;
+        $q['post_type']  = 'attachment';
     }
 
-    public function argName($value, &$q)
+    public static function argName(Query $query, $value, &$q)
     {
-        $this->where('post_name', $value);
-        $this->isSingle = true;
+        $query->where('post_name', $value);
+        $query->isSingle = true;
     }
 
-    public function argStatic($value, &$q)
+    public static function argStatic(Query $query, $value, &$q)
     {
-        $this->where('post_type', 'page');
-        $this->isSingle = false;
+        $query->where('post_type', 'page');
+        $query->isSingle = false;
     }
 
-    public function argPagename($value, &$q)
+    public static function argPagename(Query $query, $value, &$q)
     {
-        $this->where('post_name', $value);
-        $this->isSingle = true;
-        $q['post_type'] = 'page';
+        $query->where('post_name', $value);
+        $query->isSingle = true;
+        $q['post_type']  = 'page';
     }
 
-    public function argPageId($value, &$q)
+    public static function argPageId(Query $query, $value, &$q)
     {
-        $this->where('post_id', $value);
-        $this->isSingle = true;
-        $q['post_type'] = 'page';
+        $query->where('post_id', $value);
+        $query->isSingle = true;
+        $q['post_type']  = 'page';
     }
 
-    public function argSecond($value, &$q)
+    public static function argSecond(Query $query, $value, &$q)
     {
-        $this->where('post_date_object.second', $value);
+        $query->where('post_date_object.second', $value);
     }
 
-    public function argMinute($value, &$q)
+    public static function argMinute(Query $query, $value, &$q)
     {
-        $this->where('post_date_object.minute', $value);
+        $query->where('post_date_object.minute', $value);
     }
 
-    public function argHour($value, &$q)
+    public static function argHour(Query $query, $value, &$q)
     {
-        $this->where('post_date_object.hour', $value);
+        $query->where('post_date_object.hour', $value);
     }
 
-    public function argDay($value, &$q)
+    public static function argDay(Query $query, $value, &$q)
     {
-        $this->where('post_date_object.day', $value);
+        $query->where('post_date_object.day', $value);
     }
 
-    public function argMonthnum($value, &$q)
+    public static function argMonthnum(Query $query, $value, &$q)
     {
-        $this->where('post_date_object.month', $value);
+        $query->where('post_date_object.month', $value);
     }
 
-    public function argYear($value, &$q)
+    public static function argYear(Query $query, $value, &$q)
     {
-        $this->where('post_date_object.year', $value);
+        $query->where('post_date_object.year', $value);
     }
 
-    public function argW($value, &$q)
+    public static function argW(Query $query, $value, &$q)
     {
-        $this->where('post_date_object.week', $value);
+        $query->where('post_date_object.week', $value);
     }
 
-    public function argM($value, &$q)
+    public static function argM(Query $query, $value, &$q)
     {
-        $this->where('post_date_object.m', $value);
+        $query->where('post_date_object.m', $value);
     }
 
-    public function argCategoryName($value, &$q)
+    public static function argCategoryName(Query $query, $value, &$q)
     {
-        $this->where('terms.category.slug', $value);
+        $query->where('terms.category.slug', $value);
     }
 
-    public function argTag($value, &$q)
+    public static function argTag(Query $query, $value, &$q)
     {
-        $this->where('terms.post_tag.slug', $value);
+        $query->where('terms.post_tag.slug', $value);
     }
 
-    public function argCat($value, &$q)
+    public static function argCat(Query $query, $value, &$q)
     {
-        $this->where('terms.category.term_id', $value);
+        $query->where('terms.category.term_id', $value);
     }
 
-    public function argTagId($value, &$q)
+    public static function argTagId(Query $query, $value, &$q)
     {
-        $this->where('terms.post_tag.term_id', $value);
+        $query->where('terms.post_tag.term_id', $value);
     }
 
-    public function argAuthor($value, &$q)
+    public static function argAuthor(Query $query, $value, &$q)
     {
-        $this->where('post_author.id', $value);
+        $query->where('post_author.id', $value);
     }
 
-    public function argAuthorName($value, &$q)
+    public static function argAuthorName(Query $query, $value, &$q)
     {
-        $this->where('post_author.raw', $value);
+        $query->where('post_author.raw', $value);
     }
 
-    public function argFeed($value, &$q)
+    public static function argFeed(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argTb($value, &$q)
+    public static function argTb(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argPaged($value, &$q)
+    public static function argPaged(Query $query, $value, &$q)
     {
-        $this->setFrom(($value - 1) * $q['posts_per_page']);
+        $query->setFrom(($value - 1) * $q['posts_per_page']);
     }
 
-    public function argCommentsPopup($value, &$q)
+    public static function argCommentsPopup(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argMetaKey($value, &$q)
+    public static function argMetaKey(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argMetaValue($value, &$q)
+    public static function argMetaValue(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argPreview($value, &$q)
+    public static function argPreview(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argS($value, &$q)
+    public static function argS(Query $query, $value, &$q)
     {
-        $this->setQuery([
+        $query->setQuery([
             'bool' => [
                 'should' => [
                     [
@@ -355,155 +350,155 @@ trait WpConverterTrait
         ]);
     }
 
-    public function argSentence($value, &$q)
+    public static function argSentence(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argFields($value, &$q)
+    public static function argFields(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argMenuOrder($value, &$q)
+    public static function argMenuOrder(Query $query, $value, &$q)
     {
-        $this->where('menu_order', $value);
+        $query->where('menu_order', $value);
     }
 
-    public function argCategoryIn($value, &$q)
+    public static function argCategoryIn(Query $query, $value, &$q)
     {
-        $this->where('terms.category.term_id', array_values($value));
+        $query->where('terms.category.term_id', array_values($value));
     }
 
-    public function argCategoryNotIn($value, &$q)
+    public static function argCategoryNotIn(Query $query, $value, &$q)
     {
-        $this->whereNot('terms.category.term_id', array_values($value));
+        $query->whereNot('terms.category.term_id', array_values($value));
     }
 
-    public function argCategoryAnd($value, &$q)
+    public static function argCategoryAnd(Query $query, $value, &$q)
     {
-        $this->where('terms.category.term_id', '=', array_values($value));
+        $query->where('terms.category.term_id', '=', array_values($value));
     }
 
-    public function argPostIn($value, &$q)
+    public static function argPostIn(Query $query, $value, &$q)
     {
-        $this->where('post_id', array_values($value));
+        $query->where('post_id', array_values($value));
     }
 
-    public function argPostNotIn($value, &$q)
+    public static function argPostNotIn(Query $query, $value, &$q)
     {
-        $this->whereNot('post_id', array_values($value));
+        $query->whereNot('post_id', array_values($value));
     }
 
-    public function argTagIn($value, &$q)
+    public static function argTagIn(Query $query, $value, &$q)
     {
-        $this->where('terms.post_tag.term_id', array_values($value));
+        $query->where('terms.post_tag.term_id', array_values($value));
     }
 
-    public function argTagNotIn($value, &$q)
+    public static function argTagNotIn(Query $query, $value, &$q)
     {
-        $this->whereNot('terms.post_tag.term_id', array_values($value));
+        $query->whereNot('terms.post_tag.term_id', array_values($value));
     }
 
-    public function argTagAnd($value, &$q)
+    public static function argTagAnd(Query $query, $value, &$q)
     {
-        $this->where('terms.post_tag.term_id', '=', array_values($value));
+        $query->where('terms.post_tag.term_id', '=', array_values($value));
     }
 
-    public function argTagSlugIn($value, &$q)
+    public static function argTagSlugIn(Query $query, $value, &$q)
     {
-        $this->where('terms.post_tag.slug', array_values($value));
+        $query->where('terms.post_tag.slug', array_values($value));
     }
 
-    public function argTagSlugAnd($value, &$q)
+    public static function argTagSlugAnd(Query $query, $value, &$q)
     {
-        $this->where('terms.post_tag.slug', '=', array_values($value));
+        $query->where('terms.post_tag.slug', '=', array_values($value));
     }
 
-    public function argPostParentIn($value, &$q)
+    public static function argPostParentIn(Query $query, $value, &$q)
     {
-        $this->where('post_parent', array_values($value));
+        $query->where('post_parent', array_values($value));
     }
 
-    public function argPostParentNotIn($value, &$q)
+    public static function argPostParentNotIn(Query $query, $value, &$q)
     {
-        $this->whereNot('post_parent', array_values($value));
+        $query->whereNot('post_parent', array_values($value));
     }
 
-    public function argAuthorIn($value, &$q)
+    public static function argAuthorIn(Query $query, $value, &$q)
     {
-        $this->where('post_author.id', array_values($value));
+        $query->where('post_author.id', array_values($value));
     }
 
-    public function argAuthorNotIn($value, &$q)
+    public static function argAuthorNotIn(Query $query, $value, &$q)
     {
-        $this->whereNot('post_author.id', array_values($value));
+        $query->whereNot('post_author.id', array_values($value));
     }
 
-    public function argCacheResults($value, &$q)
-    {
-        //
-    }
-
-    public function argIgnoreStickyPosts($value, &$q)
+    public static function argCacheResults(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argSuppressFilters($value, &$q)
+    public static function argIgnoreStickyPosts(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argUpdatePostTermCache($value, &$q)
+    public static function argSuppressFilters(Query $query, $value, &$q)
     {
-        $this->updatePostTermCache = (bool) $value;
+        //
     }
 
-    public function argUpdatePostMetaCache($value, &$q)
+    public static function argUpdatePostTermCache(Query $query, $value, &$q)
     {
-        $this->updatePostMetaCache = (bool) $value;
+        $query->updatePostTermCache = (bool) $value;
     }
 
-    public function argPostType($value, &$q)
+    public static function argUpdatePostMetaCache(Query $query, $value, &$q)
+    {
+        $query->updatePostMetaCache = (bool) $value;
+    }
+
+    public static function argPostType(Query $query, $value, &$q)
     {
         if ($value == 'any' || isset($value[0]) && $value[0] == 'any') {
             $pt = Indexer::getSearchablePostTypes();
-            $this->where('post_type', array_values($pt));
+            $query->where('post_type', array_values($pt));
         } else {
-            $this->where('post_type', $value);
+            $query->where('post_type', $value);
         }
     }
 
-    public function argPostsPerPage($value, &$q)
+    public static function argPostsPerPage(Query $query, $value, &$q)
     {
-        if ($this->isSingle) {
-            $this->setSize(1);
+        if ($query->isSingle) {
+            $query->setSize(1);
         } elseif ($value == '-1') {
-            $this->setSize(10000000);
+            $query->setSize(10000000);
         } else {
-            $this->setSize((int) $value);
+            $query->setSize((int) $value);
         }
     }
 
-    public function argNopaging($value, &$q)
+    public static function argNopaging(Query $query, $value, &$q)
     {
-        $this->setSize(10000000);
+        $query->setSize(10000000);
     }
 
-    public function argCommentsPerPage($value, &$q)
+    public static function argCommentsPerPage(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argNoFoundRows($value, &$q)
+    public static function argNoFoundRows(Query $query, $value, &$q)
     {
         //
     }
 
-    public function argOrderby($value, &$q)
+    public static function argOrderby(Query $query, $value, &$q)
     {
-        if ($this->isSingle) {
+        if ($query->isSingle) {
             return;
         }
 
@@ -512,17 +507,17 @@ trait WpConverterTrait
             $key = str_replace('wp_posts.', '', $key);
             switch ($key) {
                 case 'ID':
-                    $this->addSort('post_id', $o);
+                    $query->addSort('post_id', $o);
                     break;
 
                 case 'post_author':
                 case 'author':
-                    $this->addSort('post_author.id', $o);
+                    $query->addSort('post_author.id', $o);
                     break;
 
                 case 'post_title':
                 case 'title':
-                    $this->addSort('post_title.raw', $o);
+                    $query->addSort('post_title.raw', $o);
                     break;
 
                 case 'post_name':
@@ -532,7 +527,7 @@ trait WpConverterTrait
                 case 'post_parent':
                 case 'post_comment_count':
                 case 'menu_order':
-                    $this->addSort($key, $o);
+                    $query->addSort($key, $o);
                     break;
 
                 case 'rand':
@@ -540,15 +535,15 @@ trait WpConverterTrait
                     break;
 
                 case 'meta_value_num':
-                    $this->addSort('post_meta_num.'.$q['meta_key'], $o);
+                    $query->addSort('post_meta_num.'.$q['meta_key'], $o);
                     break;
 
                 case 'meta_value':
-                    $this->addSort('post_meta.'.$q['meta_key'], $o);
+                    $query->addSort('post_meta.'.$q['meta_key'], $o);
                     break;
 
                 case 'relevance':
-                    $this->addSort([
+                    $query->addSort([
                         '_score'     => 'desc',
                         'menu_order' => 'asc',
                         'post_title' => 'asc',
@@ -557,25 +552,25 @@ trait WpConverterTrait
 
                 case 'none':
                 case '':
-                    $this->addSort('post_date', 'desc');
+                    $query->addSort('post_date', 'desc');
                     break;
 
                 default:
-                    $this->addSort('post_'.$key, $o);
+                    $query->addSort('post_'.$key, $o);
                     break;
             }
         }
     }
 
-    public function argTaxonomy($value, &$q)
+    public static function argTaxonomy(Query $query, $value, &$q)
     {
         if (!empty($q['term'])) {
-            $this->should([
+            $query->should([
                     'terms.'.$value.'.all_slugs' => $q['term'],
                 ]
             );
         } elseif (!empty($q['term_id'])) {
-            $this->should([
+            $query->should([
                     'terms.'.$value.'.term_id' => $q['term_id'],
                     'terms.'.$value.'.parent'  => $q['term_id'],
                 ]
@@ -583,7 +578,7 @@ trait WpConverterTrait
         }
     }
 
-    public function argTaxQuery($value, &$q)
+    public static function argTaxQuery(Query $query, $value, &$q)
     {
         $terms = [];
         foreach ($value as $tax) {
@@ -593,15 +588,15 @@ trait WpConverterTrait
             $terms["terms.$tax[taxonomy].$tax[field]"] = $tax['terms'];
         }
         if (isset($value['relation']) && $value['relation'] == 'OR') {
-            $this->should($terms);
+            $query->should($terms);
         } else {
-            $this->must($terms);
+            $query->must($terms);
         }
     }
 
-    public function argMetaQuery($value, &$q)
+    public static function argMetaQuery(Query $query, $value, &$q)
     {
-        $this->bool(function (Query $filter) use ($value, $q) {
+        $query->bool(function (Query $query) use ($value, $q) {
             foreach ($value as $key => $mq) {
                 if ($key === 'relation') {
                     continue;
@@ -609,15 +604,15 @@ trait WpConverterTrait
                 if (empty($mq['compare']) || $mq['compare'] == '=') {
                     $mq['compare'] = 'in'; // ”=” is handled as ”in” in meta query
                 }
-                $filter->where('post_meta.'.$mq['key'].'.raw', $mq['compare'], $mq['value']);
+                $query->where('post_meta.'.$mq['key'].'.raw', $mq['compare'], $mq['value']);
             }
 
         }, !empty($value['relation']) ? $value['relation'] : 'and');
     }
 
-    public function argDateQuery($value, &$q)
+    public static function argDateQuery(Query $query, $value, &$q)
     {
-        $this->bool(function (Query $filter) use ($value, $q) {
+        $query->bool(function (Query $query) use ($value, $q) {
             foreach ($value as $dq) {
                 $column    = !empty($dq['column']) ? $dq['column'] : 'post_date';
                 $inclusive = !empty($dq['inclusive']);
@@ -629,7 +624,7 @@ trait WpConverterTrait
                             if ($inclusive) {
                                 $comparator .= 'e';
                             }
-                            $filter->where($column, $comparator, $date);
+                            $query->where($column, $comparator, $date);
                             break;
                         case 'after':
                             $date       = static::buildDatetime($value, !$inclusive);
@@ -637,11 +632,11 @@ trait WpConverterTrait
                             if ($inclusive) {
                                 $comparator .= 'e';
                             }
-                            $filter->where($column, $comparator, $date);
+                            $query->where($column, $comparator, $date);
                             break;
                         case 'week' :
                         case 'w' :
-                            $this->where($column.'_object.week', $value);
+                            $query->where($column.'_object.week', $value);
                             break;
                         case 'year' :
                         case 'month' :
@@ -652,7 +647,7 @@ trait WpConverterTrait
                         case 'hour' :
                         case 'minute' :
                         case 'second' :
-                            $this->where($column.'_object.'.$key, $value);
+                            $query->where($column.'_object.'.$key, $value);
                             break;
                     }
                 }

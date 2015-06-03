@@ -12,6 +12,7 @@
 namespace Wallmander\ElasticsearchIndexer\Model;
 
 use Elasticsearch\Client as ElasticSearchClient;
+use Wallmander\ElasticsearchIndexer\Service\Elasticsearch;
 
 /**
  * A connection to Elasticsearch.
@@ -69,6 +70,6 @@ class Client extends ElasticSearchClient
      */
     public function isAvailable()
     {
-        return (bool) Service\Elasticsearch::indicesExists($this->getIndexName());
+        return (bool) Elasticsearch::indicesExists($this->getIndexName());
     }
 }

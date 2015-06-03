@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Wallmander\ElasticsearchIndexer\Model\Service;
+namespace Wallmander\ElasticsearchIndexer\Service;
 
 /**
  * Service layer for WordPress.

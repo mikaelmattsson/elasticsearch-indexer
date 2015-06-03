@@ -12,8 +12,8 @@
 namespace Wallmander\ElasticsearchIndexer\Model;
 
 use Exception;
-use Wallmander\ElasticsearchIndexer\Model\Service\Elasticsearch;
-use Wallmander\ElasticsearchIndexer\Model\Service\WordPress;
+use Wallmander\ElasticsearchIndexer\Service\Elasticsearch;
+use Wallmander\ElasticsearchIndexer\Service\WordPress;
 use WP_Query;
 use WP_User;
 

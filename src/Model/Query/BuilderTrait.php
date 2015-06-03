@@ -18,9 +18,20 @@ namespace Wallmander\ElasticsearchIndexer\Model\Query;
  */
 trait BuilderTrait
 {
+    /**
+     * @var array
+     */
     protected $args = [];
 
+    /**
+     * @var null|object
+     */
     protected $filterBuildingPoint = null;
+
+    /**
+     * @var bool
+     */
+    public $isSingle = false;
 
     protected function builderConstruct()
     {

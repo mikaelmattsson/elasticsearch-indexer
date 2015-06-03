@@ -12,6 +12,8 @@
 namespace Wallmander\ElasticsearchIndexer\Model;
 
 use stdClass;
+use Wallmander\ElasticsearchIndexer\Model\Query\BuilderTrait;
+use Wallmander\ElasticsearchIndexer\Model\Query\WpConverter;
 use WP_Post;
 use WP_Query;
 
@@ -52,7 +54,7 @@ class Query extends Client
      */
     public $updatePostMetaCache = false;
 
-    use Query\WpConverterTrait;
+    use BuilderTrait;
 
     public function __construct()
     {
@@ -153,5 +155,12 @@ class Query extends Client
         }
 
         return $this->posts;
+    }
+
+    public function formatArgs(WP_Query $wpQuery)
+    {
+        WpConverter::formatArgs($this, $wpQuery);
+
+        return $this;
     }
 }

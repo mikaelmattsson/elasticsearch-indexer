@@ -15,8 +15,8 @@ use Exception;
 use Wallmander\ElasticsearchIndexer\Model\Config;
 use Wallmander\ElasticsearchIndexer\Model\Indexer;
 use Wallmander\ElasticsearchIndexer\Model\Log;
-use Wallmander\ElasticsearchIndexer\Model\Service\Elasticsearch;
-use Wallmander\ElasticsearchIndexer\Model\Service\WordPress;
+use Wallmander\ElasticsearchIndexer\Service\Elasticsearch;
+use Wallmander\ElasticsearchIndexer\Service\WordPress;
 
 /**
  * Class Admin.
