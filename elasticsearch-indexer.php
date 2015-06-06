@@ -18,15 +18,21 @@
  * Author: Mikael Mattsson
  * Text Domain: elasticsearch-indexer
  */
-if (defined('DISABLE_ES') && DISABLE_ES) {
-    return;
-}
 
 define('ESI_PLUGINFILE', __FILE__);
 define('ESI_PATH', dirname(ESI_PLUGINFILE).'/');
 define('ESI_URL', plugins_url('/', __FILE__));
 
-require_once ESI_PATH.'vendor/autoload.php';
-require_once ESI_PATH.'functions.php';
+if (version_compare(phpversion(), '5.4.0', '<') === true) {
 
-Wallmander\ElasticsearchIndexer\Hooks::setup();
+    function esi_php_version_failed()
+    {
+        deactivate_plugins(ESI_PLUGINFILE);
+        wp_die(__('Elastic search indexer requires at least php version 5.4', 'elasticsearch-indexer'));
+    }
+    add_action('admin_init', 'esi_php_version_failed');
+    
+    return;
+}
+
+require_once ESI_PATH.'bootstrap.php';
