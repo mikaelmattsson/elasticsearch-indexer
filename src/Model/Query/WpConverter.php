@@ -604,7 +604,12 @@ class WpConverter
                 if (empty($mq['compare']) || $mq['compare'] == '=') {
                     $mq['compare'] = 'in'; // ”=” is handled as ”in” in meta query
                 }
-                $query->where('post_meta.'.$mq['key'].'.raw', $mq['compare'], $mq['value']);
+                if (!empty($mq['type']) && strtolower($mq['type']) === 'numeric') {
+                    $term = 'post_meta_num';
+                } else {
+                    $term = 'post_meta';
+                }
+                $query->where($term.'.'.$mq['key'].'.raw', $mq['compare'], $mq['value']);
             }
 
         }, !empty($value['relation']) ? $value['relation'] : 'and');

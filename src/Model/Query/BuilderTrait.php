@@ -175,6 +175,12 @@ trait BuilderTrait
                 ];
                 break;
 
+            case 'between':
+                $this->filterBuildingPoint[]['bool'][$must]['range'] = [
+                    $arg1 => ['gt' => $arg3[0], 'lt' => $arg3[1]],
+                ];
+                break;
+
         }
 
         return $this;

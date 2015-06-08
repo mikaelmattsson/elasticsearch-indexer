@@ -295,7 +295,8 @@ class Indexer extends Client
             'post_mime_type'           => $post->post_mime_type,
             'permalink'                => get_permalink($post->ID),
             'terms'                    => static::prepareTerms($post),
-            'post_meta'                => static::prepareMeta($post),
+            'post_meta'                => $meta = static::prepareMeta($post),
+            'post_meta_num'            => static::prepareMetaNum($meta),
             'post_date_object'         => static::prepareDateTerms($post_date),
             'post_date_gmt_object'     => static::prepareDateTerms($post_date_gmt),
             'post_modified_object'     => static::prepareDateTerms($post_modified),
@@ -303,17 +304,7 @@ class Indexer extends Client
             'menu_order'               => $post->menu_order,
             'guid'                     => $post->guid,
             'comment_count'            => $post->comment_count,
-            'post_meta_num'            => [],
         ];
-
-        $metaInts = apply_filters('esi_post_meta_nums', ['_price', '_order_total'], $post);
-
-        //for range filters
-        foreach ($metaInts as $metaKey) {
-            if ($metaValue = get_post_meta($post->ID, $metaKey, 1)) {
-                $post_args->post_meta_num[$metaKey] = (int) $metaValue;
-            }
-        }
 
         $post_args = apply_filters('esi_post_sync_args', $post_args, $post);
 
@@ -404,6 +395,20 @@ class Indexer extends Client
         }
 
         return array_map('maybe_unserialize', $meta);
+    }
+
+    /**
+     * @param array $meta
+     *
+     * @return array
+     */
+    public static function prepareMetaNum(array $meta)
+    {
+        foreach ($meta as $key => $value) {
+            $meta[$key] = array_map('intval', $value);
+        }
+
+        return $meta;
     }
 
     /**
