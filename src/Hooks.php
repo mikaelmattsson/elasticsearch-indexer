@@ -78,9 +78,7 @@ class Hooks
         $class = __NAMESPACE__.'\Controller\Admin';
         $class = apply_filters('esi_controller_admin', $class);
 
-        if (is_super_admin() && is_admin_bar_showing()) {
-            add_action('admin_bar_menu', [$class, 'actionAdminBarMenu'], 80);
-        }
+        add_action('admin_bar_menu', [$class, 'actionAdminBarMenu'], 80);
 
         if (is_admin()) {
             add_action('admin_menu', [$class, 'actionAdminMenu']);
