@@ -17,6 +17,7 @@ use Wallmander\ElasticsearchIndexer\Model\Indexer;
 use Wallmander\ElasticsearchIndexer\Model\Log;
 use Wallmander\ElasticsearchIndexer\Service\Elasticsearch;
 use Wallmander\ElasticsearchIndexer\Service\WordPress;
+use WP_Admin_Bar;
 
 /**
  * Class Admin.
@@ -110,9 +111,9 @@ class Admin
             die('invalid request');
         }
 
-        $site    = (int) $_POST['site'];
-        $from    = (int) $_POST['from'];
-        $size    = (int) $_POST['size'];
+        $site = (int) $_POST['site'];
+        $from = (int) $_POST['from'];
+        $size = (int) $_POST['size'];
 
         try {
             $indexer               = new Indexer();
@@ -135,5 +136,34 @@ class Admin
         }
 
         die();
+    }
+
+    public static function actionAdminBarMenu(WP_Admin_Bar $adminBar)
+    {
+        $args = [
+            'id'    => 'esindexer',
+            'title' => 'ES Indexer: '.static::getStatusText(),
+            'href'  => 'admin.php?page=esindexer_index',
+            'meta'  => [
+                'title' => 'Elastic Search Indexer',
+            ],
+        ];
+        $adminBar->add_node($args);
+    }
+
+    private static function getStatusText()
+    {
+        if ($time = Config::option('is_indexing')) {
+            if ($time + 20 < time()) {
+                return 'Indexing process interrupted';
+            }
+
+            return 'Indexing...';
+        }
+        if (!Config::option('enable_integration')) {
+            return 'Disabled Integration';
+        }
+
+        return 'Enabled';
     }
 }

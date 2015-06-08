@@ -19,4 +19,5 @@ return [
     'index_private_post_types'            => false,
     'profile_admin'                       => false,
     'profile_frontend'                    => false,
+    'is_indexing'                         => false,
 ];

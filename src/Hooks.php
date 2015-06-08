@@ -75,15 +75,18 @@ class Hooks
      */
     public static function setupAdmin()
     {
-        if (!is_admin()) {
-            return;
-        }
         $class = __NAMESPACE__.'\Controller\Admin';
         $class = apply_filters('esi_controller_admin', $class);
 
-        add_action('admin_menu', [$class, 'actionAdminMenu']);
-        add_action('admin_init', [$class, 'actionAdminInit']);
-        add_action('wp_ajax_es_reindex', [$class, 'ajaxReindex']);
+        if (is_super_admin() && is_admin_bar_showing()) {
+            add_action('admin_bar_menu', [$class, 'actionAdminBarMenu'], 80);
+        }
+
+        if (is_admin()) {
+            add_action('admin_menu', [$class, 'actionAdminMenu']);
+            add_action('admin_init', [$class, 'actionAdminInit']);
+            add_action('wp_ajax_es_reindex', [$class, 'ajaxReindex']);
+        }
     }
 
     /**
@@ -111,7 +114,7 @@ class Hooks
      */
     public static function setupQueryIntegration()
     {
-        if (!Config::option('enable_integration')) {
+        if (!Config::option('enable_integration') || Config::option('is_indexing')) {
             return;
         }
 
@@ -131,13 +134,13 @@ class Hooks
         add_filter('posts_results', [$class, 'filterThePosts'], 10, 2);
 
         // Ensure we're in a loop before we allow blog switching
-        //add_action('loop_start', [$class, 'actionLoopStart'], 10, 1); //see todo in README.md
+        //add_action('loop_start', [$class, 'actionLoopStart'], 10, 1);
 
         // Properly restore blog if necessary
-        //add_action('loop_end', [$class, 'actionLoopEnd'], 10, 1); //see todo in README.md
+        //add_action('loop_end', [$class, 'actionLoopEnd'], 10, 1);
 
         // Properly switch to blog if necessary
-        //add_action('the_post', [$class, 'actionThePost'], 10, 1); //see todo in README.md
+        //add_action('the_post', [$class, 'actionThePost'], 10, 1);
 
         //add_filter('split_the_query', '__return_false', 10, 2);
     }
