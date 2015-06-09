@@ -582,10 +582,20 @@ class WpConverter
     {
         $terms = [];
         foreach ($value as $tax) {
+            $include_children = !isset($tax['include_children']) || $tax['include_children'] != false;
             if ($tax['field'] == 'id') {
-                $tax['field'] = 'term_id';
+                $terms["terms.$tax[taxonomy].term_id"] = $tax['terms'];
+                if ($include_children) {
+                    $terms["terms.$tax[taxonomy].parent"] = $tax['terms'];
+                }
+            } elseif ($tax['field'] == 'slug') {
+                $terms["terms.$tax[taxonomy].slug"] = $tax['terms'];
+                if ($include_children) {
+                    $terms["terms.$tax[taxonomy].all_slugs"] = $tax['terms'];
+                }
+            } else {
+                $terms["terms.$tax[taxonomy].$tax[field]"] = $tax['terms'];
             }
-            $terms["terms.$tax[taxonomy].$tax[field]"] = $tax['terms'];
         }
         if (isset($value['relation']) && $value['relation'] == 'OR') {
             $query->should($terms);

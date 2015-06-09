@@ -122,17 +122,6 @@ use Wallmander\ElasticsearchIndexer\Model\Config;
                 </td>
             </tr>
             <tr valign="top">
-                <th>Include child taxonomies</th>
-                <td>
-                    <input type="hidden" name="<?php echo Config::optionKey('include_posts_from_child_taxonomies') ?>"
-                           value="0"/>
-                    <input type="checkbox" name="<?php echo Config::optionKey('include_posts_from_child_taxonomies') ?>"
-                           value="1" <?php echo Config::option('include_posts_from_child_taxonomies') ? 'checked="checked"' : ''; ?>/>
-
-                    <p class="description">Include posts from child taxonomies</p>
-                </td>
-            </tr>
-            <tr valign="top">
                 <th>Enable Profiler Frontend</th>
                 <td>
                     <input type="hidden" name="<?php echo Config::optionKey('profile_frontend') ?>"
