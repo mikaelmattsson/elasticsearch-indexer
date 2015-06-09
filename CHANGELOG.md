@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.4.0 (released 2015-06-09)
+
+- Add support for numeric meta queries
+- Bugfix
+
+## 1.3.0 (released 2015-06-09)
+
+- Add indexer status to admin bar
+- Disable the integration while indexing
+- Add php version check
+
 ## 1.2.4 (released 2015-05-31)
 
 - Bug fix
