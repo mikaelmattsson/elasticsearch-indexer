@@ -26,7 +26,12 @@ class WordPress
     public static function getSites()
     {
         if (is_multisite() && $sites = wp_get_sites()) {
-            return $sites;
+            $blogIDs = [];
+            foreach ($sites as $value) {
+                $blogIDs[] = $value['blog_id'];
+            }
+
+            return $blogIDs;
         }
 
         return [get_current_blog_id()];
