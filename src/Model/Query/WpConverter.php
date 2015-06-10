@@ -137,7 +137,7 @@ class WpConverter
             }
         }
 
-        do_action('esi_after_format_args', $query);
+        do_action('esi_after_format_args', $query, $wpQuery);
     }
 
     public static function argPostStatus(Query $query, $value, &$q)
