@@ -633,23 +633,42 @@ class WpConverter
 
     public static function argMetaQuery(Query $query, $value, &$q)
     {
-        $query->bool(function (Query $query) use ($value, $q) {
-            foreach ($value as $key => $mq) {
+        $currentValue = $value;
+        $function     = function (Query $query) use (&$currentValue, &$function) {
+            foreach ($currentValue as $key => $mq) {
                 if ($key === 'relation') {
                     continue;
                 }
-                if (empty($mq['compare']) || $mq['compare'] == '=') {
-                    $mq['compare'] = 'in'; // ”=” is handled as ”in” in meta query
-                }
-                if (!empty($mq['type']) && strtolower($mq['type']) === 'numeric') {
-                    $term = 'post_meta_num';
-                } else {
-                    $term = 'post_meta';
-                }
-                $query->where($term.'.'.$mq['key'].'.raw', $mq['compare'], $mq['value']);
-            }
+                if (!isset($mq[0]) || !is_array($mq[0])) {
+                    // not nested
 
-        }, !empty($value['relation']) ? $value['relation'] : 'and');
+                    if (empty($mq['compare']) || $mq['compare'] == '=') {
+                        $compare = 'in'; // ”=” is handled as ”in” in meta query
+                    } else {
+                        $compare = $mq['compare'];
+                    }
+
+                    $value  = $mq['value'];
+                    $type   = (!empty($mq['type'])) ? strtolower($mq['type']) : 'char';
+
+                    switch ($type) {
+                        case 'numeric' :
+                            $query->where("post_meta_num.$mq[key]", $compare, $value);
+                            break;
+                        case 'char' :
+                        default :
+                            $query->where("post_meta.$mq[key].raw", $compare, $value);
+                            break;
+                    }
+                } else {
+                    // nested
+                    $currentValue = $mq;
+                    $query->bool($function, !empty($currentValue['relation']) ? $currentValue['relation'] : 'and');
+                }
+            }
+        };
+
+        $query->bool($function, !empty($value['relation']) ? $value['relation'] : 'and');
     }
 
     public static function argDateQuery(Query $query, $value, &$q)
