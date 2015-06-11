@@ -564,6 +564,9 @@ class WpConverter
 
     public static function argTaxonomy(Query $query, $value, &$q)
     {
+        if (!empty($q['tax_query'])) {
+            return;
+        }
         if (!empty($q['term'])) {
             $query->should([
                     'terms.'.$value.'.all_slugs' => $q['term'],
@@ -580,28 +583,52 @@ class WpConverter
 
     public static function argTaxQuery(Query $query, $value, &$q)
     {
-        $terms = [];
-        foreach ($value as $tax) {
-            $include_children = !isset($tax['include_children']) || $tax['include_children'] != false;
-            if ($tax['field'] == 'id') {
-                $terms["terms.$tax[taxonomy].term_id"] = $tax['terms'];
-                if ($include_children) {
-                    $terms["terms.$tax[taxonomy].parent"] = $tax['terms'];
+        $currentValue = $value;
+        $function     = function (Query $query) use (&$currentValue, &$function) {
+            foreach ($currentValue as $key => $tax) {
+                if ($key === 'relation') {
+                    continue;
                 }
-            } elseif ($tax['field'] == 'slug') {
-                $terms["terms.$tax[taxonomy].slug"] = $tax['terms'];
-                if ($include_children) {
-                    $terms["terms.$tax[taxonomy].all_slugs"] = $tax['terms'];
+                if (!isset($tax[0]) || !is_array($tax[0])) {
+                    // not nested
+                    $include_children = !isset($tax['include_children']) || $tax['include_children'] != false;
+                    $compare          = empty($tax['operator']) ? 'in' : $tax['operator'];
+                    $terms            = $tax['terms'];
+                    if (is_string($terms)) {
+                        if (strpos($terms, '+') !== false) {
+                            $terms = preg_split('/[+]+/', $terms);
+                        } else {
+                            $terms = preg_split('/[,]+/', $terms);
+                        }
+                    }
+                    switch ($tax['field']) {
+                        case 'term_id' :
+                            $query->where("terms.$tax[taxonomy].term_id", $compare, $terms);
+                            if ($include_children) {
+                                $query->where("terms.$tax[taxonomy].parent", $compare, $terms);
+                            }
+                            break;
+                        case 'slug' :
+                            if ($include_children) {
+                                $query->where("terms.$tax[taxonomy].all_slugs", $compare, $terms);
+                            } else {
+                                $query->where("terms.$tax[taxonomy].slug", $compare, $terms);
+                            }
+                            break;
+                        case 'name' :
+                            // plugin exclusive feature.
+                            $query->where("terms.$tax[taxonomy].name", $compare, $terms);
+                            break;
+                    }
+                } else {
+                    // nested
+                    $currentValue = $tax;
+                    $query->bool($function, !empty($currentValue['relation']) ? $currentValue['relation'] : 'and');
                 }
-            } else {
-                $terms["terms.$tax[taxonomy].$tax[field]"] = $tax['terms'];
             }
-        }
-        if (isset($value['relation']) && $value['relation'] == 'OR') {
-            $query->should($terms);
-        } else {
-            $query->must($terms);
-        }
+        };
+
+        $query->bool($function, !empty($value['relation']) ? $value['relation'] : 'and');
     }
 
     public static function argMetaQuery(Query $query, $value, &$q)
