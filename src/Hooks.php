@@ -37,6 +37,7 @@ class Hooks
 
         static::setupSync();
         static::setupQueryIntegration();
+        static::setupWooCommerce();
         static::setupWooCommerceAdmin();
     }
 
@@ -140,7 +141,28 @@ class Hooks
         // Properly switch to blog if necessary
         //add_action('the_post', [$class, 'actionThePost'], 10, 1);
 
-        //add_filter('split_the_query', '__return_false', 10, 2);
+        //add_filter('split_the_query', '__return_false', 40);
+    }
+
+    /**
+     * Setup WooCommerce hooks.
+     */
+    public static function setupWooCommerce()
+    {
+        add_action('init', function () {
+            if (!class_exists('WooCommerce') || !Config::option('enable_integration')) {
+                return;
+            }
+
+            $class = __NAMESPACE__.'\Controller\WooCommerce';
+            $class = apply_filters('esi_controller_woocommerce', $class);
+
+            add_filter('pre_get_posts', [$class, 'actionPreGetPosts'], 15);
+
+            add_action('init', function () {
+                static::forceRemoveAction('posts_search', 'product_search');
+            }, 15);
+        });
     }
 
     /**

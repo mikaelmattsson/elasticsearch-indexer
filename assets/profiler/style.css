@@ -44,6 +44,17 @@
 }
 
 #esi-profiler .esi-totals {
-    width: 300px;
+    width: 100%;
+    max-width: 500px;
 }
 
+#esi-profiler .esi-wpquery-args span,
+#esi-profiler .esi-elasticsearch-args span {
+    display: block;
+    white-space: pre;
+    line-height: 1.1;
+}
+
+#esi-profiler .esi-wpquery-args {
+    width: 38.2%;
+}

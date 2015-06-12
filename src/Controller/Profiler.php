@@ -11,6 +11,10 @@
 
 namespace Wallmander\ElasticsearchIndexer\Controller;
 
+use Wallmander\ElasticsearchIndexer\Model\Profiler as ProfilerModel;
+use Wallmander\ElasticsearchIndexer\Model\Query;
+use WP_Query;
+
 /**
  * Class Profiler.
  *
@@ -29,6 +33,7 @@ class Profiler
 
         add_action('wp_enqueue_scripts', [get_class(), 'actionWpEnqueueScripts']);
         add_action('admin_enqueue_scripts', [get_class(), 'actionWpEnqueueScripts']);
+        add_action('esi_after_format_args', [get_class(), 'actionAfterFormatArgs'], 90, 2);
         add_action('shutdown', [get_class(), 'actionShutdown']);
     }
 
@@ -45,21 +50,21 @@ class Profiler
      */
     public static function actionShutdown()
     {
-        global $wpdb;
-
-        $queries = $wpdb->queries;
-
-        usort($queries, function ($a, $b) {
-            return ($a[1] < $b[1]) * 2 - 1;
-        });
-
-        $totalCount = count($queries);
-        $totalTime  = (float) 0;
-
-        foreach ($queries as $q) {
-            $totalTime += $q[1];
-        }
+        $queries        = ProfilerModel::getMySQLQueries();
+        $totalTime      = ProfilerModel::getMySQLQueriesTime();
+        $elasticQueries = ProfilerModel::getElasticQueries();
 
         require ESI_PATH.'/views/profiler/footer.php';
+    }
+
+    /**
+     * Save the elasticsearch query.
+     *
+     * @param Query    $query
+     * @param WP_Query $wpQuery
+     */
+    public static function actionAfterFormatArgs(Query $query, WP_Query $wpQuery)
+    {
+        ProfilerModel::addElasticsearchQueryArgs($query->getArgs(), $wpQuery->query_vars);
     }
 }
