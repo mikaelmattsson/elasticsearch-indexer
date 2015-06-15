@@ -34,7 +34,7 @@ class WooCommerceAdmin
 
         $wpQuery = $query->wp_query;
 
-        if ('edit.php' != $pagenow || empty($wpQuery->query_vars['s']) || $wpQuery->query_vars['post_type'] != 'shop_order') {
+        if ('edit.php' != $pagenow || !$wpQuery->get('s') || $wpQuery->get('post_type') != 'shop_order') {
             return;
         }
 
@@ -65,7 +65,7 @@ class WooCommerceAdmin
             $searchFields[$key] = 'post_meta.'.$value;
         }
 
-        $searchOrderId = str_replace('Order #', '', $wpQuery->query_vars['s']);
+        $searchOrderId = str_replace('Order #', '', $wpQuery->get('s'));
         if (!is_numeric($searchOrderId)) {
             $searchOrderId = 0;
         }
@@ -77,15 +77,10 @@ class WooCommerceAdmin
                 'should' => [
                     [
                         'multi_match' => [
-                            'fields' => $searchFields,
-                            'query'  => $wpQuery->query_vars['s'],
-                        ],
-                    ],
-                    [
-                        'fuzzy_like_this' => [
-                            'fields'         => $searchFields,
-                            'like_text'      => $wpQuery->query_vars['s'],
-                            'min_similarity' => apply_filters('esi_min_similarity', 0.75),
+                            'fields'   => $searchFields,
+                            'type'     => 'cross_fields',
+                            'operator' => 'and',
+                            'query'    => $wpQuery->get('s'),
                         ],
                     ],
                     [
@@ -117,10 +112,10 @@ class WooCommerceAdmin
 
         $orderItemNames = $wpdb->get_col(
             $wpdb->prepare("
-					SELECT order_item_name
-					FROM {$wpdb->prefix}woocommerce_order_items as order_items
-					WHERE order_id = %d
-					",
+                    SELECT order_item_name
+                    FROM {$wpdb->prefix}woocommerce_order_items as order_items
+                    WHERE order_id = %d
+                    ",
                 $post->ID
             )
         );
