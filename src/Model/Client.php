@@ -62,14 +62,4 @@ class Client extends ElasticSearchClient
 
         return $this;
     }
-
-    /**
-     * Evaluate if the we can search for posts.
-     *
-     * @return bool
-     */
-    public function isAvailable()
-    {
-        return (bool) Elasticsearch::indicesExists($this->getIndexName());
-    }
 }

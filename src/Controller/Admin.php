@@ -140,12 +140,13 @@ class Admin
 
     public static function actionAdminBarMenu(WP_Admin_Bar $adminBar)
     {
-        $args = [
+        $statusText = static::getStatusText();
+        $args       = [
             'id'    => 'esindexer',
-            'title' => 'ES Indexer: '.static::getStatusText(),
-            'href'  => 'admin.php?page=esindexer_index',
+            'title' => 'ES Indexer: <span style="color:'.$statusText[1].'">'.$statusText[0].'</span>',
+            'href'  => get_admin_url(null, 'admin.php?page=esindexer_index'),
             'meta'  => [
-                'title' => 'Elastic Search Indexer',
+                'title' => Elasticsearch::getErrorMessage(),
             ],
         ];
         $adminBar->add_node($args);
@@ -153,17 +154,26 @@ class Admin
 
     private static function getStatusText()
     {
+        if (!Elasticsearch::isAvailable()) {
+            return ['Unable to connect', '#e14d43'];
+        }
+
+        if (Config::option('user_index_version') < Config::option('plugin_index_version')) {
+            return ['Reindex required', '#e14d43'];
+        }
+
         if ($time = Config::option('is_indexing')) {
             if ($time + 20 < time()) {
-                return 'Indexing process interrupted';
+                return ['Indexing process interrupted', '#e14d43'];
             }
 
-            return 'Indexing...';
-        }
-        if (!Config::option('enable_integration')) {
-            return 'Disabled Integration';
+            return ['Indexing...', '#ccaf0b'];
         }
 
-        return 'Enabled';
+        if (!Config::option('enable_integration')) {
+            return ['Disabled Integration', '#999'];
+        }
+
+        return ['Enabled', '#a3b745'];
     }
 }

@@ -37,10 +37,11 @@ class Indexer extends Client
     {
         add_filter('esi_skip_query_integration', '__return_true');
 
-        Config::setOption('is_indexing', time());
-
         WordPress::switchToBlog($site);
         $this->setBlog($site);
+
+        Config::setOption('is_indexing', time());
+        Config::setOption('user_index_version', Config::option('plugin_index_version'));
 
         list($indexed, $total) = $this->reindexBlog($from, $size);
 

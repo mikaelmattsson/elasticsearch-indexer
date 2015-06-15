@@ -11,8 +11,8 @@
 
 namespace Wallmander\ElasticsearchIndexer;
 
-use Wallmander\ElasticsearchIndexer\Model\Client;
 use Wallmander\ElasticsearchIndexer\Model\Config;
+use Wallmander\ElasticsearchIndexer\Service\Elasticsearch;
 
 /**
  * Class Hooks.
@@ -30,8 +30,11 @@ class Hooks
         static::setupProfiler();
         static::setupAdmin();
 
-        $client = new Client();
-        if (!$client->isAvailable()) {
+        if (!Elasticsearch::isAvailable()) {
+            return;
+        }
+
+        if (Config::option('user_index_version') < Config::option('plugin_index_version')) {
             return;
         }
 

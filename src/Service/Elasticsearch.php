@@ -11,8 +11,10 @@
 
 namespace Wallmander\ElasticsearchIndexer\Service;
 
+use Exception;
 use Guzzle\Http\Client as HttpClient;
 use Guzzle\Http\Exception\RequestException;
+use Wallmander\ElasticsearchIndexer\Model\Client;
 use Wallmander\ElasticsearchIndexer\Model\Config;
 
 /**
@@ -22,6 +24,10 @@ use Wallmander\ElasticsearchIndexer\Model\Config;
  */
 class Elasticsearch
 {
+    protected static $isAvailable  = null;
+
+    protected static $errorMessage = '';
+
     /**
      * Send a simple get request to the Elasticsearch server.
      *
@@ -166,21 +172,54 @@ class Elasticsearch
     public static function ping($host)
     {
         $start   = microtime(true);
-        $status  = 'OK';
+        $message = 'OK';
         $success = true;
         try {
-            $client  = new HttpClient();
+            $client = new HttpClient();
             $client->get($host)->send();
-        } catch (RequestException $e) {
-            $status  = $e->getMessage();
+        } catch (Exception $e) {
+            $message = $e->getMessage();
             $success = false;
         }
         $end = microtime(true);
 
         return [
-            'status'  => $status,
+            'status'  => $message,
             'time'    => ($end - $start) * 1000,
             'success' => $success,
         ];
+    }
+
+    /**
+     * Evaluate if the we can search for posts.
+     *
+     * @return bool
+     */
+    public static function isAvailable()
+    {
+        if (static::$isAvailable !== null) {
+            return static::$isAvailable;
+        }
+
+        $client = new Client();
+
+        try {
+            static::$isAvailable = (bool) self::indicesExists($client->getIndexName());
+        } catch (Exception $e) {
+            static::$errorMessage = $e->getMessage();
+            static::$isAvailable  = false;
+        }
+
+        return static::$isAvailable;
+    }
+
+    /**
+     * Returns a latest saved status message if any.
+     *
+     * @return string
+     */
+    public static function getErrorMessage()
+    {
+        return self::$errorMessage;
     }
 }

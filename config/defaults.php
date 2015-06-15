@@ -10,13 +10,18 @@
  */
 
 return [
+    // System variables
+    'plugin_index_version'     => 1, // Update this value to prompt the user to reindex
+    'user_index_version'       => 1,
+    'is_indexing'              => false,
+
+    // User settings
     'enable_integration'       => true,
     'hosts'                    => '127.0.0.1:9200',
     'index_name'               => null,
     'shards'                   => 5,
     'replicas'                 => 1,
-    'index_private_post_types' => false,
+    'index_private_post_types' => true,
     'profile_admin'            => false,
     'profile_frontend'         => false,
-    'is_indexing'              => false,
 ];
