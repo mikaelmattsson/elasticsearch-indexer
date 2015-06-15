@@ -11,7 +11,7 @@
 
 return [
     // System variables
-    'plugin_index_version'     => 1, // Update this value to prompt the user to reindex
+    'plugin_index_version'     => 2, // Update this value to prompt the user to reindex
     'user_index_version'       => 1,
     'is_indexing'              => false,
 
