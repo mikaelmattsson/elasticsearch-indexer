@@ -39,9 +39,13 @@ trait BuilderTrait
         $this->filterBuildingPoint   = &$this->args['filter']['and'];
     }
 
-    public function setQuery(array $query)
+    public function setQuery($query)
     {
-        $this->args['query'] = $query;
+        if ($query) {
+            $this->args['query'] = $query;
+        } elseif (isset($this->args['query'])) {
+            unset($this->args['query']);
+        }
 
         return $this;
     }

@@ -38,61 +38,61 @@ class WooCommerceAdmin
             return;
         }
 
-        $searchFields = apply_filters('woocommerce_shop_order_search_fields', [
-            '_billing_first_name',
-            '_billing_last_name',
-            '_shipping_first_name',
-            '_shipping_last_name',
-            '_order_key',
-            '_billing_company',
-            '_billing_address_1',
-            '_billing_address_2',
-            '_billing_city',
-            '_billing_postcode',
-            '_billing_country',
-            '_billing_state',
-            '_billing_email',
-            '_billing_phone',
-            '_shipping_address_1',
-            '_shipping_address_2',
-            '_shipping_city',
-            '_shipping_postcode',
-            '_shipping_country',
-            '_shipping_state',
-        ]);
-
-        foreach ($searchFields as $key => $value) {
-            $searchFields[$key] = 'post_meta.'.$value;
-        }
-
         $searchOrderId = str_replace('Order #', '', $wpQuery->get('s'));
+
         if (!is_numeric($searchOrderId)) {
-            $searchOrderId = 0;
-        }
+            $searchFields = apply_filters('woocommerce_shop_order_search_fields', [
+                '_billing_first_name',
+                '_billing_last_name',
+                '_shipping_first_name',
+                '_shipping_last_name',
+                '_order_key',
+                '_billing_company',
+                '_billing_address_1',
+                '_billing_address_2',
+                '_billing_city',
+                '_billing_postcode',
+                '_billing_country',
+                '_billing_state',
+                '_billing_email',
+                '_billing_phone',
+                '_shipping_address_1',
+                '_shipping_address_2',
+                '_shipping_city',
+                '_shipping_postcode',
+                '_shipping_country',
+                '_shipping_state',
+            ]);
 
-        $searchFields[] = 'order_item_names';
+            foreach ($searchFields as $key => $value) {
+                $searchFields[$key] = 'post_meta.'.$value;
+            }
 
-        $query->setQuery([
-            'bool' => [
-                'should' => [
-                    [
-                        'multi_match' => [
-                            'fields'   => $searchFields,
-                            'type'     => 'cross_fields',
-                            'operator' => 'and',
-                            'query'    => $wpQuery->get('s'),
-                        ],
-                    ],
-                    [
-                        'term' => [
-                            'post_id' => $searchOrderId,
+            $searchFields[] = 'order_item_names';
+
+            $query->setQuery([
+                'bool' => [
+                    'should' => [
+                        [
+                            'multi_match' => [
+                                'fields'               => $searchFields,
+                                'type'                 => 'cross_fields',
+                                'operator'             => 'and',
+                                'minimum_should_match' => '50%',
+                                'query'                => $wpQuery->get('s'),
+                            ],
                         ],
                     ],
                 ],
-            ],
-        ]);
+            ]);
+        } else {
+            $query->where('post_id', (int) $searchOrderId);
+            $query->setQuery(false);
+        }
 
-        $query->setSort('post_date', 'desc');
+        if (!$wpQuery->get('orderby')) {
+            $query->setSort('post_date', 'desc');
+        }
     }
 
     /**
