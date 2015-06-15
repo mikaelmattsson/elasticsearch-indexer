@@ -34,9 +34,11 @@ class WooCommerceAdmin
 
         $wpQuery = $query->wp_query;
 
-        if ('edit.php' != $pagenow || empty($wpQuery->query_vars['s']) || $wpQuery->query_vars['post_type'] != 'shop_order') {
+        if ('edit.php' != $pagenow || !$wpQuery->get('s') || $wpQuery->get('post_type') != 'shop_order') {
             return;
         }
+
+        $search = str_replace('Order #', '', $wpQuery->get('s'));
 
         $searchFields = apply_filters('woocommerce_shop_order_search_fields', [
             '_billing_first_name',
@@ -65,39 +67,29 @@ class WooCommerceAdmin
             $searchFields[$key] = 'post_meta.'.$value;
         }
 
-        $searchOrderId = str_replace('Order #', '', $wpQuery->query_vars['s']);
-        if (!is_numeric($searchOrderId)) {
-            $searchOrderId = 0;
-        }
-
         $searchFields[] = 'order_item_names';
+        $searchFields[] = 'post_id';
 
         $query->setQuery([
             'bool' => [
                 'should' => [
                     [
                         'multi_match' => [
-                            'fields' => $searchFields,
-                            'query'  => $wpQuery->query_vars['s'],
-                        ],
-                    ],
-                    [
-                        'fuzzy_like_this' => [
-                            'fields'         => $searchFields,
-                            'like_text'      => $wpQuery->query_vars['s'],
-                            'min_similarity' => apply_filters('esi_min_similarity', 0.75),
-                        ],
-                    ],
-                    [
-                        'term' => [
-                            'post_id' => $searchOrderId,
+                            'fields'               => $searchFields,
+                            'type'                 => 'cross_fields',
+                            'operator'             => 'and',
+                            'minimum_should_match' => '50%',
+                            'analyzer'             => 'esi_index_simple',
+                            'query'                => $search,
                         ],
                     ],
                 ],
             ],
         ]);
 
-        $query->setSort('post_date', 'desc');
+        if (!$wpQuery->get('orderby')) {
+            $query->setSort('post_date', 'desc');
+        }
     }
 
     /**
@@ -117,10 +109,10 @@ class WooCommerceAdmin
 
         $orderItemNames = $wpdb->get_col(
             $wpdb->prepare("
-					SELECT order_item_name
-					FROM {$wpdb->prefix}woocommerce_order_items as order_items
-					WHERE order_id = %d
-					",
+                    SELECT order_item_name
+                    FROM {$wpdb->prefix}woocommerce_order_items as order_items
+                    WHERE order_id = %d
+                    ",
                 $post->ID
             )
         );
