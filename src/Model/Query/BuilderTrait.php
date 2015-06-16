@@ -74,6 +74,17 @@ trait BuilderTrait
         return $this;
     }
 
+    public function setMinScore($score)
+    {
+        if ($score) {
+            $this->args['min_score'] = $score;
+        } elseif (isset($this->args['min_score'])) {
+            unset($this->args['min_score']);
+        }
+
+        return $this;
+    }
+
     public function bool($callable, $relation = 'must')
     {
         $tmp      = &$this->filterBuildingPoint;
