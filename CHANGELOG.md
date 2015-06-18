@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 1.5.1 (released 2015-06-18)
+
+- Improved order search
+
+## 1.5.0 (released 2015-06-15)
+
+- Improved order search
+- Improved product search
+- Add versioning on index
+- Temporary deactivation of integration when indexing
+
+## 1.4.2 (released 2015-06-11)
+
+- Add support for nested meta_queries
+
+## 1.4.1 (released 2015-06-11)
+
+- Add support for include_children on tax_query
+- Bugfix
+
 ## 1.4.0 (released 2015-06-09)
 
 - Add support for numeric meta queries
