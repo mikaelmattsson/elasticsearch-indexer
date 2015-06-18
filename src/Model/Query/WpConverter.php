@@ -104,7 +104,7 @@ class WpConverter
         if (empty($q['orderby'])) {
             $q['orderby'] = 'none';
         }
-        if ($wpQuery->is_search()) {
+        if ($wpQuery->is_search() && $wpQuery->get('s')) {
             if ($q['orderby'] == 'none' || $q['orderby'] == 'menu_order title') {
                 $q['orderby'] = 'relevance';
             }

@@ -28,10 +28,10 @@ return [
                 'type'      => 'custom',
                 'tokenizer' => 'keyword',
             ],
-            'esi_index_simple' => [
+            'esi_simple_analyzer' => [
                 'type'      => 'custom',
                 'tokenizer' => 'standard',
-                'filter'    => ['standard', 'lowercase', 'stop'],
+                'filter'    => ['standard', 'lowercase', 'esi_ngram'],
             ],
         ],
         'filter' => [
