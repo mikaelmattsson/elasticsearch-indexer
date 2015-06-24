@@ -1,6 +1,6 @@
 === Elasticsearch Indexer ===
 Contributors: wallmanderco
-Tags: elasticsearch, indexer, performance, search engine
+Tags: elasticsearch, indexer, performance, search engine, elastic, search
 Requires at least: 3.6
 Tested up to: 4.2
 Stable tag: 1.5.1
