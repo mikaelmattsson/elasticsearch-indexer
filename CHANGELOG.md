@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.6.0 (released 2015-06-18)
+
+- Add option to only use plugin for searching
+- Improved order search
+
 ## 1.5.1 (released 2015-06-18)
 
 - Improved order search
