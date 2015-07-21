@@ -82,8 +82,12 @@ class WooCommerceAdmin
                         ],
                     ],
                     [
-                        'term' => [
-                            'post_id' => (int) $search,
+                        'multi_match' => [
+                            'fields'               => $searchFields,
+                            'type'                 => 'cross_fields',
+                            'operator'             => 'and',
+                            'analyzer'             => 'esi_simple_analyzer',
+                            'query'                => $search,
                         ],
                     ],
                 ],

@@ -31,7 +31,7 @@ return [
             ],
             'esi_simple_analyzer' => [
                 'type'      => 'custom',
-                'tokenizer' => 'whitespace',
+                'tokenizer' => 'standard',
                 'filter'    => ['standard', 'lowercase', 'keyword_repeat', 'porter_stem'],
             ],
         ],
