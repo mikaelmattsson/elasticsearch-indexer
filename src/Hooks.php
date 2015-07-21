@@ -40,8 +40,14 @@ class Hooks
 
         static::setupSync();
         static::setupQueryIntegration();
-        static::setupWooCommerce();
-        static::setupWooCommerceAdmin();
+
+        add_action('init', function () {
+            /*
+             * Need to be set up after WooCommerce.
+             */
+            static::setupWooCommerce();
+            static::setupWooCommerceAdmin();
+        }, 15);
     }
 
     /**
@@ -116,7 +122,7 @@ class Hooks
      */
     public static function setupQueryIntegration()
     {
-        if (!Config::option('enable_integration') || Config::option('is_indexing')) {
+        if (!Config::enabledIntegration() || Config::option('is_indexing')) {
             return;
         }
 
@@ -152,20 +158,17 @@ class Hooks
      */
     public static function setupWooCommerce()
     {
-        add_action('init', function () {
-            if (!class_exists('WooCommerce') || !Config::option('enable_integration')) {
-                return;
-            }
+        if (!class_exists('WooCommerce') || !Config::enabledIntegration()) {
+            return;
+        }
 
-            $class = __NAMESPACE__.'\Controller\WooCommerce';
-            $class = apply_filters('esi_controller_woocommerce', $class);
+        $class = __NAMESPACE__.'\Controller\WooCommerce';
+        $class = apply_filters('esi_controller_woocommerce', $class);
 
-            add_filter('pre_get_posts', [$class, 'actionPreGetPosts'], 15);
+        add_filter('pre_get_posts', [$class, 'actionPreGetPosts'], 15);
 
-            add_action('init', function () {
-                static::forceRemoveAction('posts_search', 'product_search');
-            }, 15);
-        });
+
+        static::forceRemoveAction('posts_search', 'product_search');
     }
 
     /**
@@ -173,20 +176,18 @@ class Hooks
      */
     public static function setupWooCommerceAdmin()
     {
-        add_action('init', function () {
-            if (!class_exists('WooCommerce') || !Config::option('index_private_post_types')) {
-                return;
-            }
+        if (!class_exists('WooCommerce') || !Config::option('index_private_post_types')) {
+            return;
+        }
 
-            $class = __NAMESPACE__.'\Controller\WooCommerceAdmin';
-            $class = apply_filters('esi_controller_woocommerceadmin', $class);
-            add_filter('esi_post_sync_args', [$class, 'filterPostSyncArgs'], 10, 2);
+        $class = __NAMESPACE__.'\Controller\WooCommerceAdmin';
+        $class = apply_filters('esi_controller_woocommerceadmin', $class);
+        add_filter('esi_post_sync_args', [$class, 'filterPostSyncArgs'], 10, 2);
 
-            if (Config::option('enable_integration')) {
-                static::forceRemoveAction('parse_query', 'shop_order_search_custom_fields');
-                add_action('esi_after_format_args', [$class, 'actionOrderSearch']);
-            }
-        }, 15);
+        if (Config::enabledFullIntegration()) {
+            static::forceRemoveAction('parse_query', 'shop_order_search_custom_fields');
+            add_action('esi_after_format_args', [$class, 'actionOrderSearch']);
+        }
     }
 
     /**

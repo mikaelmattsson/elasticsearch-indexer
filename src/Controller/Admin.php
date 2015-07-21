@@ -170,8 +170,8 @@ class Admin
             return ['Indexing...', '#ccaf0b'];
         }
 
-        if (!Config::option('enable_integration')) {
-            return ['Disabled Integration', '#999'];
+        if (!Config::enabledIntegration()) {
+            return ['Integration Disabled', '#999'];
         }
 
         return ['Enabled', '#a3b745'];

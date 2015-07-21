@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Wallmander\ElasticsearchIndexer\Model\Config;
+
 return [
     // System variables
     'plugin_index_version'     => 3, // Update this value to prompt the user to reindex
@@ -16,7 +18,7 @@ return [
     'is_indexing'              => false,
 
     // User settings
-    'enable_integration'       => true,
+    'integration_level'        => Config::INTEGRATION_LEVEL_FULL,
     'hosts'                    => '127.0.0.1:9200',
     'index_name'               => null,
     'shards'                   => 5,

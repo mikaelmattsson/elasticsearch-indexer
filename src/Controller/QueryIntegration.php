@@ -11,6 +11,7 @@
 
 namespace Wallmander\ElasticsearchIndexer\Controller;
 
+use Wallmander\ElasticsearchIndexer\Model\Config;
 use Wallmander\ElasticsearchIndexer\Model\Query;
 use Wallmander\ElasticsearchIndexer\Model\Query\WpConverter;
 use WP_Query;
@@ -36,6 +37,12 @@ class QueryIntegration
     public static function filterPostsRequest($request, WP_Query $query)
     {
         if (apply_filters('esi_skip_query_integration', false, $query)) {
+            return $request;
+        }
+
+        if (!$query->is_search() && !Config::enabledFullIntegration()) {
+            $query->is_elasticsearch_compatible = false;
+
             return $request;
         }
 

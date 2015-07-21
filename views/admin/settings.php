@@ -14,12 +14,20 @@ use Wallmander\ElasticsearchIndexer\Model\Config;
         <table class="form-table">
 
             <tr valign="top">
-                <th>Enable Integration</th>
+                <th>Integration</th>
                 <td>
-                    <input type="hidden" name="<?php echo Config::optionKey('enable_integration') ?>"
-                           value="0"/>
-                    <input type="checkbox" name="<?php echo Config::optionKey('enable_integration') ?>"
-                           value="1" <?php echo Config::option('enable_integration') ? 'checked="checked"' : ''; ?>/>
+                    <label><input type="radio" value="<?php echo Config::INTEGRATION_LEVEL_OFF ?>"
+                        <?php echo Config::option('integration_level') == Config::INTEGRATION_LEVEL_OFF ? 'checked="checked"' : '' ?>
+                        name="<?php echo Config::optionKey('integration_level') ?>"/> Off</label>
+                    <br>
+                    <label><input type="radio" value="<?php echo Config::INTEGRATION_LEVEL_SEARCH ?>"
+                            <?php echo Config::option('integration_level') == Config::INTEGRATION_LEVEL_SEARCH ? 'checked="checked"' : '' ?>
+                            name="<?php echo Config::optionKey('integration_level') ?>"/> Search only</label>
+                    <br>
+                    <label><input type="radio" value="<?php echo Config::INTEGRATION_LEVEL_FULL ?>"
+                            <?php echo Config::option('integration_level') == Config::INTEGRATION_LEVEL_FULL ? 'checked="checked"' : '' ?>
+                            name="<?php echo Config::optionKey('integration_level') ?>"/> Full</label>
+                    <br>
 
                     <p class="description">Posts will still be synced if disabled.</p>
                 </td>

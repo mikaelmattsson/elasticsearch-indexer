@@ -24,6 +24,21 @@ class Config
     const OPTION_PREFIX = 'esi_';
 
     /**
+     * Prefix for options.
+     */
+    const INTEGRATION_LEVEL_OFF = 0;
+
+    /**
+     * Prefix for options.
+     */
+    const INTEGRATION_LEVEL_SEARCH = 1;
+
+    /**
+     * Prefix for options.
+     */
+    const INTEGRATION_LEVEL_FULL = 2;
+
+    /**
      * Fetch config array from a file in the config directory.
      *
      * @param string $config
@@ -115,4 +130,15 @@ class Config
 
         return apply_filters('esi_index_name', $indexName);
     }
+
+    public static function enabledIntegration()
+    {
+        return Config::option('integration_level') != Config::INTEGRATION_LEVEL_OFF;
+    }
+
+    public static function enabledFullIntegration()
+    {
+        return Config::option('integration_level') == Config::INTEGRATION_LEVEL_FULL;
+    }
+
 }
