@@ -266,7 +266,24 @@ class WpConverter
 
     public static function argCat(Query $query, $value, &$q)
     {
-        $query->where('terms.category.term_id', $value);
+        /*
+         * See https://codex.wordpress.org/Class_Reference/WP_Query#Category_Parameters
+         */
+        $in = [];
+        $notIn = [];
+        foreach ($value as $id) {
+            if ((int) $id < 0) {
+                $notIn[] = -$id;
+            } else {
+                $in[] = $id;
+            }
+        }
+        if ($in) {
+            $query->where('terms.category.term_id', $in);
+        }
+        if ($notIn) {
+            $query->whereNot('terms.category.term_id', $notIn);
+        }
     }
 
     public static function argTagId(Query $query, $value, &$q)
