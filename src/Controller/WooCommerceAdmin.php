@@ -68,7 +68,7 @@ class WooCommerceAdmin
         }
 
         $searchFields[] = 'order_item_names';
-        $searchFields[] = 'post_id';
+        $searchFields[] = '_id';
 
         $query->setQuery([
             'bool' => [
@@ -76,9 +76,7 @@ class WooCommerceAdmin
                     [
                         'multi_match' => [
                             'fields'               => $searchFields,
-                            'type'                 => 'cross_fields',
-                            'operator'             => 'and',
-                            'minimum_should_match' => '30%',
+                            'type'                 => 'phrase_prefix',
                             'analyzer'             => 'esi_simple_analyzer',
                             'query'                => $search,
                         ],

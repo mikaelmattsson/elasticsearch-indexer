@@ -27,11 +27,12 @@ return [
             'esi_index_analyzer' => [
                 'type'      => 'custom',
                 'tokenizer' => 'keyword',
+                'filter'    => ['standard', 'lowercase'],
             ],
             'esi_simple_analyzer' => [
                 'type'      => 'custom',
-                'tokenizer' => 'standard',
-                'filter'    => ['standard', 'lowercase', 'esi_ngram'],
+                'tokenizer' => 'whitespace',
+                'filter'    => ['standard', 'lowercase', 'keyword_repeat', 'porter_stem'],
             ],
         ],
         'filter' => [
