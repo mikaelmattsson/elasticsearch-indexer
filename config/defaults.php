@@ -13,7 +13,7 @@ use Wallmander\ElasticsearchIndexer\Model\Config;
 
 return [
     // System variables
-    'plugin_index_version'     => 3, // Update this value to prompt the user to reindex
+    'plugin_index_version'     => 5, // Update this value to prompt the user to reindex
     'user_index_version'       => 1,
     'is_indexing'              => false,
 
