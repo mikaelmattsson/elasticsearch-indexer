@@ -167,7 +167,6 @@ class Hooks
 
         add_filter('pre_get_posts', [$class, 'actionPreGetPosts'], 15);
 
-
         static::forceRemoveAction('posts_search', 'product_search');
     }
 

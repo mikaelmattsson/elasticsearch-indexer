@@ -133,12 +133,11 @@ class Config
 
     public static function enabledIntegration()
     {
-        return Config::option('integration_level') != Config::INTEGRATION_LEVEL_OFF;
+        return self::option('integration_level') != self::INTEGRATION_LEVEL_OFF;
     }
 
     public static function enabledFullIntegration()
     {
-        return Config::option('integration_level') == Config::INTEGRATION_LEVEL_FULL;
+        return self::option('integration_level') == self::INTEGRATION_LEVEL_FULL;
     }
-
 }

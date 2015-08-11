@@ -269,7 +269,7 @@ class WpConverter
         /*
          * See https://codex.wordpress.org/Class_Reference/WP_Query#Category_Parameters
          */
-        $in = [];
+        $in    = [];
         $notIn = [];
         foreach ($value as $id) {
             if ((int) $id < 0) {
