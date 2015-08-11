@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.6.1 (released 2015-08-11)
+
+- Add compatibility with third party plugins like WPML
+
 ## 1.6.0 (released 2015-06-18)
 
 - Add option to only use plugin for searching
