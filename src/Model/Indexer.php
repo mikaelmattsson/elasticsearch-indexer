@@ -80,6 +80,7 @@ class Indexer extends Client
             'ignore_sticky_posts' => true,
             'orderby'             => 'id',
             'order'               => 'asc',
+            'suppress_filters'    => true,
         ]);
 
         $query = new WP_Query($args);
