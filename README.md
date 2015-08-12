@@ -35,9 +35,9 @@ The plugin requires that you have Elasticsearch installed on your server
  1. Click on the new menu item and press the button “Reindex all posts”.
 
 ## Not supported
- - Sticky posts
- - Password protected posts
- - Random sorting
+ - Sticky posts (ignores sticky posts. All wordpress queries will act as if `ignore_sticky_posts` is set to `true`)
+ - Password protected posts (fallback to MySQL if used)
+ - Random sorting (ignored)
 
 ## License
 Elasticsearch Indexer is licensed under [General Public License (GPLv2)](LICENSE).
