@@ -11,7 +11,7 @@ Aside from super fast full text search, this plugin will speed up post listings 
 
 The plugin works by indexing all posts and post meta data and redirecting the requests by WordPress from MySQL to Elasticsearch.
 
-The plugin requires that you have Elasticsearch installed on your server
+The plugin requires that you have Elasticsearch installed on your server.
 
 WordPress Repository: https://wordpress.org/plugins/elasticsearch-indexer/
 
@@ -32,9 +32,9 @@ WordPress Repository: https://wordpress.org/plugins/elasticsearch-indexer/
  1. Click on the new menu item and press the button “Reindex all posts”.
 
 ## Installing Elasticsearch
-Follow the instructions in the [Elasticsearch Docs](https://www.elastic.co/guide/en/elasticsearch/guide/current/_installing_elasticsearch.html)
+Follow the instructions in the [Elasticsearch Docs](https://www.elastic.co/guide/en/elasticsearch/guide/current/_installing_elasticsearch.html).
 
-Make sure that Elasticsearch is installed and running on your server by running `curl -XGET -i 'http://127.0.0.1:9200'` in the command line
+Make sure that Elasticsearch is installed and running on your server by running `curl -XGET -i 'http://127.0.0.1:9200'` in the command line.
 
 ## Not supported
  - Sticky posts (ignores sticky posts. All wordpress queries will act as if `ignore_sticky_posts` is set to `true`)
