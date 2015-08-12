@@ -21,8 +21,8 @@ WordPress Repository: https://wordpress.org/plugins/elasticsearch-indexer/
  - [WooCommerce 135 000 products](http://enabled-2.es-demo.wallmanderco.se/)
  - [WooCommerce 135 000 products without elasticsearch](http://disabled-2.es-demo.wallmanderco.se/)
 
-## Installing the plugin from Github
- 1. Download the [zip](https://github.com/wallmanderco/elasticsearch-indexer/archive/master.zip) file from github.
+## Installing the plugin from GitHub
+ 1. Download the [zip](https://github.com/wallmanderco/elasticsearch-indexer/archive/master.zip) file from GitHub.
  1. Unzip and put the new directory inside you plugins directory (`/wp-content/plugins/`) in wordpress.
  1. run `composer install` inside the new directory.
  1. [Install Elasticsearch](http://www.elastic.co/guide/en/elasticsearch/reference/1.5/_installation.html) if you haven't already.
