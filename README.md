@@ -13,10 +13,7 @@ The plugin works by indexing all posts and post meta data and redirecting the re
 
 The plugin requires that you have Elasticsearch installed on your server
 
-## Links
- - Website: https://wallmanderco.github.io/elasticsearch-indexer/
- - Documentation: https://wallmanderco.github.io/elasticsearch-indexer/docs/
- - WordPress Repository: https://wordpress.org/plugins/elasticsearch-indexer/
+WordPress Repository: https://wordpress.org/plugins/elasticsearch-indexer/
 
 ## Demo
  - [WooCommerce 10 000 products](http://enabled-1.es-demo.wallmanderco.se/)
@@ -24,7 +21,7 @@ The plugin requires that you have Elasticsearch installed on your server
  - [WooCommerce 135 000 products](http://enabled-2.es-demo.wallmanderco.se/)
  - [WooCommerce 135 000 products without elasticsearch](http://disabled-2.es-demo.wallmanderco.se/)
 
-## Installation from Github
+## Installing the plugin from Github
  1. Download the [zip](https://github.com/wallmanderco/elasticsearch-indexer/archive/master.zip) file from github.
  1. Unzip and put the new directory inside you plugins directory (`/wp-content/plugins/`) in wordpress.
  1. run `composer install` inside the new directory.
@@ -33,6 +30,11 @@ The plugin requires that you have Elasticsearch installed on your server
 (You can test this by running `curl -XGET -i 'http://127.0.0.1:9200'` in the command line)
  1. Activate the plugin in the wordpress admin panel.
  1. Click on the new menu item and press the button “Reindex all posts”.
+
+## Installing Elasticsearch
+Follow the instructions in the [Elasticsearch Docs](https://www.elastic.co/guide/en/elasticsearch/guide/current/_installing_elasticsearch.html)
+
+Make sure that Elasticsearch is installed and running on your server by running `curl -XGET -i 'http://127.0.0.1:9200'` in the command line
 
 ## Not supported
  - Sticky posts (ignores sticky posts. All wordpress queries will act as if `ignore_sticky_posts` is set to `true`)
