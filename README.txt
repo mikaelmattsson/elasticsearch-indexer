@@ -17,11 +17,9 @@ Aside from super fast full text search, this plugin will speed up post listings 
 
 The plugin works by indexing all posts and post meta data and redirecting the requests by WordPress from MySQL to Elasticsearch.
 
-The plugin requires that you have Elasticsearch installed on your server
+The plugin requires that you have installed Elasticsearch on the local server or a remote server.
 
 [View the project on Github](https://github.com/wallmanderco/elasticsearch-indexer) for more info.
-
- - Source code: https://github.com/wallmanderco/elasticsearch-indexer
 
 == Installation ==
 1. Upload 'elasticsearch-indexer' to the '/wp-content/plugins/' directory
