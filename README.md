@@ -36,6 +36,9 @@ Follow the instructions in the [Elasticsearch Docs](https://www.elastic.co/guide
 
 Make sure that Elasticsearch is installed and running on your server by running `curl -XGET -i 'http://127.0.0.1:9200'` in the command line.
 
+## Usage
+The plugin requires no modification to work. Once you have put in your settings and run an initial reindex of the site the plugin will keep elasticsearch in sync with MySQL and redirect queries from MySQL to Elasticsearch. However the plugin comes with a few extra features and filters that you can use.
+
 ## Not supported
  - Sticky posts (ignores sticky posts. All wordpress queries will act as if `ignore_sticky_posts` is set to `true`)
  - Password protected posts (fallback to MySQL if used)
